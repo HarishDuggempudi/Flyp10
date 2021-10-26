@@ -1,0 +1,36 @@
+<!-- Page Heading -->
+<div class="d-flex flex-row-reverse">
+  <h1 class="nb-heading-one mr-auto">Level Editor</h1>
+</div>
+<!-- /.row -->
+
+<div class="row">
+    <div class="col-md-8">
+        <mat-card class="material-card-sm">
+            <form role="form" novalidate [formGroup]="levelForm" (ngSubmit)="saveLevel()">
+                <div class="mb-3">
+                  <mat-form-field class="material-input-full">
+                    <input matInput placeholder="Level" value=""  [(ngModel)]="levelObj.level" formControlName="level" >
+                  </mat-form-field>
+                </div>
+                <div class="mb-3">
+                  <mat-form-field class="material-input-full">
+                    <input matInput placeholder="Maximum Score" value=""  [(ngModel)]="levelObj.maxscore" formControlName="maxscore" >
+                  </mat-form-field>
+                </div>
+                <div class="mb-3">
+                  <mat-checkbox  [checked]="levelObj.active"  formControlName="active"  [(ngModel)]="levelObj.active">
+                    Active
+                  </mat-checkbox>
+                </div>
+
+                <div class="mb-3">
+                    <button mat-raised-button color="primary" type="submit">Save</button>
+                    <button mat-raised-button color="warn" type="button" (click)="triggerCancelForm()">Cancel</button>
+                </div>
+            </form>
+        </mat-card>
+    </div>
+</div>
+
+

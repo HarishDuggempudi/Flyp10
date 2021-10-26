@@ -1,0 +1,157 @@
+                      <div class="d-flex flex-row-reverse" style="width: 47%;padding-bottom: 6px;">
+	
+	<button mat-raised-button color="primary" (click)="uploadFromCSV()">
+			<i class="fas fa-file-csv"></i> &nbsp;Upload Events from CSV</button>
+			<h1 class="nb-heading-one mr-auto">Event Editor</h1>
+</div>
+<mat-card class="material-card-sm col-lg-6">
+					  <form role="form" novalidate [formGroup]="AddEventForm" (ngSubmit)="saveSportsEvent()" *ngIf="loginuserinfo.userRole=='1'">
+					  
+						 <!--  <div class="mb-3" *ngIf="eventList.length > 0 ">
+							<mat-form-field class="material-input-full">	
+							  <mat-select  placeholder="Event"  [(ngModel)]="eventObj.title" [formControl]="AddEventForm.controls['title']" (change)="isOthereventSelected()">
+								<mat-option *ngFor="let sports of eventList" [value]="sports.event">
+									{{sports.event}}
+								</mat-option>         
+								<mat-option value="others">
+									Others
+								</mat-option>         
+							  </mat-select>							 
+							 <mat-error>
+								<control-messages [isSubmitted]="isSubmitted" [control]="AddEventForm.controls.title"></control-messages>
+							  </mat-error>
+							</mat-form-field>
+							</div> -->
+							<div class="mb-3">
+								<mat-form-field class="material-input-full" style="margin-top:5px;">								 
+									<input matInput placeholder="Event " [(ngModel)]="eventObj.title" [formControl]="AddEventForm.controls.title" >
+								 <mat-error>
+									<control-messages [isSubmitted]="isSubmitted" [control]="AddEventForm.controls.title"></control-messages>
+									</mat-error>
+								</mat-form-field>
+						</div>
+						<!-- 	<div class="mb-3"  *ngIf="showtextbox">
+							<span *ngIf="showtextbox">Enter event manually*</span>
+								<mat-form-field class="material-input-full" style="margin-top:5px;">								 
+									<input matInput placeholder="Event " [(ngModel)]="eventObj.othertitle" [formControl]="AddEventForm.controls.othertitle" >
+								 <mat-error>
+									<control-messages [isSubmitted]="isSubmitted" [control]="AddEventForm.controls.othertitle"></control-messages>
+									</mat-error>
+								</mat-form-field>
+								</div> -->
+							<label style="font-weight:bold;">Venue Details</label>
+							
+						   <div class="mb-3">
+						     <mat-form-field class="material-input-full">
+							  <input matInput placeholder="Venue" [(ngModel)]="eventObj.address" [formControl]="AddEventForm.controls.address">
+							   <mat-error>
+								 <control-messages [isSubmitted]="isSubmitted" [control]="AddEventForm.controls.address"></control-messages>
+							  </mat-error>
+							</mat-form-field>													  
+						  </div>
+						  <div class="mb-3">
+						     <mat-form-field class="material-input-full">
+							  <input matInput placeholder="State" [(ngModel)]="eventObj.state" [formControl]="AddEventForm.controls.state">
+							   <mat-error>
+								 <control-messages [isSubmitted]="isSubmitted" [control]="AddEventForm.controls.state"></control-messages>
+							  </mat-error>
+							</mat-form-field>													  
+						  </div>
+						  <div class="mb-3">
+						     <mat-form-field class="material-input-full">
+							  <input matInput placeholder="City" [(ngModel)]="eventObj.city" [formControl]="AddEventForm.controls.city">
+							   <mat-error>
+								 <control-messages [isSubmitted]="isSubmitted" [control]="AddEventForm.controls.city"></control-messages>
+							  </mat-error>
+							</mat-form-field>													  
+						  </div>
+						   <div class="mb-3">
+							<mat-form-field class="material-input-full">
+							
+							  <mat-select placeholder="Sport" [(ngModel)]="eventObj.sportid" [formControl]="AddEventForm.controls['sportName']">
+								<mat-option *ngFor="let sports of sportlist" [value]="sports._id">
+									{{sports.sportName}}
+								</mat-option>         
+							  </mat-select>
+							  <mat-error>
+								<control-messages [isSubmitted]="isSubmitted" [control]="AddEventForm.controls.sportName"></control-messages>
+							  </mat-error>
+							</mat-form-field>
+						  </div>
+						    <div class="mb-3">
+							<mat-form-field class="material-input-full">
+							  <!-- <input matInput placeholder="Start Date" [(ngModel)]="eventObj.startDate" [formControl]="AddEventForm.controls.startDate">
+							  <mat-error>
+								<control-messages [isSubmitted]="isSubmitted" [control]="AddEventForm.controls.startDate"></control-messages>
+							  </mat-error> -->
+							
+									<input matInput [matDatepicker]="picker" [(ngModel)]="eventObj.start" required  formControlName="start" placeholder="Start Date">
+									<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+									<mat-datepicker #picker  [startAt]="eventObj.start"></mat-datepicker>
+									<mat-error>
+									  <control-messages [isSubmitted]="isSubmitted" [control]="AddEventForm.controls['start']"></control-messages>
+									</mat-error>
+								  </mat-form-field>
+						  </div>
+						    <div class="mb-3">
+							<mat-form-field class="material-input-full">
+							  <!-- <input matInput placeholder="End Date" [(ngModel)]="eventObj.endDate" [formControl]="AddEventForm.controls.endDate">
+							  <mat-error>
+								<control-messages [isSubmitted]="isSubmitted" [control]="AddEventForm.controls.endDate"></control-messages>
+							  </mat-error>
+							</mat-form-field> -->
+							 <input matInput [matDatepicker]="picker1" [min]="minDate" [(ngModel)]="eventObj.end" required  formControlName="end" placeholder="end Date">
+									<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+									<mat-datepicker #picker1  [startAt]="eventObj.end"  ></mat-datepicker>
+									<mat-error>
+									  <control-messages [isSubmitted]="isSubmitted" [control]="AddEventForm.controls['end']"></control-messages>
+									</mat-error>
+							 </mat-form-field>
+						  </div>
+						  <div class="mb-3">
+						     <mat-form-field class="material-input-full">
+							  <input matInput placeholder="Number of days" [(ngModel)]="eventObj.Nod" [formControl]="AddEventForm.controls.Nod">
+							   <mat-error>
+								 <control-messages [isSubmitted]="isSubmitted" [control]="AddEventForm.controls.Nod"></control-messages>
+							  </mat-error>
+							</mat-form-field>													  
+						  </div>
+						  <div class="mb-3">
+							<button mat-raised-button color="primary" type="submit">
+							  <i class="fas fa-save"></i> Save</button>
+							<button mat-raised-button color="warn" type="button" (click)="triggerCancelForm()">Cancel</button>
+						  </div>
+						</form>
+						<form role="form" novalidate [formGroup]="AdduserEventForm" (ngSubmit)="saveEventList()" *ngIf="loginuserinfo.userRole!='1'">			  
+						  <div class="mb-3" *ngIf="eventList.length > 0 ">
+							<mat-form-field class="material-input-full">	
+							  <mat-select  placeholder="Event"  [(ngModel)]="eventlistObj.title" [formControl]="AdduserEventForm.controls['title']" (change)="isOthereventSelected()">
+								<mat-option *ngFor="let sports of eventList" [value]="sports.title">
+									{{sports.title}}
+								</mat-option>               
+							  </mat-select>							 
+							 <mat-error>
+								<control-messages [isSubmitted]="isSubmitted" [control]="AdduserEventForm.controls.title"></control-messages>
+							  </mat-error>
+							</mat-form-field>
+							</div>
+						   <div class="mb-3">
+							<mat-form-field class="material-input-full">
+							
+							  <mat-select multiple placeholder="Sport" [(ngModel)]="eventlistObj.sportName" [formControl]="AdduserEventForm.controls['sportName']">
+								<mat-option *ngFor="let sports of sportlist" [value]="sports.sportName">
+									{{sports.sportName}}
+								</mat-option>         
+							  </mat-select>
+							  <mat-error>
+								<control-messages [isSubmitted]="isSubmitted" [control]="AdduserEventForm.controls.sportName"></control-messages>
+							  </mat-error>
+							</mat-form-field>
+						  </div>						
+						  <div class="mb-3">
+							<button mat-raised-button color="primary" type="submit">
+							  <i class="fas fa-save"></i> Save</button>
+							<button mat-raised-button color="warn" type="button" (click)="triggerCancelForm()">Cancel</button>
+						  </div>
+						</form>
+						</mat-card>

@@ -1,0 +1,249 @@
+<!-- Page Heading -->
+<div class="d-flex flex-row-reverse">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb nb-breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/dashboard']">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">My Wallet</li>
+        </ol>
+    </nav>
+    <h1 class="nb-heading-one mr-auto">My Wallet</h1>
+</div>
+<div *ngIf="loginobjUser.userRole=='3'">
+    <div class="row">
+        <div class="col-md-4">
+            <mat-card>
+                <div>
+                    <h5>Active Balance</h5>
+                    <h6 style="color:#3f51b5">$ <span style="font-size:40px">{{formatDollar(walletObj.balance)}}</span></h6>
+                </div>
+                <div>
+                    <span style="float:right;color:#2f3191;cursor:pointer;" (click)="addCredits('1')" data-toggle="modal" data-target="#addcredit"><i class="fa fa-plus-circle"></i>&nbsp;Add Credit</span>
+
+                </div>
+            </mat-card>
+        </div>
+        <div class="col-md-4">
+            <mat-card>
+                <div>
+                    <h5>Subscription Type</h5>
+                    <h6 style="color:#3f51b5" *ngIf="objUser.subtype=='0' || objUser.subtype=='-1'"><b>Standard</b></h6>
+                    <h6 style="color:#3f51b5" *ngIf="objUser.subtype=='2'"><b>Premium</b></h6>
+                    <h6 style="color:#3f51b5" *ngIf="objUser.subtype=='3'"><b>Premium Plus</b></h6>
+                </div>
+                <div *ngIf="objUser.subtype=='-1'" style="margin-bottom:12px;">
+                    <span style="font-size:11px;"><b>Your Subscription Expired On:{{formatdate(objUser.subEnd)}}</b></span>
+                    <br>
+                </div>
+                <div *ngIf="objUser.subtype=='0' || objUser.subtype=='-1'">
+                    <span style="font-size:11px;">Subscribe to unlock features and enter our Flyp10 world meets</span>
+                </div>
+
+                <div *ngIf="objUser.subtype!='0' && objUser.subtype!='-1'" style="margin-bottom:12px;">
+                    <span style="font-size:11px;">Expires On:{{formatdate(objUser.subEnd)}}</span>
+                    <br>
+                </div>
+
+                <div *ngIf="objUser.subtype=='0' || objUser.subtype=='-1'">
+                    <span style="float:right;color:#2f3191;cursor:pointer;" (click)="addCredits('2')" data-toggle="modal" data-target="#addcredit"><i class="fas fa-level-up-alt"></i>&nbsp;Upgrade Now</span>
+                </div>
+
+
+            </mat-card>
+        </div>
+    </div>
+    <br>
+    
+    <div >
+             <button mat-stroked-button style="background-color:#3f51b5;border: none; color: white;" (click)="Promocode()">Promocode</button>
+        </div>
+    <div class="row" style="margin-top:20px;">
+        <div class="col-md-8">
+            <mat-card style="max-height: 400px;overflow-y: scroll;">
+                <h5>Transaction history</h5>
+                <mat-list *ngFor="let txn of transaction">
+                    <mat-list-item style="margin-top:10px">
+                        <div class="col-md-2" style=" background-color:#2f3191;color: #fff;padding: 18px;text-align:center;">
+                            <span *ngIf="txn.txn_amount.indexOf('.') !== -1">$&nbsp;{{txn.txn_amount}}</span>
+                            <span *ngIf="txn.txn_amount.indexOf('.') == -1">$&nbsp;{{txn.txn_amount}}.00</span>
+                        </div>
+                        <div style="margin-left:10px;margin-top:15px;">
+                            <!-- <h5 *ngIf="txn.txn_type=='c'">Credited</h5>	
+					<h5 *ngIf="txn.txn_type=='d'">Debited</h5> -->
+                            <h6 style="color: #2f3191 !important;">{{txn.txn_desc}} {{txn.promocode && txn.promocode!='0'?' -Promo Code: '+txn.promocode:''}}</h6>
+                            <!-- <p *ngIf="txn.promocode && txn.promocode=='0'" style="font-size:14px;color: #8a8787;">Promo Code:&nbsp;{{txn.promocode}}</p> -->
+                            <p style="font-size:14px;color: #8a8787;">{{txn.txn_date}}</p>
+                        </div>
+                        <i *ngIf="txn.txn_type=='c'" style="position: absolute; right: 0; color: green" class="fa fa-arrow-up"></i>
+                        <i *ngIf="txn.txn_type=='d'" style="position: absolute; right: 0; color: red" class="fa fa-arrow-down"></i>
+                    </mat-list-item>
+                    <mat-divider style="margin-top:10px;"></mat-divider>
+                </mat-list>
+                <span *ngIf="transaction.length == 0">No data to display</span>
+            </mat-card>
+        </div>
+    </div>
+</div>
+<div *ngIf="loginobjUser.userRole=='2'">
+    <div class="row">
+        <div class="col-md-4">
+            <mat-card>
+                <div>
+                    <h5 *ngIf="!remit">Active Balance</h5>
+                    <h5 *ngIf="remit">Available balance is <span style="color:#3f51b5;font-weight: bolder">$ {{formatDollar(walletObj.balance)}}</span>. Please enter the amount to remit</h5>
+                    <h6 style="color:#3f51b5" *ngIf="!remit">$ <span style="font-size:40px; font-weight: bolder">{{formatDollar(walletObj.balance)}}</span></h6>
+                    <!-- <h6 style="color:#3f51b5" *ngIf="remit">$ <span style="font-size:40px">{{remitSliderVal}}/{{walletObj.balance}}</span></h6>            -->
+                </div>
+                <!-- <mat-slider style="min-width: 283px !important;" [(ngModel)]="remitSliderVal" min="0" tickInterval="1" [max]="walletObj.balance" step="1" (input)="onRemitSliderChange($event)" *ngIf="remit"></mat-slider> -->
+                <div class="mb-3" *ngIf="remit">
+                    <mat-form-field class="material-input-full">
+                        <input matInput placeholder="Enter amount" [(ngModel)]="remitSliderVal" type="number">
+                        <!-- <mat-error>
+					<control-messages [isSubmitted]="isSubmitted" [control]="tokenForm.controls['amount']"></control-messages>
+				  </mat-error> -->
+                    </mat-form-field>
+                    <span *ngIf="walletObj.balance < remitSliderVal" style="color: red; font-style: italic">You do not have sufficient balance for this remittance</span>
+                    <span *ngIf="remitSliderVal == 0" style="color: red; font-style: italic">Invalid amount</span>
+
+                </div>
+                <div *ngIf="!remit; else showOptionsToRemit" style="padding-bottom: 14px;">
+                    <span style="float:right;color:#2f3191;cursor:pointer;" (click)="Remit()">Remit&nbsp;<i class="fas fa-arrow-right"></i></span>
+                </div>
+                <ng-template #showOptionsToRemit>
+                    <div>
+                        <span *ngIf="walletObj.balance >= remitSliderVal && remitSliderVal != 0 && remitSliderVal != null" style="float:right;color:#2f3191;cursor:pointer;color: green" (click)="submitRemitRequest()"><i class="fas fa-check"></i>&nbsp;Request</span>&nbsp;&nbsp;
+                        <span *ngIf="walletObj.balance < remitSliderVal || remitSliderVal == null || remitSliderVal == 0" style="float:right;cursor:not-allowed;color: #00800080"><i class="fas fa-check"></i>&nbsp;Request</span>&nbsp;&nbsp;
+                        <span style="float:right;color:#2f3191;cursor:pointer;color:red;margin-right: 10px;" (click)="cancelRemitance()"><i class="fas fa-ban"></i>&nbsp;Cancel</span>&nbsp;&nbsp;
+                    </div>
+                </ng-template>
+
+            </mat-card>
+        </div>
+    </div>
+    <!-- <judges-history-table></judges-history-table> -->
+
+    <div style="margin-top:20px;">
+        <nav mat-tab-nav-bar class="mb-4">
+            <a mat-tab-link *ngFor="let link of navLinks" [routerLink]="link.path" [routerLinkActiveOptions]="{exact: true}" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">
+				{{link.label}}
+			</a>
+        </nav>
+
+        <router-outlet></router-outlet>
+        <!-- <div class="col-md-8">
+     <mat-card>
+	      <h5>Transaction history</h5>
+	       <mat-list *ngFor="let txn of transaction">
+			 <mat-list-item  style="margin-top:10px">			
+			   <div class="col-md-2" style=" background-color:#2f3191;color: #fff;padding: 18px;text-align:center;">			  
+				   <span *ngIf="txn.txn_amount.indexOf('.') !== -1">$&nbsp;{{txn.txn_amount}}</span>
+			     <span *ngIf="txn.txn_amount.indexOf('.') == -1">$&nbsp;{{txn.txn_amount}}.00</span>
+			   </div>
+			   <div style="margin-left:10px;margin-top:15px;">
+			      <h5 *ngIf="txn.txn_type=='c'">Credited</h5>	
+				  <h5 *ngIf="txn.txn_type=='d'">Debited</h5>
+				  <p style="font-size:14px;color: #8a8787;">{{txn.txn_date}}</p>
+				</div>  
+				
+			 </mat-list-item>		  
+			 <mat-divider style="margin-top:10px;"></mat-divider>
+			</mat-list>
+			<span *ngIf="transaction.length == 0">No data to display</span>
+     </mat-card>
+  </div> -->
+    </div>
+</div>
+<div class="modal fade" id="addcredit" role="dialog" style="overflow-y: hidden !important;background: linear-gradient(90deg, rgba(46, 49, 146, 0.52), rgba(190, 30, 45, 0.6));">
+    <div class="modal-dialog " style="  max-width: 50% ;display:block;margin:0 auto;margin-top:20px !important">
+
+
+        <!-- Modal content-->
+        <div class="modal-content" style="overflow-y: hidden">
+            <div class="modal-header" style="background:#3f51b5;color: white;">
+                <h5 class="modal-title">Add Credit</h5>
+                <button type="button" class="close" data-dismiss="modal" id="close" style="color:white" (click)='isCreditFormSubmitted = false'>&times;</button>
+            </div>
+            <div class="modal-body" style="padding:0px;overflow: hidden;position: relative; min-height:170px!important">
+
+                <form role="form" novalidate [formGroup]="creditForm" style="margin:20px !important">
+
+
+
+
+                    <div class="mb-3" *ngIf="type=='1'">
+                        <div *ngIf="type=='1'"><label><b>Select Amount</b></label></div>
+                        <select (change)="onAmountChange($event)" style="width:100%;height:35px" placeholder="Amount" formControlName="amount" [(ngModel)]='amount' name="amount">
+				  <option disabled selected="true" value=''>Select amount</option>
+				<option *ngFor='let a of credit' [value]="a">{{formatDollar(a)}}</option>
+			   
+			  </select>
+                        <mat-error>
+                            <control-messages [isSubmitted]="isCreditFormSubmitted" [control]="creditForm.controls['amount']"></control-messages>
+                        </mat-error>
+
+                    </div>
+                    <div *ngIf="type=='2'"><label><b>Select Package</b></label> <a style="float:right;" href="https://flyp10.com/#our-pricings" target="_blank">View package details here</a></div>
+                    <div class="mb-3" *ngIf="type=='2'">
+                        <mat-radio-group formControlName="selectedpackage" (change)="onPackageChange($event)" [(ngModel)]='selectedpackage'>
+                            <mat-radio-button value="{{subscription[0]}}">Premium ${{subscription[0]}} / year</mat-radio-button>
+                            <mat-radio-button style="padding-left: 10px;" value="{{subscription[1]}}">Premium-Plus ${{subscription[1]}} / year</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <div class="mb-3" *ngIf="type!='1'">
+                        <mat-form-field class="material-input-full">
+                            <input matInput placeholder="Promocode" type="text" formControlName="promocode" [(ngModel)]='promocode'>
+                            <mat-error>
+                                <control-messages [isSubmitted]="isCreditFormSubmitted" [control]="creditForm.controls['promocode']"></control-messages>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-3">
+                        <mat-form-field class="material-input-full">
+                            <input matInput placeholder="Zip" type="number" formControlName="zip" [(ngModel)]='zip'>
+                            <mat-error>
+                                <control-messages [isSubmitted]="isCreditFormSubmitted" [control]="creditForm.controls['zip']"></control-messages>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-3">
+                        <mat-form-field class="material-input-full">
+                            <input matInput placeholder="Address" type="text" formControlName="address" [(ngModel)]='address'>
+                            <mat-error>
+                                <control-messages [isSubmitted]="isCreditFormSubmitted" [control]="creditForm.controls['address']"></control-messages>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-3 text-center">
+                        <button type="submit" mat-raised-button color="primary" (click)="paycredit()">
+			  Click here to pay</button>
+
+                    </div>
+                </form>
+
+                <!-- <form  role="form" novalidate [formGroup]="creditForm" >
+          <div class="col-md-12 word-wrap" style="margin-top:50px;" >
+           
+			<div class="mb-3">
+				<mat-form-field class="material-input-full">
+				  <mat-select placeholder="Amount"  (change)='onAmountChange($event)' formControlName="amount" name="amount">
+					<mat-option  *ngFor='let a of credit' [value]="a">{{formatDollar(a)}}</mat-option>
+					
+				  </mat-select>
+				 <mat-error>
+				  <control-messages [isSubmitted]="isCreditFormSubmitted" [control]="creditForm.controls['amount']"></control-messages>
+				</mat-error>
+				</mat-form-field>
+				 </div>   
+              
+             </div> 
+             <div class="mb-6 text-center">
+              <button mat-raised-button color="primary" (click)="paycredit()">
+                <i class="fas fa-paper-plane"></i>Click here pay</button>
+			</div>
+			</form> -->
+                <br>
+            </div>
+        </div>
+    </div>
+</div>

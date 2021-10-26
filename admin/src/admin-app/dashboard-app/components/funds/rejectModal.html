@@ -1,0 +1,19 @@
+<!-- <h3>Please Enter a reason</h3> -->
+<mat-form-field class="material-input-full">
+    <textarea [(ngModel)]='reason' matInput placeholder="Please enter a reason (optional)"  >
+        </textarea>
+
+</mat-form-field>
+  <div >
+   
+        <button mat-raised-button color='primary' (click)="onSubmit()" style="color:white;float: right;">Submit</button>
+        <button mat-raised-button color='warning' (click)="onCancel()" style="color:white;float: right;background: rgb(244, 66, 55);margin-right: 10px">Cancel</button>
+
+        <!-- 
+            <div class='admin-request'>
+                <mat-form-field class='filterBox' floatPlaceholder="never" style=" width: 220px !important;margin-left:15px;float: right;
+                margin-top: -37px;">
+                  <input matInput (keyup)="applyFilter($event.target.value)"  placeholder="Filter By Category/Keywords">
+                </mat-form-field>
+              </div> -->
+            </div>

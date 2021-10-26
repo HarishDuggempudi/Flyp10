@@ -1,0 +1,25 @@
+<div class="d-flex flex-row-reverse">
+  <h1 class="nb-heading-one mr-auto">Element Group Editor</h1>
+</div>
+<mat-card class="material-card-sm">
+    <form role="form" novalidate [formGroup]="AddElementGroupForm" (ngSubmit)="saveSportsElementGroup()">
+       <div class="mb-3">
+        <mat-form-field class="material-input-full">
+          <input matInput placeholder="Element Group" [(ngModel)]="elementgroupObj.elementGroup" [formControl]="AddElementGroupForm.controls.elementGroup">
+          <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="AddElementGroupForm.controls.elementGroup"></control-messages>
+          </mat-error>
+        </mat-form-field>
+      </div>
+  <div class="mb-3">
+        <mat-checkbox [checked]="elementgroupObj.active" formControlName="active" [(ngModel)]="elementgroupObj.active">
+          Active
+        </mat-checkbox>
+      </div> 
+      <div class="mb-3">
+        <button mat-raised-button color="primary" type="submit">
+          <i class="fas fa-save"></i> Save</button>
+        <button mat-raised-button color="warn" type="button" (click)="triggerCancelForm()">Cancel</button>
+      </div>
+    </form>
+  </mat-card>

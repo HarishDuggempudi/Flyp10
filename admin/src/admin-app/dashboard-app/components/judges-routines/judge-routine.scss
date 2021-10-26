@@ -1,0 +1,89 @@
+
+   .mat-tab-label{
+    color: #2e3192;
+    font-weight: 900;
+}
+   
+   .toolbar-background {
+        background: linear-gradient(to left,  #2e3192 0%, #be1e2d 100%);
+        color: white!important;
+      }.toolbar-title-md {
+        padding: 0 12px;
+        font-size: 2rem;
+        font-weight: 500;
+        color: #fff;
+    }.bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default {
+        color: #ffffff;
+        background-color: transparent;
+    }.content-md {
+        color: #000;
+         background: #fff; 
+       background: #fff; 
+    }.grid {
+        padding: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        height: 130px;
+        
+    }
+    .swal2-popup{
+       background-color: #2e3192 !important;
+    }
+    content.md [padding] {
+        padding: 0px;
+    }
+   
+    .item-md {
+        padding-left: 0px;
+        padding-right: 0;
+        
+    }.col.content {
+
+        padding: 5px;
+        position: inherit;
+    }ion-list {
+        margin: 0;
+        padding: 0;
+        display: block;
+        list-style-type: none;
+        border-bottom: 1px solid rgb(182, 182, 182);
+    }p {
+   
+        width: 200%!important;
+    }.item-md ion-thumbnail[item-start] {
+        margin: 0px 0px 0px 0;}
+        img{
+            max-width: 100%;
+            border: 0;
+            border-radius: 2px;
+        }
+        .list-md > .item-block:last-child ion-label, .list-md > .item-block:last-child .item-inner, .list-md > .item-wrapper:last-child ion-label, .list-md > .item-wrapper:last-child .item-inner {
+            border-bottom: 0;
+            margin: 0px;
+        }
+        .scroll-content{
+            padding:5px!important;
+        }
+        ion-icon {
+            display: inline-block;
+            font-size: 1em;
+        }.list-md {
+            margin: 1px 0px 4px 7px;
+        }
+        .material-card-sm {
+             max-width: 100% !important; 
+        }i{
+            font-size: 10px;
+            color: grey
+            
+        }

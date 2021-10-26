@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700');
+@import '~@ngx-share/button/styles/share-buttons';
+@import '~@ngx-share/button/styles/themes/default/default-theme';
+@keyframes slideInUp {
+  from {
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+    visibility: visible;
+  }
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}.bg{
+  background: black!important;
+}
+
+.nb-share-page {
+  height: 100%;
+  width:100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 30px 15px;
+  // background: #2e3192;
+  background-image: url("../../../assets/admin/img/login.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+ 
+} .card {
+  flex: 0 0 900px;
+  max-width: 900px;
+  animation-name: slideInUp;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  padding-bottom:20px!important;
+  color:black;
+}

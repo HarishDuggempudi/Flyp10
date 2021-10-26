@@ -1,0 +1,84 @@
+<!-- Page Heading -->
+<div class="d-flex flex-row-reverse">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb nb-breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/dashboard']">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Pricing Editor</li>
+    </ol>
+  </nav>
+  <h1 class="nb-heading-one mr-auto">Pricing Editor</h1>
+</div>
+<!-- /.row -->
+
+  <div class="row">
+      <div class="col-md-8">
+	  
+          <mat-card class="material-card-sm">
+              <form role="form" novalidate [formGroup]="pricingForm" (ngSubmit)="savepricing()">
+			   <div class="mb-3">
+					 <mat-form-field class="material-input-full">
+					  <mat-select placeholder="Sport" [(ngModel)]="pricingObj.sportid" formControlName="sport" (change)="onSportChange($event)">
+					   <mat-option *ngFor="let sport of sportList" [value]="sport._id">
+						 {{sport.sportName}}
+					   </mat-option>   				     			   
+					</mat-select> 
+				   <mat-error>
+					<control-messages [isSubmitted]="isSubmitted" [control]="pricingForm.controls['sport']"></control-messages>
+				  </mat-error>
+				</mat-form-field>
+		       </div>
+			   
+			    <div class="mb-3">
+					 <mat-form-field class="material-input-full">
+					  <mat-select placeholder="Score Type" [(ngModel)]="pricingObj.scoretype" formControlName="scoretype" >
+					   <mat-option  value="1">
+						 Score Only
+					   </mat-option>   
+					  <mat-option value="2">
+						Judges Notes
+             </mat-option>  
+             <mat-option value="3">
+              Skills
+               </mat-option>     			   
+					</mat-select>
+                   <mat-error>					
+					<control-messages [isSubmitted]="isSubmitted" [control]="pricingForm.controls['scoretype']"></control-messages>
+				    </mat-error>
+				</mat-form-field>			 
+		       </div>
+               <label><b>Configure Pricing($)</b></label>
+                <div class="mb-3">  
+                    <mat-form-field class="material-input-full">
+                      <input matInput placeholder="Competitor" type='number' [(ngModel)]="pricingObj.competitor" value="" formControlName="competitor" >
+                      <mat-error>
+                        <control-messages [isSubmitted]="isSubmitted" [control]="pricingForm.controls['competitor']"></control-messages>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="mb-3">
+                    <mat-form-field class="material-input-full">
+                      <input matInput placeholder="Judge" type='number'  [(ngModel)]="pricingObj.judge" value="" formControlName="judge" >
+                      <mat-error>
+                        <control-messages [isSubmitted]="isSubmitted" [control]="pricingForm.controls['judge']"></control-messages>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>		
+                  <div class="mb-3">
+                    <mat-form-field class="material-input-full">
+                      <input matInput placeholder="Technician" type='number'  [(ngModel)]="pricingObj.technician" [value]="pricingObj.technician" formControlName="technician" >
+                      <mat-error>
+                        <control-messages [isSubmitted]="isSubmitted" [control]="pricingForm.controls['technician']"></control-messages>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>			           
+                  <div class="mb-3">
+                        <button mat-raised-button color="primary" type="submit">Save</button>  
+                        <button mat-raised-button color="warn" type="button" (click)="triggerCancelForm()">Cancel</button>					  
+                  </div>
+              </form>
+          </mat-card>
+      </div>
+  </div>
+  

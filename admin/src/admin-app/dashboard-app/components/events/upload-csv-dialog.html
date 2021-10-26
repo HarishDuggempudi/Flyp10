@@ -1,0 +1,16 @@
+<h2 mat-dialog-title class="text-bold" style="font-weight: bold"><i class="fas fa-upload"></i> Upload Events from CSV</h2>
+<mat-dialog-content><div class="mb-3">
+    <input style="    border-bottom: 1px solid #000;
+    padding-bottom: 6px;
+    width: 100%;" type="file" class="upload" accept=".csv" (change)="changeListener($event.target.files)">
+    <!-- <mat-form-field class="material-input-full"> -->
+       <!-- <input matInput placeholder="Enter passphrase" [(ngModel)]="passphrase">           -->
+       <!-- <input type="file" class="upload"> -->
+    <!-- </mat-form-field> -->
+    <!-- <span *ngIf="wrongPassphrase" style="color: red; font-style: italic">Wrong Flyp-phrase! Please check again with this user.</span> -->
+   </div>
+</mat-dialog-content>
+<mat-dialog-actions class="float-right">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="uploadFromCSV()">Upload</button>
+</mat-dialog-actions>

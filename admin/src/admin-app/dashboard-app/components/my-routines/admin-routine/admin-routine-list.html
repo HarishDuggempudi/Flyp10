@@ -1,0 +1,32 @@
+<!-- Page Heading -->
+<div class="d-flex flex-row-reverse">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb nb-breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/dashboard']">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Routine Management</li>
+        </ol>
+    </nav>
+    <h1 class="nb-heading-one mr-auto" *ngIf="Isflyp10routine">Flyp10 Routine Management</h1>
+    <h1 class="nb-heading-one mr-auto" *ngIf="Iseventmeetroutine">Eventmeet Routine Management</h1>
+</div>
+<div class="pb-4">
+
+    <button mat-raised-button color="primary" (click)="flyp10routine()" *ngIf="Iseventmeetroutine">
+     <i class="fas fa-video"></i>&nbsp;My Flyp10 Routine</button>
+    <button mat-raised-button color="primary" (click)="eventmeetroutine()" *ngIf="Isflyp10routine">
+     <i class="fas fa-video"></i>&nbsp;Eventmeet Routine</button>
+</div>
+<nav mat-tab-nav-bar class="mb-4" *ngIf="Isflyp10routine">
+    <a mat-tab-link *ngFor="let link of flyp10navLinks" [routerLink]="link.path" [routerLinkActiveOptions]="{exact: true}" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">
+      {{link.label}}
+    </a>
+</nav>
+<nav mat-tab-nav-bar class="mb-4" *ngIf="Iseventmeetroutine">
+    <a mat-tab-link *ngFor="let link of eventmeetnavLinks" [routerLink]="link.path" [routerLinkActiveOptions]="{exact: true}" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">
+    {{link.label}}
+  </a>
+</nav>
+
+<router-outlet></router-outlet>

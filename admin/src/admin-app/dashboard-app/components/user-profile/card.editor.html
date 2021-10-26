@@ -1,0 +1,157 @@
+  <!-- Page Heading -->
+<div class="d-flex flex-row-reverse">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb nb-breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/dashboard']">Dashboard</a>
+      </li>
+	   <li class="breadcrumb-item">
+        <a [routerLink]="['/profile']">Profile</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Card Editor</li>
+    </ol>
+  </nav>
+  <h1 class="nb-heading-one mr-auto">Card Editor</h1>
+</div>
+<!-- /.row -->
+
+  <div class="row">
+      <div class="col-md-6">  
+          <mat-card class="material-card-sm">
+		   <form  role="form" novalidate [formGroup]="cardForm" (ngSubmit)="getToken()">
+           <div class="mb-3">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Cardholder’s Name"   formControlName="name">
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['name']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div>
+         
+		   <div class="mb-3">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Card number" class="cc-number" [ngClass]="cardType" (keyup)="returnCardType($event)"  type="text" [mask]="cardNumMask"   formControlName="cardnumber">
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['cardnumber']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+			<span *ngIf="cardType=='unknown' && isChecked" style="color:red;font-style: italic">Invalid card number</span>
+           </div>
+		   
+		   <div class="mb-3">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Expire date (MM/YY)" autocomplete="off"  type="text" mask="00/00"  formControlName="expdate">
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted"  [control]="cardForm.controls['expdate']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div>
+		    <div class="row">
+			 <div class="col-md-10" style="padding-right:0px;">
+              <mat-form-field class="material-input-full">
+                <input matInput placeholder="Security code" type="text" style="text-security:disc;-webkit-text-security:disc;" autocomplete="off" [mask]="cvvMask" formControlName="cvv">
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['cvv']"></control-messages>
+              </mat-error>
+             </mat-form-field>
+            </div>
+			<div class="col-md-2" style="padding-left:0px;">
+			  <button mat-mini-fab class="material-icon-sm" color="primary"  title="View" href="javascript:void(0)" style="margin-left:10px;background-color:#2f3191;" type="button" (click)="whatisCVV()">
+                          <i class="fa fa-question" ></i>
+                </button>
+			</div>
+		  </div>
+		
+		   <div class="mb-3">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Address"   formControlName="address">
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['address']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div>
+           <div>
+            <label><b>Paying in US Currency?</b></label>
+            <div class="mb-3">       
+                <mat-radio-group formControlName="USCitizen" (change)="OnCityzenChange()">
+                  <mat-radio-button style="padding-left: 10px;" value="Y">Yes</mat-radio-button>
+                  <mat-radio-button style="padding-left: 10px;" value="N">No</mat-radio-button>
+                </mat-radio-group>    
+                <mat-error>
+                  <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['USCitizen']"></control-messages>
+                </mat-error>
+                <!-- <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.submissionfor"></control-messages>   -->
+            </div>
+      </div>
+      <div class="mb-3" *ngIf="cardForm.controls['USCitizen'].value=='N'">
+        <mat-form-field class="material-input-full">
+           <mat-select placeholder="Country"   formControlName="country" name="country"  >
+          <mat-option *ngFor="let c of countrylist" [value]="c.Country">
+            {{c.Country}}
+          </mat-option>
+        </mat-select>
+          <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['country']"></control-messages>
+          </mat-error>
+        </mat-form-field>
+       </div>
+		    <div class="mb-3">
+            <mat-form-field class="material-input-full">
+              <mat-select *ngIf="cardForm.controls['USCitizen'].value!='N'" placeholder="State"   formControlName="state" name="state" (change)="OnstateChange()" >
+              <mat-option *ngFor="let state of statelist" [value]="state.abbreviation">
+                {{state.name}}
+              </mat-option>
+            </mat-select>
+             <input matInput placeholder="State" *ngIf="cardForm.controls['USCitizen'].value=='N'"   formControlName="state" >
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['state']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div>
+		   	    <div class="mb-3">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="City" *ngIf="cardForm.controls['USCitizen'].value!='N'"   formControlName="city" [matAutocomplete]="auto" (ngModelChange)="docityFilter($event)">
+				       <mat-autocomplete #auto="matAutocomplete"  (optionSelected)="onCityChange()">
+							  <mat-option *ngFor="let option of filteredCityOptions" [value]="option.city" >
+								{{option.city}}
+							  </mat-option>
+             </mat-autocomplete>
+             <input matInput placeholder="City" *ngIf="cardForm.controls['USCitizen'].value=='N'"   formControlName="city" >
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['city']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div>
+		    <div class="mb-3">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Zip code" *ngIf="cardForm.controls['USCitizen'].value!='N'"  formControlName="zip" [matAutocomplete]="Zipauto"  (ngModelChange)="dozipFilter($event)">
+                
+                <mat-autocomplete #Zipauto="matAutocomplete">
+							  <mat-option *ngFor="let option of filteredZipOptions" [value]="option.Zip" >
+								{{option.Zip}}
+							  </mat-option>
+             </mat-autocomplete>
+             <input matInput placeholder="Zip code/Postal Code" *ngIf="cardForm.controls['USCitizen'].value=='N'"   formControlName="zip" >
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['zip']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div>
+		   <div class="mb-3">
+                    <mat-checkbox  formControlName="isdefault">
+                        Default Card for payments
+                     </mat-checkbox>
+                 </div> 
+		     <div class="mb-3">
+          <button type="submit" mat-raised-button color="primary">
+            Add</button>
+          <button type="button" (click)="triggerCancelForm()" mat-raised-button color="warn">
+            Cancel
+          </button>
+      </div>
+		  </form>
+          </mat-card>
+      </div>
+	  
+  </div>
+  

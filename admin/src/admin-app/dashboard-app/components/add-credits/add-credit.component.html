@@ -1,0 +1,56 @@
+<form role="form" novalidate [formGroup]="addCreditsForm" #form="ngForm" (ngSubmit)="addcreditWallet()">
+    <div class="row">
+        <div class="col-md-6">
+            <h4 style="padding: 12px;color: gray;margin-bottom: 0;">Add Credit</h4>
+            <mat-card class="material-card-sm">
+            <mat-form-field class="material-input-full">
+            <mat-select  [formControl]="addCreditsForm.controls.Competitors" [(ngModel)]="Competitor" (change)="OnCompetitorChange()" placeholder="Select Competitor">
+                <mat-option>
+                  <ngx-mat-select-search [formControl]="addCreditsForm.controls.inputCompetitors"
+                       [placeholderLabel]="'Search Competitors'" 
+                               [noEntriesFoundLabel]="'No matching competitors found'"
+                  ><i ngxMatSelectSearchClear class="fa fa-times" aria-hidden="true"></i></ngx-mat-select-search>
+                </mat-option>
+
+                <mat-option *ngFor="let comp of filteredCompetitors" [value]="comp._id" >
+                  {{comp.username}}
+                </mat-option>
+                </mat-select>
+                <mat-error>
+                  <control-messages [isSubmitted]="isSubmitted" [control]="addCreditsForm.controls.Competitors"></control-messages>
+                </mat-error>
+            </mat-form-field>
+            <div class="mb-3">
+              <mat-form-field class="material-input-full">
+                  <input matInput placeholder="Available balance" readonly  [formControl]="addCreditsForm.controls.availablebalance" [(ngModel)]="AvailableBalance" type="text"   formControlName="availablebalance" >
+                <mat-error>
+                  <control-messages [isSubmitted]="isSubmitted"  [control]="addCreditsForm.controls['availablebalance']"></control-messages>
+                </mat-error>
+              </mat-form-field>
+             </div>
+             <div class="mb-3">
+              <mat-form-field class="material-input-full">
+                  <input matInput placeholder="Add Credit"  [formControl]="addCreditsForm.controls.AddCredit" [(ngModel)]="AddCredit" type="text"   formControlName="AddCredit" >
+                <mat-error>
+                  <control-messages [isSubmitted]="isSubmitted"  [control]="addCreditsForm.controls['AddCredit']"></control-messages>
+                </mat-error>
+              </mat-form-field>
+             </div>
+             <div class="mb-3">
+              <mat-form-field class="material-input-full">
+                  <input matInput placeholder="Enter Description"  [formControl]="addCreditsForm.controls.Description"  type="text"   formControlName="Description" >
+                <mat-error>
+                  <control-messages [isSubmitted]="isSubmitted"  [control]="addCreditsForm.controls['Description']"></control-messages>
+                </mat-error>
+              </mat-form-field>
+             </div>
+            <div class="mb-6">
+                <button mat-raised-button color="primary" type="submit">
+                  <i class="fas fa-plus"></i>&nbsp;&nbsp;Add Credit</button>
+                <button mat-raised-button color="warn" type="button" (click)="cancel()"><i class="fas fa-refresh"></i>Cancel</button>
+              </div>
+            </mat-card>
+        </div>
+    </div>
+    
+    

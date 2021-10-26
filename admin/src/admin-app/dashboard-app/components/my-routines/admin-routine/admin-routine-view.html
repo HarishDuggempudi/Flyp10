@@ -1,0 +1,224 @@
+<head>
+    <meta property="og:title" content="The Rock" />
+    <meta property="og:description" content="Directed by Michael Bay.  With Sean Connery, Nicolas Cage, Ed Harris, John Spencer." />
+    <meta property="og:url" content="http://www.imdb.com/title/tt0117500/" />
+    <meta property="og:image" content="http://ia.media-imdb.com/images/rock.jpg" />
+</head>
+
+<div class="row">
+    <div class="col-md-8">
+        <mat-card class="material-card-sm">
+            <h4>{{routineObj.title}}</h4>
+            <video *ngIf="routineObj.videofilename!='' && routineObj.videofilename!=null" controls controlsList="nodownload" #toJudgeVideo width="100%" (timeupdate)="setCurrentTime($event)" (loadedmetadata)="onMetadata($event, toJudgeVideo)">
+                <source [src]="'https://flyp10.com/'+routineObj.videofilename" type="video/mp4" />
+                Browser not supported
+            </video>
+
+            <!-- <div class="row" *ngIf="routineObj.routinestatus=='0'">
+                <mat-checkbox style="margin-left: 15px;margin-top: 4px;" (change)="toggleIncompleteVideo($event)">Incomplete video</mat-checkbox>
+                <button  mat-raised-button style="position: absolute; right: 24px;color:red" class="upload-routine float-right"  color="light" (click)="showCommentsBar()" ><i class="fas fa-flag"></i> Flag as inappropriate</button>   
+            </div> -->
+            <!--                 
+            <div class="comments"  *ngIf="routineObj.scoretype!='1' && routineObj.routinestatus=='1'  ">
+                <div class="comment">
+                    <h4>Comments</h4>
+                    <div *ngIf="comments.length; else showNull">
+                        <div class="comment-container" *ngFor="let comment of comments; let i = index">
+                            <span>{{i+1}}.<strong class="comment-duration">&nbsp;({{comment.time | minuteSeconds}}) </strong> &nbsp;{{comment.comment}}</span>                            
+                        </div>
+                    </div>
+                    <ng-template #showNull>
+                        <div class="text-center" style="padding-bottom: 8px">
+                            <span class="font-italic" style="color: lightgray">No comments added</span>
+                        </div>
+                        
+                    </ng-template>                    
+                </div>
+            </div> -->
+        </mat-card>
+    </div>
+
+
+    <div class="col-md-4">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-group ">
+                    <ul class="list-group">
+                        <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
+                         Duration
+                          <span class="badge " style="font-size:14px">{{formatduration(routineObj.duration)}}</span>
+                        </li> -->
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Sports
+                            <span class="badge " style="font-size:14px">{{routineObj.sport}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Level
+                            <span class="badge " style="font-size:14px">{{routineObj.level}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Event
+                            <span class="badge " style="font-size:14px">{{routineObj.event}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Submitted by
+                            <span class="badge " style="font-size:14px">{{routineObj.submittedBy}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Submitted on
+                            <span class="badge " style="font-size:14px">{{formatdate(routineObj.submittedOn)}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Status
+                            <span class="badge" style="font-size:14px" *ngIf="routineObj.routinestatus=='0'">In Queue</span>
+                            <span class="badge" style="font-size:14px" *ngIf="routineObj.routinestatus=='1'">Judged</span>
+                            <span class="badge" style="font-size:14px" *ngIf="routineObj.routinestatus=='3'">Incomplete</span>
+                            <span class="badge" style="font-size:14px" *ngIf="routineObj.routinestatus=='4'">Inappropriate</span>
+                            <span class="badge" style="font-size:14px" *ngIf="routineObj.routinestatus=='5'">Evaluating</span>
+
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="routineObj.score">
+                            Score
+                            <span class="badge " style="font-size:14px">{{routineObj.score}}</span>
+                        </li>
+                    </ul>
+                </ul>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<div class="col-md-12" style="margin-top:20px;" *ngIf="routineObj.routinestatus=='1' && routineObj.scoretype=='2'&&routineObj.uploadingType =='1'">
+    <mat-card>
+        <h4>Comments</h4>
+        <div class="row" style="margin-top:20px;">
+            <div class="col-sm-2" *ngIf="scoreCard.time">
+                <span><b>Time</b></span>
+            </div>
+            <div class="col-sm-3">
+                <span><b>Element</b></span>
+            </div>
+            <div class="col-sm-2">
+                <span><b>Comment</b></span>
+            </div>
+            <div class="col-sm-1" style="padding:0px" *ngIf="scoreCard.skillvalue">
+                <span><b>Skill Value</b></span>
+            </div>
+            <div class="col-sm-1" style="padding:0px;" *ngIf="scoreCard.execution">
+                <span><b>Execution</b></span>
+            </div>
+            <div class="col-sm-1" *ngIf="scoreCard.bonus">
+                <span><b>Bonus</b></span>
+            </div>
+            <div class="col-sm-1" *ngIf="scoreCard.factor">
+                <span><b>Factor</b></span>
+            </div>
+            <div class="col-sm-1">
+                <span><b>Total</b></span>
+            </div>
+        </div>
+        <hr/>
+        <div *ngIf="comments.length; else showNull">
+            <div class="row" *ngFor="let com of comments" style="margin-top:20px;">
+                <div class="col-sm-2" *ngIf="scoreCard.time">
+                    <span>{{com.time}}</span>
+                </div>
+                <div class="col-sm-3">
+                    <span>{{com.element}}</span>
+                </div>
+                <div class="col-sm-2">
+                    <span>{{com.comment}}</span>
+                </div>
+                <div class="col-sm-1" style="padding:0px" *ngIf="scoreCard.skillvalue">
+                    <span>{{com.skillvalue}}</span>
+                </div>
+                <div class="col-sm-1" *ngIf="scoreCard.execution">
+                    <span>{{com.execution}}</span>
+                </div>
+                <div class="col-sm-1" *ngIf="scoreCard.bonus">
+                    <span>{{com.bonus?com.bonus:0}}</span>
+                </div>
+                <div class="col-sm-1" *ngIf="scoreCard.factor">
+                    <span>{{com.factor}}</span>
+                </div>
+                <div class="col-sm-1">
+                    <span>{{com.total}}</span>
+                </div>
+            </div>
+        </div>
+        <ng-template #showNull>
+            <div class="text-center" style="padding-bottom: 8px">
+                <span class="font-italic" style="color: lightgray">No comments added</span>
+            </div>
+
+        </ng-template>
+        <hr/>
+        <div class="row" style="margin-top:20px;">
+            <div class="col-md-3">
+                <b>Over all comment</b>:
+            </div>
+            <div class="col-md-3">
+                {{routineObj.comment}}
+            </div>
+            <!-- <div class="col-md-2">
+             <label><b>Score</b>:</label>
+             <label>{{routineObj.score}}</label>
+         </div> -->
+            <div class="col-md-3">
+                <label><b>Degree of difficulty</b>:</label>
+                <label>{{routineObj.dod}}</label>
+            </div>
+        </div>
+
+    </mat-card>
+</div>
+<!-- Modal -->
+<br>
+<mat-card class="nb-dashboard-table" *ngIf="routineObj.uploadingType =='2'">
+    <mat-table #table [dataSource]="dataSource">
+        <ng-container matColumnDef="SN">
+            <mat-header-cell class="symbol-no" *matHeaderCellDef> SN </mat-header-cell>
+            <mat-cell class="symbol-no" *matCellDef="let event let i=index"> {{preIndex+(i+1)}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Panel">
+            <mat-header-cell *matHeaderCellDef> Panel</mat-header-cell>
+            <mat-cell *matCellDef="let event">
+                <span style="color: #04088f;cursor: pointer;" *ngIf="event.judgePanel">{{event.judgePanel}}</span>
+                <span style="color: #04088f;cursor: pointer;" *ngIf="!event.judgePanel">J</span> </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="JudgeName">
+            <mat-header-cell *matHeaderCellDef>Judge Name </mat-header-cell>
+            <mat-cell *matCellDef="let event"> {{event.userinfo.firstName}} {{event.userinfo.lastName}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Status">
+            <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+            <mat-cell *matCellDef="let event">
+                <span *ngIf="event.routinestatus=='0' || event.routinestatus=='5'">In Queue</span>
+                <span *ngIf="event.routinestatus=='1' || !event.routinestatus">Judged</span>
+                <span *ngIf="event.routinestatus=='3'">Poor Video Quality</span>
+                <span *ngIf="event.routinestatus=='4'">Inappropriate</span>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Score">
+            <mat-header-cell *matHeaderCellDef>Score</mat-header-cell>
+            <mat-cell *matCellDef="let event"> {{event.score}} </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="Overall Comment">
+            <mat-header-cell *matHeaderCellDef>Overall Comment</mat-header-cell>
+
+            <mat-cell *matCellDef="let event"> {{event.comments}} </mat-cell>
+
+
+
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <div class="p-3 text-center" *ngIf=" AssignedJudges.length==0 ">
+        No Records Found
+    </div>
+
+</mat-card>

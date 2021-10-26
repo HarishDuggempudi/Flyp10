@@ -1,0 +1,425 @@
+<!-- Facebook Pixel Code -->
+
+<script>
+    ! function(f, b, e, v, n, t, s)
+
+    {
+        if (f.fbq) return;
+        n = f.fbq = function() {
+            n.callMethod ?
+
+                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+        };
+
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = '2.0';
+
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+
+        s.parentNode.insertBefore(t, s)
+    }(window, document, 'script',
+
+        'https://connect.facebook.net/en_US/fbevents.js');
+
+    fbq('init', '256352801666442');
+
+    fbq('track', 'PageView');
+</script>
+
+<noscript>
+
+        <img height="1" width="1" src="https://www.facebook.com/tr?id=256352801666442&ev=PageView&noscript=1" />
+
+    </noscript>
+
+<!-- End Facebook Pixel Code -->
+<ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="large" color="#241472" type="ball-clip-rotate"></ngx-spinner>
+<div class="bg-img">
+    <div class="logo">
+        <a href="#"><img src="../../../assets/client/images/logo-transparent.png" class="img-rounded" alt="Cinque Terre">
+            <h3 *ngIf="userRole=='competitor'">Competitor Signup</h3>
+            <h3 *ngIf="userRole=='judge'">Judge Signup</h3>
+            <h3 *ngIf="userRole=='recruiter'">Recruiter Signup</h3>
+        </a>
+        <a (click)="triggerCancelForm()" class="loginlink">Already have an account? <u>Login here</u> </a>
+    </div>
+
+
+
+    <aw-wizard class="wizardStyle" navBarLayout="large-filled-symbols" style="margin-left:auto;margin-right:auto;">
+        <div class="container">
+            <aw-wizard-step stepTitle="Basic Info" [navigationSymbol]="{ symbol: '1' }" (stepExit)="enterSecondStep($event)">
+
+                <form [formGroup]="basicInfo">
+                    <div class="form-group" style="display:table;margin:auto; padding: 0px 30px;">
+
+
+
+                        <img *ngIf="!cropped" style="width: 150px;height: 150px;" src="../../../assets/admin/img/defaults/default_avatar.png">
+                        <p>*You can change this later.</p>
+                    </div>
+                    <p style="margin-bottom:5px!important"><b>Select profile Picture</b></p>
+                    <input style="margin-bottom:10px;" type="file" (change)="fileChangeEvent($event)" accept="image/*" />
+
+                    <image-cropper style="margin-bottom:10px" *ngIf="cropped" [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="4 / 4" [resizeToWidth]="128" format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+                        (loadImageFailed)="loadImageFailed()"></image-cropper>
+
+
+
+                    <!-- Generated markup by the plugin -->
+
+                    <div class="form-group">
+                        <!-- <label for="email"><b>First Name:</b></label> -->
+                        <input type="text" class="form-control" formControlName="fname" placeholder="First Name*">
+                        <span *ngIf="basicInfo?.controls.fname?.errors?.required && basicInfoSubmitted" style="color: red;">First name is required</span>
+
+                    </div>
+
+
+                    <div class="form-group">
+                        <!-- <label for="email"><b>Last Name:</b></label> -->
+                        <input type="text" class="form-control" formControlName="lname" placeholder="Last Name*">
+                        <span *ngIf="basicInfo?.controls.lname?.errors?.required && basicInfoSubmitted" style="color: red;">Last name is required</span>
+
+                    </div>
+                    <div class="input-group mb-3" *ngIf="userRole=='competitor'">
+                        <input class="form-control" style="float:none;height: 38px; " formControlName="dob" disabled="true" placeholder="Birth Date" ngx-mydatepicker name="mydate" #dp="ngx-mydatepicker" (dateChanged)="onDateChanged($event)" />
+
+                        <span class="input-group-append">
+                                    <button type="button" style="padding: 6px 12px;" class="btn btn-default" (click)="dp.clearDate()">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                    <button type="button" style="padding: 6px 12px;" class="btn btn-default" (click)="dp.toggleCalendar()">
+                                        <i class="fa fa-calendar"></i>
+                                    </button>
+                                </span>
+                        <span class="col-md-12" *ngIf="basicInfo?.controls.dob?.errors?.required && basicInfoSubmitted" style="color: red;padding-left: 0;">Date of birth is required</span>
+                        <span class="col-md-12" *ngIf="basicInfo?.controls.dob?.errors?.age && basicInfoSubmitted" style="color: red;padding-left: 0;">Age should be grater then 18</span>
+                    </div>
+                    <div class="form-group">
+                        <!-- <label for="email"><b>Username:</b></label> -->
+                        <input type="text" class="form-control" formControlName="username" #username (input)="checkUsername($event.target.value)" placeholder="Select a username*">
+                        <span *ngIf="basicInfo?.controls.username?.errors?.required  && basicInfoSubmitted" style="color: red;">Username cannot be empty</span>
+                        <span *ngIf="basicInfo?.controls.username?.errors?.minlength && basicInfoSubmitted" style="color: red;">Username must be atleast 3 characters long</span>
+
+                        <span style="color: red" *ngIf="userAvailability===1">Username not available <i class="fas fa-times"></i></span>
+                        <span style="color: green" *ngIf="userAvailability===2">Username available <i class="fas fa-check"></i></span>
+                    </div>
+                    <div class="form-group  mb-3">
+                        <!-- <label for="email"><b>Password:</b></label> -->
+                        <input type="password" class="form-control" formControlName="pwd" placeholder="Password*">
+                        <span *ngIf="basicInfo?.controls.pwd?.errors?.required && basicInfoSubmitted" style="color: red;">Choose a password to proceed</span>
+                        <span class="col-md-12" *ngIf="basicInfo?.controls.pwd?.errors?.invalidPassword && basicInfoSubmitted && !basicInfo?.controls.pwd?.errors?.required" style="color: red;padding-left: 0;">Invalid password. Password must be at least 8 characters long, and contain a number</span>
+                    </div>
+                    <div class="form-group  mb-3">
+                        <!-- <label for="email"><b>Password:</b></label> -->
+                        <input type="password" class="form-control" formControlName="repwd" placeholder="Re-enter Password*" (keyup)="CheckPwd()">
+                        <span *ngIf="basicInfo?.controls.repwd?.errors?.required && basicInfoSubmitted" style="color: red;">Re-Enter your password to proceed</span>
+                        <span class="col-md-12" *ngIf="!isPwdMatch" style="color: red;padding-left: 0;">Password mismatch, please ensure both the passwords are same.</span>
+                    </div>
+
+                    <div class="form-group mb-3" *ngIf="userRole=='competitor'">
+                        <label style="margin: 0px;padding: 0px;" for="x_card_code" class="control-label mb-1">How do know Flyp10? </label>
+                        <select class="form-control" placeholder="How do know Flyp10" id="sel1" formControlName="referralType">
+                                      <option value="" selected disabled>--Select--</option>
+                                      <option value="F" >Flyp10 user</option>
+                                      <option value="S" >Social Media</option>
+                                      <option value="P" >Promo Code</option>									
+                                    </select>
+                    </div>
+                    <div class="form-group  mb-3" *ngIf="userRole=='competitor'">
+                        <!-- <label for="email"><b>Password:</b></label> -->
+                        <input *ngIf="basicInfo.value.referralType == 'F'" type="text" class="form-control" formControlName="referrer" placeholder="Enter Flyp10 user name*">
+                        <input *ngIf="basicInfo.value.referralType == 'S'" type="text" class="form-control" formControlName="referrer" placeholder="Enter social media name*">
+                        <input *ngIf="basicInfo.value.referralType == 'P'" type="text" class="form-control" formControlName="referrer" placeholder="Enter Promo Code*">
+                        <span class="col-md-12" *ngIf="basicInfo.value.referralType == 'F'" style="color: black;padding-left: 0;">Please ensure username is correct.</span>
+
+
+                    </div>
+
+                </form>
+                <div class="row" style="padding: 0px 15px;">
+                    <!-- <button type="button" class="formBtn floatLeft" (click)="captchaVerify()" style="background-color:#972347;width: 40%;" ><i class="fa fa-times"></i>&nbsp;captcha</button> -->
+                    <button type="button" class="formBtn floatLeft" (click)="cancelButton()" style="background-color:#972347;width: 40%;"><i class="fa fa-times"></i>&nbsp;Cancel</button>
+                    <button type="button" class="formBtn floatRight" awNextStep>Next (Contact Info)&nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></button>
+                </div>
+            </aw-wizard-step>
+            <aw-wizard-step stepTitle="Contact Info" [navigationSymbol]="{ symbol: '2' }" [canEnter]="basicInfo.valid && userAvailability==2 && this.isPwdMatch" (stepExit)="enterFinalStep($event)">
+                <form [formGroup]="contactInfo">
+
+
+                    <div *ngIf="userRole=='judge'" class="form-group" data-tip="Please register using the same email address you use with your sport’s certification profile.">
+                        <!-- <label for="email"><b>Email:</b></label> -->
+                        <input type="email" class="form-control" formControlName="email" placeholder="Enter Email address">
+                        <span *ngIf="contactInfo?.controls.email?.errors?.email && contactInfoSubmitted" style="color: red;">Invalid Email</span>
+                        <!-- <pre>{{contactInfo | json}}</pre> -->
+                    </div>
+                    <div *ngIf="userRole=='recruiter'" class="form-group" data-tip="Please register using the same email address you use with your official recruiting profile.">
+                        <!-- <label for="email"><b>Email:</b></label> -->
+                        <input type="email" class="form-control" formControlName="email" placeholder="Enter Email address">
+                        <span *ngIf="contactInfo?.controls.email?.errors?.email && contactInfoSubmitted" style="color: red;">Invalid Email</span>
+                        <!-- <pre>{{contactInfo | json}}</pre> -->
+                    </div>
+                    <div *ngIf="userRole=='competitor'" class="form-group">
+                        <!-- <label for="email"><b>Email:</b></label> -->
+                        <input type="email" class="form-control" formControlName="email" placeholder="Enter Email address">
+                        <span *ngIf="contactInfo?.controls.email?.errors?.email && contactInfoSubmitted" style="color: red;">Invalid Email</span>
+                        <!-- <pre>{{contactInfo | json}}</pre> -->
+                    </div>
+
+                    <div class="form-group">
+                        <!-- <label for="email"><b>Phone Number:</b></label> -->
+                        <input type="number" class="form-control" formControlName="phone" placeholder="Phone Number (optional)">
+                        <span *ngIf="contactInfo?.controls.phone?.errors?.required && contactInfoSubmitted" style="color: red;">Phone number is required</span>
+                        <!-- <span *ngIf="contactInfo?.controls.phone.value.toString().length < 10 && contactInfoSubmitted" style="color: red;">Not a valid phone number</span> -->
+                    </div>
+                    <div class="col-12" style="margin: 0px;padding: 0px;">
+                        <!-- <div class="form-group">
+                                   <label style="margin: 0px;padding: 0px;" for="x_card_code" class="control-label mb-1">Paying in US Currency? </label>
+                                    <select class="form-control"  placeholder="Citizen" id="sel1" formControlName="USCitizen" (change)="onjudgeCitizenchange()">
+                                      <option value="" selected disabled>--Select--</option>
+                                      <option value="Y" >Yes</option>
+                                      <option value="N" >No</option>									
+                                    </select>
+                                  <span *ngIf="contactInfo?.controls.USCitizen?.errors?.required && contactInfoSubmitted" style="color: red;">Required</span>
+                               </div>  -->
+                    </div>
+                    <div class="col-12" style="margin: 0px;padding: 0px;">
+                        <div class="form-group">
+                            <label for="x_card_code" style="margin: 0px;padding: 0px;" class="control-label mb-1">Country </label>
+                            <select class="form-control" placeholder="Country" id="country" formControlName="country" (change)="OnCountryChange($event)">
+                                      <option value="" selected disabled>Select Country</option>
+                                      <option *ngFor="let c of countrylist"  [value]="c.Name">{{c.Name}}</option>                    								
+                                    </select>
+                            <span *ngIf="contactInfo?.controls.country?.errors?.required && contactInfoSubmitted" style="color: red;">Country is required</span>
+                        </div>
+                    </div>
+
+                    <!-- <div class="form-group" *ngIf="userRole!='competitor'"> -->
+                    <div class="form-group">
+                        <!-- <select class="form-control" *ngIf="contactInfo.controls.USCitizen.value=='Y'" placeholder="State" id="sel1" formControlName="address">
+                                      <option value="" selected disabled>Select State</option>
+                                      <option *ngFor="let state of statelist" >{{state.name}}</option>									
+                                    </select> -->
+                        <select class="form-control" *ngIf="isSelectState" placeholder="State" id="sel1" formControlName="address">
+                                        <option value="" selected disabled>Select State/Province</option>
+                                        <option *ngFor="let state of statelist" >{{state.name}}</option>									
+                                      </select>
+                        <input type="text" placeholder="State/Province" class="form-control" *ngIf="!isSelectState" formControlName="address">
+                        <span *ngIf="contactInfo?.controls.address?.errors?.required && contactInfoSubmitted" style="color: red;">State is required</span>
+                    </div>
+                    <div class="form-group">
+                        <div class="g-recaptcha" data-sitekey="6LdfKsMZAAAAAHFd6VxiGKFv89oZ4uSQxCAXd2ZQ"></div>
+                        <span class="col-md-12" *ngIf="isCaptchaInvalid" style="color: red;padding-left: 0;">Captcha is required</span>
+                        <span class="col-md-12" *ngIf="!isCaptchaInvalid && !isCaptchaVerify" style="color: red;padding-left: 0;">Invalid captcha.Please try again</span>
+                    </div>
+
+                    <div class="row" style="padding: 0px 15px;">
+                        <button type="button" class="formBtn floatLeft" awPreviousStep><i class="fa fa-chevron-left" aria-hidden="true"></i>&nbsp;Prev</button>
+                        <div *ngIf="userRole=='judge' || userRole=='recruiter' || userRole=='competitor'" class="floatRight">
+                            <button type="button" class="formBtn" (click)="userFormSubmit()"><i class="fa fa-lock fa-lg"></i>&nbsp;submit</button>
+                            <button type="button" class="formBtn" (click)="cancelButton()" style="background-color:#972347;"><i class="fa fa-times"></i>&nbsp;Cancel</button>
+                        </div>
+                        <!-- <button *ngIf="userRole=='competitor'" type="button" class="formBtn floatRight" awNextStep>Next&nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></button> -->
+                    </div>
+                </form>
+            </aw-wizard-step>
+            <!-- <aw-wizard-step stepTitle="Sport Info" [navigationSymbol]="{ symbol: '3' }" [canEnter]="basicInfo.valid && contactInfo.valid" (stepExit)="enterFinalStep($event)">
+                        <form [formGroup]="sportInfo">
+                            <div class="form-group">
+                                <label for="sel1">Select sport:</label>
+                                <select class="form-control"  formControlName="sportName">
+                                  <option  *ngFor="let sp of sportObj" [value]="sp.sportName">{{sp.sportName}}</option>
+      
+                                </select>
+                                <span *ngIf="sportInfo?.controls.sportName.value == '' && sportInfoSubmitted" style="color: red;">Select a sport</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="sel1">Select Level:</label>
+                                <select class="form-control" formControlName="level">
+                                  <option *ngFor="let lvl of levelObj" [value]="lvl.level">{{lvl.level}}</option>
+                                
+                                </select>
+                                <span *ngIf="sportInfo?.controls.level.value == '' && sportInfoSubmitted" style="color: red;">Select a level</span>
+                 
+                            </div>
+                            <div class="row" style="padding: 0px 15px;">
+                                <button type="button" class="formBtn floatLeft" awPreviousStep>Prev</button>
+                                <button type="button" class="formBtn floatRight" awNextStep>Next</button>
+                            </div> 
+                        </form>
+                        
+                    </aw-wizard-step> -->
+            <div *ngIf="userRole=='competitor'">
+                <!-- <aw-wizard-step  stepTitle="Card Info" [navigationSymbol]="{ symbol: '3' }" [canEnter]="basicInfo && contactInfo.valid">
+                            <form [formGroup]="cardInfo">
+                                    <div class="form-group has-success">
+                                            <label for="cc-name" class="control-label mb-1">Cardholder’s Name</label>
+											<div class="row" style="margin-left:0px;">
+											   <input formControlName="nameOnCard" name="cc-name" type="text" class="form-control cc-name" autocomplete="cc-name" style="width:50%;">
+											   <a class="card-link" (click)="whyThis()">Why does Flyp10 need this?</a>
+											</div>                                           
+                                            <span class="invalid-feedback">Enter the name as shown on credit card</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cc-number" class="control-label mb-1">Card number</label>
+                                            <input formControlName="cardNum" name="cc-number" type="tel" (keyup)="returnCardType($event)"  class="form-control cc-number identified " [ngClass]="cardType" [mask]="cardNumMask">
+                                             <span *ngIf="cardType=='unknown' && isChecked" style="color:red;font-style: italic">Invalid card number</span>
+											<span *ngIf="cardType=='unknown'&& submitted" style="color:red;font-style: italic">Enter a valid 16 digit card number</span>
+                                            <span>{{cardType}}</span> 
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="cc-exp" class="control-label mb-1">Expiration</label>
+                                                    <input formControlName="expiresOn" name="cc-exp" type="tel" mask="00/00" class="form-control cc-exp" required placeholder="MM / YY" autocomplete="cc-exp">
+                                                    <span class="invalid-feedback">Enter the expiration date</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                <label for="x_card_code" class="control-label mb-1">Security code</label>
+                                                <div class="input-group">
+                                                    <input formControlName="cvv" name="x_card_code" type="text" style="text-security:disc;-webkit-text-security:disc;"  [mask]="cvvMask" class="form-control cc-cvc" required autocomplete="off">
+                                                    <span class="invalid-feedback order-last">Enter the 3-digit code on back</span>
+                                                    <div class="input-group-append" (click)="whatisCvv()">
+                                                        <div class="input-group-text">
+                                                        <span class="fa fa-question-circle fa-lg" data-toggle="popover" data-container="body" data-html="true" data-title="Security Code" 
+                                                        data-content="<div class='text-center one-card'>The 3 digit code on back of the card..<div class='visa-mc-cvc-preview'></div></div>"
+                                                        data-trigger="hover"></span>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                          
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="cc-exp" class="control-label mb-1">Address</label>
+                                                    <div class="input-group">
+                                                        <input formControlName="address" name="cc-exp" type="text" class="form-control cc-exp" autocomplete="cc-exp">
+                                                        <span *ngIf="cardInfo?.controls.address?.errors?.required && cardInfoSubmitted" style="color: red;">Address is required</span>
+                                                    </div>                                        
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                   <label for="x_card_code" class="control-label mb-1">Paying in US Currency?  </label>
+                                                    <select class="form-control"  placeholder="Citizen" id="sel1" formControlName="USCitizen" (change)="onCitizenchange()">
+                                                      <option value="" selected disabled>--Select--</option>
+                                                      <option value="Y" >Yes</option>
+                                                      <option value="N" >No</option>									
+                                                    </select>
+                                                  <span *ngIf="cardInfo?.controls.USCitizen?.errors?.required && cardInfoSubmitted" style="color: red;">Required</span>
+                                               </div> 
+                                            </div>
+                                            <div class="col-12" *ngIf="cardInfo.controls.USCitizen.value=='N'">
+                                                <div class="form-group">
+                                                   <label for="x_card_code" class="control-label mb-1">Country </label>
+                                                    <select class="form-control"  placeholder="Country" id="country" formControlName="country">
+                                                      <option value="" selected disabled>Select Country</option>
+                                                      <option *ngFor="let c of countrylist"  [value]="c.Country">{{c.Country}}</option>                    								
+                                                    </select>
+                                                  <span *ngIf="cardInfo?.controls.country?.errors?.required && cardInfoSubmitted" style="color: red;">Country is required</span>
+                                               </div> 
+                                            </div>
+                                            <div class="USPanel row" style="margin: 0px;" *ngIf="cardInfo.controls.USCitizen.value=='N'" >
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                       <label for="x_card_code" class="control-label mb-1">State/Province</label>
+                                                        <input formControlName="state"  name="state" type="text" class="form-control cc-cvc" >
+                                                       <span *ngIf="cardInfo?.controls.state?.errors?.required && cardInfoSubmitted" style="color: red;">State/Province is required</span>
+                                                   </div> 
+                                                </div>
+                                                <div class="col-6">
+                                                
+                                                    <div class="form-group">
+                                                      <label for="city" class="control-label mb-1">City</label>
+                                                       <div class="input-group">
+                                                        <input formControlName="city"  name="city" type="text" class="form-control cc-cvc" >
+                                                        <span *ngIf="cardInfo?.controls.city?.errors?.required && cardInfoSubmitted" style="color: red;">City is required</span>
+                                                      </div>
+                                                      
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                
+                                                    <div class="form-group">
+                                                      <label for="zip" class="control-label mb-1">Zip code/Postal code</label>
+                                                       <div class="input-group">
+                                                        <input formControlName="zipcode"  name="zip" type="text" class="form-control cc-cvc" >
+                                                        <span *ngIf="cardInfo?.controls.zipcode?.errors?.required && cardInfoSubmitted" style="color: red;">Zip Code is required</span>
+                                                      </div>
+                                                      
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="USPanel row" style="margin: 0px;" *ngIf="cardInfo.controls.USCitizen.value=='Y'" >
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                       <label for="x_card_code" class="control-label mb-1">State</label>
+                                                        <select class="form-control"  placeholder="State" id="sel1" formControlName="state" (change)="onStateChange($event)">
+                                                          <option value="" selected disabled>Select State</option>
+                                                          <option *ngFor="let state of statelist" >{{state.name}}</option>									
+                                                        </select>
+                                                      <span *ngIf="cardInfo?.controls.state?.errors?.required && cardInfoSubmitted" style="color: red;">State is required</span>
+                                                   </div> 
+                                                </div>
+                                                <div class="col-6">
+                                                
+                                                    <div class="form-group">
+                                                      <label for="city" class="control-label mb-1">City</label>
+                                                       <div class="input-group">
+                                                        <input formControlName="city" (change)="onCityChange()" list="city" name="city" type="text" class="form-control cc-cvc" >
+                                                        <span *ngIf="cardInfo?.controls.city?.errors?.required && cardInfoSubmitted" style="color: red;">City is required</span>
+                                                      </div>
+                                                      <datalist id="city">
+                                                          <option *ngFor="let city of Citylist" [value]="city.city">{{city.city}}</option>
+                                                      </datalist>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                
+                                                    <div class="form-group">
+                                                      <label for="zip" class="control-label mb-1">Zip code</label>
+                                                       <div class="input-group">
+                                                        <input formControlName="zipcode" list="zip" name="zip" type="number" class="form-control cc-cvc" >
+                                                        <span *ngIf="cardInfo?.controls.zipcode?.errors?.required && cardInfoSubmitted" style="color: red;">Zip Code is required</span>
+                                                      </div>
+                                                       <datalist id="zip">
+                                                          <option *ngFor="let zip of ZipCodelist" [value]="zip.Zip">{{zip.Zip}}</option>
+                                                      </datalist>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div> 
+                                        <div class="form-group  mb-3">
+                                            <div class="g-recaptcha"  data-sitekey="6LdfKsMZAAAAAHFd6VxiGKFv89oZ4uSQxCAXd2ZQ"></div>
+                                            <span  class="col-md-12"  *ngIf="isCaptchaInvalid" style="color: red;padding-left: 0;">Captcha is required</span>
+                                            <span  class="col-md-12"  *ngIf="!isCaptchaInvalid && !isCaptchaVerify" style="color: red;padding-left: 0;">Invalid captcha.Please try again</span>
+                                        </div>   
+                            </form>
+                                
+                                <div class="row" style="padding: 0px 15px;">
+                                        <button type="button" class="formBtn floatLeft" awPreviousStep><i class="fa fa-chevron-left" aria-hidden="true"></i>&nbsp;Prev</button>                           
+                                          <div class="floatRight">											  							 
+										      <button type="button" class="formBtn" (click)="userFormSubmit()"><i class="fa fa-lock fa-lg"></i>&nbsp;Submit</button> 
+										      <button type="button" class="formBtn" (click)="cancelButton()" style="background-color:#972347;" ><i class="fa fa-times"></i>&nbsp;Cancel</button>				
+										</div> 
+								   </div> 
+                    </aw-wizard-step> -->
+            </div>
+        </div>
+    </aw-wizard>
+
+</div>

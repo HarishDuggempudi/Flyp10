@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700');
+@import '~@ngx-share/button/styles/share-buttons';
+@import '~@ngx-share/button/styles/themes/default/default-theme';
+@keyframes slideInUp {
+  from {
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+    visibility: visible;
+  }
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.nb-welcome-pages {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 30px 15px;
+  // background: #2e3192;
+  background-image: url('../../../../assets/admin/img/login.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  card-body {
+    max-width: 700px!important;
+  }
+  .mat-card {
+    transition: box-shadow 280ms cubic-bezier(.4,0,.2,1);
+    display: block;
+    position: relative;
+    padding: 24px 50px 50px 50px!important;
+    border-radius: 2px;
+}
+.nb-share-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 30px 15px;
+  // background: #2e3192;
+  background-image: url("../../../../assets/admin/img/login.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+ 
+} .card {
+  background: black;
+  flex: 0 0 900px;
+  max-width: 900px;
+  animation-name: slideInUp;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}}

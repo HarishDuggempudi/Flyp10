@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-138497422-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-138497422-1');
+    </script>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Flyp10 | Blog</title>
+    <link href="assets/client/images/red_icon.png" rel="icon">
+
+<!-- Facebook Pixel Code -->
+
+<script>
+
+    !function(f,b,e,v,n,t,s)
+    
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    
+    s.parentNode.insertBefore(t,s)}(window,document,'script',
+    
+    'https://connect.facebook.net/en_US/fbevents.js');
+    
+    fbq('init', '256352801666442'); 
+    
+    fbq('track', 'PageView');
+    
+    </script>
+
+    
+        <noscript>
+
+            <img height="1" width="1" src="https://www.facebook.com/tr?id=256352801666442&ev=PageView&noscript=1" />
+    
+        </noscript>
+    
+    <!-- End Facebook Pixel Code -->
+</head>
+
+<body data-spy="scroll" data-target=".navbar" data-offset="90">
+
+    <!--PreLoader-->
+    <div class="loader">
+        <div class="loader-inner">
+            <div class="loader-blocks">
+                <span class="block-1"></span>
+                <span class="block-2"></span>
+                <span class="block-3"></span>
+                <span class="block-4"></span>
+                <span class="block-5"></span>
+                <span class="block-6"></span>
+                <span class="block-7"></span>
+                <span class="block-8"></span>
+                <span class="block-9"></span>
+                <span class="block-10"></span>
+                <span class="block-11"></span>
+                <span class="block-12"></span>
+                <span class="block-13"></span>
+                <span class="block-14"></span>
+                <span class="block-15"></span>
+                <span class="block-16"></span>
+            </div>
+        </div>
+    </div>
+    <!--PreLoader Ends-->
+
+    <!-- header -->
+    <header class="site-header otherpgheadr">
+        <nav class="navbar navbar-expand-lg transparent-bg static-nav">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <img src="assets/client/images/logo-transparent.png" alt="logo">
+                </a>
+                <button class="navbar-toggler navbar-toggler-right collapsed" type="button" data-toggle="collapse" data-target="#xenav">
+                    <span> </span>
+                    <span> </span>
+                    <span> </span>
+                </button>
+                <div class="collapse navbar-collapse" id="xenav">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link1" href="/#banner-main" data-text="Home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link1" href="/#aboutid" data-text="About">About Us</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link1" href="/blog" data-text="Blog">Blog</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link1" href="/#portfolio_top" data-text="Sports">MyFlyp10</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link1" href="/#virtual" data-text="Sports">Competitions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link1" href="/#our-pricings" data-text="Pricing">Our Pricing</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link1" href="/#our-testimonial" data-text="Testimonial">Testimonial</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link1" href="/#contactus" data-text="contact">Contact Us</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+    </header>
+    <!-- header -->
+
+    <!--Main Slider-->
+    <section class="page-header parallaxie center-block" [style.background-image]="'url(https://flyp10.com/public/uploads/images/blogs/'+ blogDetails.bannerImage +')'">
+        <div class="post-container padding_top" style="background: rgba(0,0,0,.5);width: 100%;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-titles text-center">
+                            <h2 class="whitecolor font-light bottom30">{{blogDetails.blogTitle}}</h2>
+                            <ul class="breadcrumb justify-content-center">
+                                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                                <li class="breadcrumb-item"><a href="/blog">Blog</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">{{blogDetails.blogTitle}}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </section>
+    <!--Main Slider ends -->
+
+    <section id="our-blog" class="padding_half bglight">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="news_item shadow">
+                        <div class="image">
+                            <img src="https://flyp10.com/public/uploads/images/blogs/{{blogDetails.bannerImage}}" alt="{{blogDetails.bannerImage}}" class="img-responsive">
+                        </div>
+                        <div class="news_desc text-left">
+                            <h3 class="text-capitalize font-light darkcolor" *ngIf="blogDetails!=undefined"><a href="blog-detail.html">{{blogDetails.blogTitle}}</a></h3>
+                            <ul class="meta-tags top20 bottom20" *ngIf="blogDetails!=undefined">
+                                <li><a href="#."><i class="fa fa-calendar"></i>{{blogDetails.addedOn | date}}</a></li>
+                                <li>
+                                    <a href="#."> <i class="fa fa-user-o"></i>{{blogDetails.author}}</a>
+                                </li>
+                            </ul>
+                            <div *ngIf="blogDetails!=undefined" [innerHTML]="blogDetails.blogDescription"></div>
+                            <!-- <p class="bottom35">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley.</p>
+                            <p class="heading_space">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nec facilisis nullano volutpat justo. Nulla tempus ultricies feugiat. Duis magna risus, luctus id urna dapibus condimentum dui. Maecenas tempor non ex eu vehicula. Sed sit placerat velit,</p>
+                            <blockquote class="blockquote darkcolor heading_space">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley</blockquote>
+                            <ul class="rounded heading_space">
+                                <li>Lorem Ipsum has been the industry's standard dummy text ever</li>
+                                <li>Lorem Ipsum has been the industry's standard dummy text ever</li>
+                                <li>Lorem Ipsum has been the industry's standard dummy text ever</li>
+                                <li>Lorem Ipsum has been the industry's standard dummy text ever</li>
+                                <li>Lorem Ipsum has been the industry's standard dummy text ever</li>
+                            </ul> -->
+                            <div class="profile-authors heading_space">
+                                <h4 class="text-capitalize darkcolor bottom40">Comments</h4>
+                                <div id="disqus_thread"></div>                                   
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <aside class="sidebar whitebox">
+                        <div class="widget heading_space">
+                            <h4 class="text-capitalize darkcolor bottom20">Recent Posts</h4>
+                            <div class="single_post bottom15" *ngFor="let blog of blogPosts;">
+                                <a href="/blog/{{blog._id}}/{{blog.blogTitle | replaceSpaceWithHyphen}}" class="post"><img style="border-radius: 0 !important" src="https://flyp10.com/public/uploads/images/blogs/{{blog.bannerImage}}" alt="post image"></a>
+                                <div class="text">
+                                    <a href="/blog/{{blog._id}}/{{blog.blogTitle | replaceSpaceWithHyphen}}">{{blog.blogTitle}}</a>
+                                    <span>{{blog.addedOn | date}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget heading_space">
+                            <h4 class="text-capitalize darkcolor bottom20">Categories</h4>
+                            <ul class="webcats">
+                                <li *ngFor="let category of blogCategories"><a (click)="blogByCategory(category._id, category.categoryName)">{{category.categoryName}}</a></li>
+                                <!-- <li><a href="#.">Lorem Ipsum <span>(05)</span></a></li> -->
+                            </ul>
+                        </div>
+                        <div class="widget heading_space">
+                            <h4 class="text-capitalize darkcolor bottom20">Tags</h4>
+                            <ul class="webtags">
+                                <li class="tags" *ngFor="let tag of blogDetails.tags"><a (click)="blogByTag(tag._id,tag.tag)">{{tag.tag}} <strong>({{tag.postCount}})</strong></a></li>
+                            </ul>
+                        </div>
+                        <!-- <div class="widget heading_space">
+                            <h4 class="text-capitalize darkcolor bottom20">search</h4>
+                            <form class="widget_search">
+                                <div class="input-group">
+                                    <input type="search" class="form-control" placeholder="search..." required>
+                                    <button type="submit" class="input-group-addon"><i class="fa fa-search"></i> </button>
+                                </div>
+                            </form>
+                        </div> -->
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+   <div class="modal fade" id="myModal" role="dialog" style="overflow-y: hidden !important;" >
+        <div class="modal-dialog" style="  max-width: 90%">
+            <button type="button" style=" background: transparent;
+            float: right;margin-right: -45px;" class="btn btn-default" data-dismiss="modal">
+                <a href="javascript:void(0)"><img style="    width: 36px;
+                    margin-right: -54px;
+                    position: absolute;
+                    right: 17px;
+                    top: -22px;
+                    z-index: 1;cursor: pointer;" src="assets/client/images/icons/close.png" alt="logo"> </a>
+                
+                </button>
+                <!-- <button style="    width: 50px;
+                height: 50px;
+                background: red;
+                border-radius: 50%;
+                color: white;
+                border: 5px solid;
+                z-index: 999;
+                position: absolute;
+                right: 0px;
+                top: -25px;
+                cursor: pointer;
+                opacity: unset;" type="button" class="close" data-dismiss="modal">&times;</button> -->
+          <!-- Modal content-->
+          <div class="modal-content" style="overflow-y: hidden">
+            <!-- <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Modal Header</h4>
+            </div> -->
+            <div class="modal-body" style="padding:0px;overflow-y: scroll;position: relative; max-height:605px">
+           
+                <faq></faq>
+            </div>            
+          </div>
+          </div>
+          </div>
+          <div class="modal fade" id="myModalPrivacy" role="dialog" style="overflow-y: hidden !important;" >
+                <div class="modal-dialog" style="  max-width: 90%">
+                    <button type="button" style=" background: transparent;
+                    float: right;margin-right: -45px;" class="btn btn-default" data-dismiss="modal">
+                        <img style=" width: 36px;
+                        margin-right: -54px;
+                        position: absolute;
+                        right: 17px;
+                        top: -22px;
+                        z-index: 1;cursor: pointer;" src="assets/client/images/icons/close.png" alt="logo"> </button>
+                       
+                  <!-- Modal content-->
+                  <div class="modal-content" style="overflow-y: hidden">
+                   
+                    <div class="modal-body" style="padding:0px;overflow-y: scroll;position: relative; max-height:605px">
+                    <privacy></privacy>
+                       
+                    </div>            
+                  </div>
+                  </div>
+                  </div>
+                  <div class="modal fade" id="myModalTerms" role="dialog" style="overflow-y: hidden !important;" >
+                        <div class="modal-dialog" style="  max-width: 90%">
+                            <button type="button" style=" background: transparent;
+                            float: right;margin-right: -45px;" class="btn btn-default" data-dismiss="modal">
+                                <img style=" width: 36px;
+                                margin-right: -54px;
+                                position: absolute;
+                                right: 17px;
+                                top: -22px;
+                                z-index: 1;cursor: pointer;" src="assets/client/images/icons/close.png" alt="logo"> </button>
+                             
+                          <div class="modal-content" style="overflow-y: hidden">
+                         
+                            <div class="modal-body" style="padding:0px;overflow-y: scroll;position: relative; max-height:605px">
+                            <terms></terms>
+                               
+                            </div>            
+                          </div>
+                          </div>
+                          </div>
+    <!--Site Footer Here-->
+       <footer id="site-footer" class="padding_half">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 text-center">
+                    <ul class="social-icons bottom25 wow fadeInUp" data-wow-delay="300ms">
+                        <li><a href="https://www.facebook.com/Flyp10/" target="_blank"><i class="fa fa-facebook"></i> </a> </li>
+                        <li><a href="https://www.instagram.com/flyp10/" target="_blank"><i class="fa fa-instagram"></i> </a> </li>
+                        <li><a href="https://twitter.com/Flyp10app" target="_blank"><i class="fa fa-twitter"></i> </a> </li>
+                        <li><a href="https://www.youtube.com/channel/UCix1RN4-_CaupFXfKguN_jA" target="_blank"><i class="fa fa-youtube"></i> </a> </li>
+                        <li><a href="https://www.pinterest.com/flyp10/" target="_blank"><i class="fa fa-pinterest-p"></i> </a> </li>
+                        <li><a href="https://www.snapchat.com/add/flyp10" target="_blank"><i class="fa fa-snapchat-ghost"></i> </a> </li>
+                        <li><a href="https://www.linkedin.com/company/flyp10/" target="_blank"><i class="fa fa-linkedin"></i> </a> </li>                     
+                        <li><a href="mailto:hello@flyp10.com"><i class="fa fa-envelope-o"></i> </a> </li>
+                    </ul>
+                    <p class="copyrights wow fadeInUp" data-wow-delay="350ms"> &copy; 2020 <a href="/">Flyp10.</a> All Rights Reserved. 
+                        <span>|</span> <a href="#" data-toggle="modal" data-target="#myModalPrivacy" > Privacy Policy</a> <span>|</span>
+                         <a href="#" class="footaactive" data-toggle="modal" data-target="#myModalTerms">   Terms of Service</a>
+                         <span>|</span>
+                         <a href="#" class="footaactive" data-toggle="modal" data-target="#myModal"> FAQ</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!--Footer ends-->
+
+</body>
+
+</html>

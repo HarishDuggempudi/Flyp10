@@ -1,0 +1,65 @@
+
+
+<!-- Facebook Pixel Code -->
+
+<script>
+
+  !function(f,b,e,v,n,t,s)
+  
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  
+  s.parentNode.insertBefore(t,s)}(window,document,'script',
+  
+  'https://connect.facebook.net/en_US/fbevents.js');
+  
+  fbq('init', '256352801666442'); 
+  
+  fbq('track', 'PageView');
+  
+  </script>
+  
+  <noscript>
+
+    <img height="1" width="1" src="https://www.facebook.com/tr?id=256352801666442&ev=PageView&noscript=1" />
+
+</noscript>
+  
+  <!-- End Facebook Pixel Code -->
+
+    <section style="padding:0 0 50px 0" >
+        <div class="container">
+            <div class="row">
+                <h2 class="text-center" style="margin-bottom: 0px"><span>  FAQ</span></h2>
+                <div class="col-md-8 offset-md-2">
+                    <div class="bd-example" data-example-id="">
+    <div id="accordion" role="tablist" aria-multiselectable="true" *ngFor="let lst of faq ;let i=index">
+      <div class="card" >
+           
+          <div class="card-header" data-toggle="collapse" [attr.href]="'#collapse0'+i">
+              <a class="card-link">
+                  {{i+1}}. {{lst.question}}
+              </a>
+            </div>
+            <div [attr.id]="'collapse0'+i" class="collapse " [ngClass]="{'show':i==0}" data-parent="#accordion">
+              <div id="link" class="card-body" [innerHTML]="lst.answer" >
+
+              </div>
+            </div>
+    
+       
+      </div> 
+    </div>
+                </div>
+            </div>
+            </div>
+            </div>
+            </section>
+            

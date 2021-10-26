@@ -1,0 +1,51 @@
+<!-- Page Heading -->
+<div class="d-flex flex-row-reverse">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb nb-breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/dashboard']">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Price Settings</li>
+    </ol>
+  </nav>
+  <h1 class="nb-heading-one mr-auto">Price Settings</h1>
+</div>
+<!-- /.row -->
+<mat-card class="material-card-sm">
+  <alert [(displayed)]="objAlert.show" [type]="objAlert.type" [closeButton]="objAlert.closeButton">
+    <strong>{{objAlert.title}}!</strong> {{objAlert.message}}
+  </alert>
+
+  <form role="form" novalidate [formGroup]="PricingForm" (ngSubmit)="savePricesetting()">
+
+    <div class="mb-3">
+      <mat-form-field class="material-input-full">
+        <input matInput type="number" placeholder="Premium Subscription ($)" formControlName="premium">
+        <mat-error>
+          <control-messages [isSubmitted]="isSubmitted" [control]="PricingForm.controls['premium']"></control-messages>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="mb-3">
+      <mat-form-field class="material-input-full">
+        <input matInput type="number" placeholder="Premium Plus Subscription ($)" formControlName="premiumPlus">
+        <mat-error>
+          <control-messages [isSubmitted]="isSubmitted" [control]="PricingForm.controls['premiumPlus']"></control-messages>
+        </mat-error>
+      </mat-form-field>
+    </div>
+   
+    <div class="mb-3" data-tip="Enter Amount in a comma-separated format.
+Example: 50,100,150,200">
+      <mat-form-field class="material-input-full">
+        <input matInput type="text" placeholder="Add Credit ($)" formControlName="addCredits">
+        <mat-error>
+          <control-messages [isSubmitted]="isSubmitted"  [control]="PricingForm.controls['addCredits']"></control-messages>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="mb-3">
+      <button mat-raised-button color="primary" type="submit">Save</button>
+    </div>
+  </form>
+</mat-card>

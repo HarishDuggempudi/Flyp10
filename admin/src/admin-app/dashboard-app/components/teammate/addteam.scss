@@ -1,0 +1,112 @@
+ .flexsearch--wrapper {
+    height: auto;
+    width: auto;
+    max-width: 100%;
+    overflow: hidden;
+    background: transparent;
+    margin: 0;
+    position: static;
+  }
+  
+  .flexsearch--form {
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .flexsearch--input-wrapper {
+    padding: 0 66px 0 0;
+    overflow: hidden;
+  }
+  
+  .flexsearch--input {
+    width: 100%;
+  }
+
+  .flexsearch {
+    padding: 0 25px 0 0px;
+  }
+  
+  .flexsearch--input {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 60px;
+    padding: 0 46px 0 10px;
+   
+    border-image: linear-gradient(to right, #be1e2d , #2e3192);
+    border-image-slice: 1;
+    border-radius: 35px;
+    /* (height/2) + border-width */
+    border-style: solid;
+    border-width: 5px;
+    margin-top: 15px;
+    color: #333;
+    font-family: 'Helvetica', sans-serif;
+    font-size: 26px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  
+  .flexsearch--submit {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: block;
+    width: 60px;
+    height: 60px;
+    padding: 0;
+    border: none;
+    margin-top: 20px;
+    /* margin-top + border-width */
+    margin-right: 5px;
+    /* border-width */
+    background: transparent;
+    color: #313191;
+    font-family: 'Helvetica', sans-serif;
+    font-size: 40px;
+    line-height: 60px;
+  }
+  
+  .flexsearch--input:focus {
+    outline: none;
+    border-color: #333;
+  }
+  
+  .flexsearch--input:focus.flexsearch--submit {
+    color: #333;
+  }
+  
+  .flexsearch--submit:hover {
+    color: #333;
+    cursor: pointer;
+  }
+  
+  ::-webkit-input-placeholder {
+    color: #888;
+  }
+  
+  input:-moz-placeholder {
+    color: #888;
+  }
+
+  .user-sport {
+    /* padding-top: 15px; */
+    padding: 6px;
+    background: #2f3090;
+    color: #fff;
+    border-radius: 15px;
+    /* line-height: 27px; */
+  }
+
+  .display-img > i {
+    padding: 19px 17px;
+    font-size: 25px;
+    background: darkgray;
+    border-radius: 50%;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+
+  .mat-fab.mat-primary, .mat-mini-fab.mat-primary, .mat-raised-button.mat-primary {
+    background-color: #2f3090;
+}

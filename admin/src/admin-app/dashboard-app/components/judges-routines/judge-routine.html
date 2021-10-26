@@ -1,0 +1,323 @@
+<mat-card style="width: 100%;">
+    <div class="row">
+        <div class="col-md-6">
+            <mat-card-header>
+                <mat-card-title>
+                    <h4 style="color: dimgray">Suggested routines</h4>
+                </mat-card-title>
+
+            </mat-card-header>
+
+            <p style="text-align: -webkit-left;margin-left: 177px;margin-top: 88px;font-size: 24px;color: gray;" *ngIf="routineList.length==0 && eventMeetRountine.length==0 && eventMeetGroupRoutine.length==0 && suggestedRoutine.length==0 && showRequest ">No routines found</p>
+            <p style="text-align: -webkit-left;margin-left: 160px;margin-top: 88px;font-size: 24px;color: gray;" *ngIf="routineList.length==0 && suggestedRoutine.length==0 && !showRequest">Processing, Please wait...</p>
+            <div *ngIf="(routineList.length>0 || eventMeetRountine.length>0 || eventMeetGroupRoutine.length>0) && suggestedRoutine.length==0 && showRequest">
+                <mat-card>
+                    <div class="row">
+                        <div class="col-md-12" *ngIf="routineList.length>0">
+                            <p style="font-size:17px"><a style="font-size: 20px;color: #007bff;font-weight: 700;">{{routineList.length}}</a> MyFlyp10 Routine available for judging.</p>
+                            <button mat-raised-button class="upload-routine " color="primary" (click)="RequestForroutine()">Request Routine</button>
+                        </div>
+                        <div class="col-md-12" style="margin-top:10px" *ngIf="eventMeetRountine.length>0">
+                            <p style="font-size:17px"><a style="font-size: 20px;color: #007bff;font-weight: 700;">{{eventMeetRountine.length}}</a> Event Meet Routine available for judging.</p>
+                            <button mat-raised-button class="upload-routine " color="primary" (click)="RequestForEventMeetroutine()">Request Routine</button>
+                        </div>
+                        <div class="col-md-12" *ngIf="eventMeetGroupRoutine.length>0">
+                            <p style="font-size:17px"><a style="font-size: 20px;color: #007bff;font-weight: 700;">{{eventMeetGroupRoutine.length}}</a> Event Meet Routine(Lower Level) available for judging.</p>
+                            <button mat-raised-button class="upload-routine " color="primary" (click)="RequestForEventMeetGroupRoutine()">Request Routine</button>
+                        </div>
+
+                    </div>
+                    <!-- <p style="font-size:17px"><a style="font-size: 20px;color: #007bff;font-weight: 700;">{{routineList.length}}</a> Routine available for judging.</p>
+ 		   <button mat-raised-button class="upload-routine "  color="primary" (click)="RequestForroutine()" >Request Routine</button> -->
+                </mat-card>
+            </div>
+            <div class="list-group" *ngFor='let routine of suggestedRoutine; let i =index'>
+
+                <a routerLink="to-judge/{{routine._id}}" (click)="isvalidclick=true" class="list-group-item" style="cursor:pointer; margin-bottom:10px;padding:0;overflow: hidden">
+                    <div class="row" style="margin: 0 !important">
+                        <div class="col-sm-6" style="margin-right:0px!important;padding:0 !important;height: 176px">
+
+                            <div>
+                                <video style="object-fit: cover" id="myVideo" width="100%" height="176" controls controlsList="nodownload">
+                            <source [src]="'https://flyp10.com/'+routine.videofilename" type="video/mp4">
+                           
+                            Your browser does not support HTML5 video.
+                          </video>
+                            </div>
+
+
+
+                        </div>
+                        <div class="col-sm-6" style="padding: 10px">
+                            <!-- <h6 class="list-group-item-heading" >{{routine.title}}</h6>  
+                      <p class="list-group-item-text" style="color:rgb(161, 167, 167)!important;" ><i class="fas fa-user"></i>&nbsp; {{routine.submittedBy}}</p>             -->
+                            <p class="list-group-item-text" style="color:black!important;width: 200px !important;
+                      white-space: nowrap;
+                      overflow: hidden;
+                      text-overflow: ellipsis;"><i class="fas fa-football-ball"></i>&nbsp; {{routine.sport}}</p>
+                            <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-calendar-times"></i>&nbsp; {{routine.event}}</p>
+                            <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-level-up-alt"></i>&nbsp; {{routine.level}}</p>
+                            <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-clock"></i>&nbsp; {{formatdate(routine.submittedOn)}}</p>
+                            <p class="list-group-item-text" style="color:black!important;" *ngIf="eventroutineJudgeObj && eventroutineJudgeObj.judgePanel"><i class="fas fa-user"></i>&nbsp; {{eventroutineJudgeObj.judgePanel}}</p>
+
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+        <div class="col-md-6">
+            <mat-card-header>
+                <mat-card-title>
+                    <h4 style="color: dimgray">Judged routines</h4>
+                </mat-card-title>
+            </mat-card-header>
+            <mat-tab-group>
+                <mat-tab label="MyFlyp10 routines">
+                    <!-- Scored routine  -->
+                    <div *ngIf="scored.length">
+                        <div class="list-group" *ngFor='let routine of scored | reverse; let i =index'>
+                            <div class="list-group-item" style=" margin-bottom:3px;padding:0 !important;overflow: hidden">
+                                <div class="row">
+                                    <div class="col-sm-6" style="margin-right:0px!important;height:176px;background: url('../../../../assets/admin/bg.jpg');display: table;background-size: cover ">
+
+                                        <p *ngIf="routine.routinestatus=='1'" style="    text-shadow: 2px 2px #383636;text-align: center;color: white !important;font-size:18px;font-weight: 600;display: table-cell;vertical-align: middle;"> Score {{routine.score}}</p>
+                                        <p *ngIf="routine.routinestatus=='3'" style="    text-shadow: 2px 2px #383636;text-align: center;color: white !important;font-size:18px;font-weight: 600;display: table-cell;vertical-align: middle;"> Poor Video Quality</p>
+                                        <p *ngIf="routine.routinestatus=='4'" style="    text-shadow: 2px 2px #383636;text-align: center;color: white !important;font-size:18px;font-weight: 600;display: table-cell;vertical-align: middle;"> Inappropriate</p>
+
+                                    </div>
+                                    <div class="col-sm-6" style="padding: 10px !important">
+                                        <!-- <h6 class="list-group-item-heading" style="font-size: 15px;">{{routine.title}}</h6>      
+                       <p class="list-group-item-text" style="color:rgb(161, 167, 167)!important;" ><i class="fas fa-user"></i>&nbsp; {{routine.submittedBy}}</p>         -->
+                                        <p *ngIf='routine.comment' style="color: #2d3188;
+                       font-size: 18px;
+                       font-weight: 500;
+                       margin-left: 16px;
+                       width: 200px !important;
+                       white-space: nowrap;
+                       overflow: hidden;
+                       text-overflow: ellipsis;">{{routine.comment}}</p>
+                                        <p class="list-group-item-text" style="color:black!important;width: 200px !important;
+                       white-space: nowrap;
+                       overflow: hidden;
+                       text-overflow: ellipsis;"><i class="fas fa-football-ball"></i>&nbsp; {{routine.sport}} </p>
+                                        <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-calendar-times"></i>&nbsp; {{routine.event}}</p>
+                                        <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-level-up-alt"></i>&nbsp; {{routine.level}}</p>
+
+                                        <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-clock"></i>&nbsp; {{formatdate(routine.submittedOn)}}</p>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- InComplete routines -->
+                    <div *ngIf="inComplete.length">
+
+                        <div class="list-group" *ngFor='let routine of inComplete | reverse; let i =index'>
+                            <div class="list-group-item" style=" margin-bottom:3px;padding:0 !important;overflow: hidden">
+                                <div class="row">
+                                    <div class="col-sm-6" style="margin-right:0px!important;height:176px;background: url('../../../../assets/admin/bg.jpg');display: table;background-size: cover ">
+
+                                        <p *ngIf="routine.routinestatus=='1'" style="    text-shadow: 2px 2px #383636;text-align: center;color: white !important;font-size:18px;font-weight: 600;display: table-cell;vertical-align: middle;"> Score {{routine.score}}</p>
+                                        <p *ngIf="routine.routinestatus=='3'" style="    text-shadow: 2px 2px #383636;text-align: center;color: white !important;font-size:18px;font-weight: 600;display: table-cell;vertical-align: middle;"> Poor Video Quality</p>
+                                        <p *ngIf="routine.routinestatus=='4'" style="    text-shadow: 2px 2px #383636;text-align: center;color: white !important;font-size:18px;font-weight: 600;display: table-cell;vertical-align: middle;"> Inappropriate</p>
+
+                                    </div>
+                                    <div class="col-sm-6" style="padding: 10px !important">
+                                        <!-- <h6 class="list-group-item-heading" style="font-size: 15px;">{{routine.title}}</h6>      
+                           <p class="list-group-item-text" style="color:rgb(161, 167, 167)!important;" ><i class="fas fa-user"></i>&nbsp; {{routine.submittedBy}}</p>         -->
+                                        <p *ngIf='routine.comment' style="color: #2d3188;
+                           font-size: 18px;
+                           font-weight: 500;
+                           margin-left: 16px;
+                           width: 200px !important;
+                           white-space: nowrap;
+                           overflow: hidden;
+                           text-overflow: ellipsis;">{{routine.comment}}</p>
+                                        <p class="list-group-item-text" style="color:black!important;width: 200px !important;
+                           white-space: nowrap;
+                           overflow: hidden;
+                           text-overflow: ellipsis;"><i class="fas fa-football-ball"></i>&nbsp; {{routine.sport}} </p>
+                                        <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-calendar-times"></i>&nbsp; {{routine.event}}</p>
+                                        <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-level-up-alt"></i>&nbsp; {{routine.level}}</p>
+
+                                        <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-clock"></i>&nbsp; {{formatdate(routine.submittedOn)}}</p>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Inappropirate routines -->
+                    <div *ngIf="inApp.length">
+                        <div class="list-group" *ngFor='let routine of inApp | reverse; let i =index'>
+                            <div class="list-group-item" style=" margin-bottom:3px;padding:0 !important;overflow: hidden">
+                                <div class="row">
+                                    <div class="col-sm-6" style="margin-right:0px!important;height:176px;background: url('../../../../assets/admin/bg.jpg');display: table;background-size: cover ">
+
+                                        <p *ngIf="routine.routinestatus=='1'" style="    text-shadow: 2px 2px #383636;text-align: center;color: white !important;font-size:18px;font-weight: 600;display: table-cell;vertical-align: middle;"> Score {{routine.score}}</p>
+                                        <p *ngIf="routine.routinestatus=='3'" style="    text-shadow: 2px 2px #383636;text-align: center;color: white !important;font-size:18px;font-weight: 600;display: table-cell;vertical-align: middle;"> Poor Video Quality</p>
+                                        <p *ngIf="routine.routinestatus=='4'" style="    text-shadow: 2px 2px #383636;text-align: center;color: white !important;font-size:18px;font-weight: 600;display: table-cell;vertical-align: middle;"> Inappropriate</p>
+
+                                    </div>
+                                    <div class="col-sm-6" style="padding: 10px !important">
+                                        <!-- <h6 class="list-group-item-heading" style="font-size: 15px;">{{routine.title}}</h6>      
+                               <p class="list-group-item-text" style="color:rgb(161, 167, 167)!important;" ><i class="fas fa-user"></i>&nbsp; {{routine.submittedBy}}</p>         -->
+                                        <p *ngIf='routine.comment' style="color: #2d3188;
+                               font-size: 18px;
+                               font-weight: 500;
+                               margin-left: 16px;
+                               width: 200px !important;
+                               white-space: nowrap;
+                               overflow: hidden;
+                               text-overflow: ellipsis;">{{routine.comment}}</p>
+                                        <p class="list-group-item-text" style="color:black!important;width: 200px !important;
+                               white-space: nowrap;
+                               overflow: hidden;
+                               text-overflow: ellipsis;"><i class="fas fa-football-ball"></i>&nbsp; {{routine.sport}} </p>
+                                        <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-calendar-times"></i>&nbsp; {{routine.event}}</p>
+                                        <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-level-up-alt"></i>&nbsp; {{routine.level}}</p>
+
+                                        <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-clock"></i>&nbsp; {{formatdate(routine.submittedOn)}}</p>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </mat-tab>
+                <mat-tab label="Event meet routines">
+                    <div *ngIf="scoredE.length">
+                        <div class="list-group" *ngFor='let routine of scoredE | reverse; let i =index'>
+                            <div class="list-group-item" style=" margin-bottom:3px;padding:0 !important;overflow: hidden">
+                                <div class="row">
+                                    <div class="col-sm-6" style="margin-right:0px!important;height:176px;background: url('../../../../assets/admin/bg.jpg');display: table;background-size: cover ">
+
+                                        <p *ngIf="routine.routinestatus=='1'" style="    text-shadow: 2px 2px #383636;text-align: center;color: white !important;font-size:18px;font-weight: 600;display: table-cell;vertical-align: middle;"> Score {{routine.score}}</p>
+                                        <p *ngIf="routine.routinestatus=='3'" style="    text-shadow: 2px 2px #383636;text-align: center;color: white !important;font-size:18px;font-weight: 600;display: table-cell;vertical-align: middle;"> Incomplete</p>
+                                        <p *ngIf="routine.routinestatus=='4'" style="    text-shadow: 2px 2px #383636;text-align: center;color: white !important;font-size:18px;font-weight: 600;display: table-cell;vertical-align: middle;"> Inappropriate</p>
+
+                                    </div>
+                                    <div class="col-sm-6" style="padding: 10px !important">
+                                        <!-- <h6 class="list-group-item-heading" style="font-size: 15px;">{{routine.title}}</h6>      
+                           <p class="list-group-item-text" style="color:rgb(161, 167, 167)!important;" ><i class="fas fa-user"></i>&nbsp; {{routine.submittedBy}}</p>         -->
+                                        <p *ngIf='routine.comments' style="color: #2d3188;
+                           font-size: 18px;
+                           font-weight: 500;
+                           margin-left: 16px;
+                           width: 200px !important;
+                           white-space: nowrap;
+                           overflow: hidden;
+                           text-overflow: ellipsis;">{{routine.comments}}</p>
+                                        <p class="list-group-item-text" style="color:black!important;width: 200px !important;
+                           white-space: nowrap;
+                           overflow: hidden;
+                           text-overflow: ellipsis;"><i class="fas fa-football-ball"></i>&nbsp; {{routine.routineInfo.sport}} </p>
+                                        <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-calendar-times"></i>&nbsp; {{routine.routineInfo.event}}</p>
+                                        <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-level-up-alt"></i>&nbsp; {{routine.routineInfo.level}}</p>
+
+                                        <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-clock"></i>&nbsp; {{formatdate(routine.routineInfo.submittedOn)}}</p>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- InComplete routines -->
+                    <div *ngIf="inCompleteE.length">
+
+                        <div class="list-group" *ngFor='let routine of inCompleteE | reverse; let i =index'>
+                            <div class="list-group-item" style=" margin-bottom:3px;padding:0 !important;overflow: hidden">
+                                <div class="row">
+                                    <div class="col-sm-6" style="margin-right:0px!important;height:176px;background: url('../../../../assets/admin/bg.jpg');display: table;background-size: cover ">
+
+                                        <p *ngIf="routine.routinestatus=='1'" style="    text-shadow: 2px 2px #383636;text-align: center;color: white !important;font-size:18px;font-weight: 600;display: table-cell;vertical-align: middle;"> Score {{routine.score}}</p>
+                                        <p *ngIf="routine.routinestatus=='3'" style="    text-shadow: 2px 2px #383636;text-align: center;color: white !important;font-size:18px;font-weight: 600;display: table-cell;vertical-align: middle;"> Poor Video Quality</p>
+                                        <p *ngIf="routine.routinestatus=='4'" style="    text-shadow: 2px 2px #383636;text-align: center;color: white !important;font-size:18px;font-weight: 600;display: table-cell;vertical-align: middle;"> Inappropriate</p>
+
+                                    </div>
+                                    <div class="col-sm-6" style="padding: 10px !important">
+                                        <!-- <h6 class="list-group-item-heading" style="font-size: 15px;">{{routine.title}}</h6>      
+                               <p class="list-group-item-text" style="color:rgb(161, 167, 167)!important;" ><i class="fas fa-user"></i>&nbsp; {{routine.submittedBy}}</p>         -->
+                                        <p *ngIf='routine.comment' style="color: #2d3188;
+                               font-size: 18px;
+                               font-weight: 500;
+                               margin-left: 16px;
+                               width: 200px !important;
+                               white-space: nowrap;
+                               overflow: hidden;
+                               text-overflow: ellipsis;">{{routine.comments}}</p>
+                                        <p class="list-group-item-text" style="color:black!important;width: 200px !important;
+                               white-space: nowrap;
+                               overflow: hidden;
+                               text-overflow: ellipsis;"><i class="fas fa-football-ball"></i>&nbsp; {{routine.routineInfo.sport}} </p>
+                                        <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-calendar-times"></i>&nbsp; {{routine.routineInfo.event}}</p>
+                                        <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-level-up-alt"></i>&nbsp; {{routine.routineInfo.level}}</p>
+
+                                        <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-clock"></i>&nbsp; {{formatdate(routine.routineInfo.submittedOn)}}</p>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Inappropirate routines -->
+                    <div *ngIf="inAppE.length">
+                        <div class="list-group" *ngFor='let routine of inAppE | reverse; let i =index'>
+                            <div class="list-group-item" style=" margin-bottom:3px;padding:0 !important;overflow: hidden">
+                                <div class="row">
+                                    <div class="col-sm-6" style="margin-right:0px!important;height:176px;background: url('../../../../assets/admin/bg.jpg');display: table;background-size: cover ">
+
+                                        <p *ngIf="routine.routinestatus=='1'" style="    text-shadow: 2px 2px #383636;text-align: center;color: white !important;font-size:18px;font-weight: 600;display: table-cell;vertical-align: middle;"> Score {{routine.score}}</p>
+                                        <p *ngIf="routine.routinestatus=='3'" style="    text-shadow: 2px 2px #383636;text-align: center;color: white !important;font-size:18px;font-weight: 600;display: table-cell;vertical-align: middle;"> Poor Video Quality</p>
+                                        <p *ngIf="routine.routinestatus=='4'" style="    text-shadow: 2px 2px #383636;text-align: center;color: white !important;font-size:18px;font-weight: 600;display: table-cell;vertical-align: middle;"> Inappropriate</p>
+
+                                    </div>
+                                    <div class="col-sm-6" style="padding: 10px !important">
+                                        <!-- <h6 class="list-group-item-heading" style="font-size: 15px;">{{routine.title}}</h6>      
+                                   <p class="list-group-item-text" style="color:rgb(161, 167, 167)!important;" ><i class="fas fa-user"></i>&nbsp; {{routine.submittedBy}}</p>         -->
+                                        <p *ngIf='routine.comment' style="color: #2d3188;
+                                   font-size: 18px;
+                                   font-weight: 500;
+                                   margin-left: 16px;
+                                   width: 200px !important;
+                                   white-space: nowrap;
+                                   overflow: hidden;
+                                   text-overflow: ellipsis;">{{routine.comment}}</p>
+                                        <p class="list-group-item-text" style="color:black!important;width: 200px !important;
+                                   white-space: nowrap;
+                                   overflow: hidden;
+                                   text-overflow: ellipsis;"><i class="fas fa-football-ball"></i>&nbsp; {{routine.routineInfo.sport}} </p>
+                                        <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-calendar-times"></i>&nbsp; {{routine.routineInfo.event}}</p>
+                                        <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-level-up-alt"></i>&nbsp; {{routine.routineInfo.level}}</p>
+
+                                        <p class="list-group-item-text" style="color:black!important;"><i class="fas fa-clock"></i>&nbsp; {{formatdate(routine.routineInfo.submittedOn)}}</p>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+
+        </div>
+    </div>
+</mat-card>

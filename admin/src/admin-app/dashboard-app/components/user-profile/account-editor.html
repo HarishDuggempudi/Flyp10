@@ -1,0 +1,92 @@
+ <!-- Page Heading -->
+<div class="d-flex flex-row-reverse">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb nb-breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/dashboard']">Dashboard</a>
+      </li>
+	   <li class="breadcrumb-item">
+        <a [routerLink]="['/profile']">Profile</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Account Editor</li>
+    </ol>
+  </nav>
+  <h1 class="nb-heading-one mr-auto">Account Editor</h1>
+</div>
+<!-- /.row -->
+
+  <div class="row">
+      <div class="col-md-6">
+	  
+          <mat-card class="material-card-sm">
+              <form role="form" novalidate [formGroup]="accountForm" (ngSubmit)="saveAccount()">		   
+                  <div class="mb-3">
+                      <mat-form-field class="material-input-full">
+                        <input matInput placeholder="Bank Name" type='text'  [(ngModel)]="accountObj.bankName" value="" formControlName="bankName" >
+                        <mat-error>
+                          <control-messages [isSubmitted]="isSubmitted" [control]="accountForm.controls['bankName']"></control-messages>
+                        </mat-error>
+                      </mat-form-field>
+                    </div> 
+                <div class="mb-3">  
+                    <mat-form-field class="material-input-full">
+                      <input matInput placeholder="Account Number" type='number' [(ngModel)]="accountObj.accountnumber" value="" formControlName="accountnumber" >
+                      <mat-error>
+                        <control-messages [isSubmitted]="isSubmitted" [control]="accountForm.controls['accountnumber']"></control-messages>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="mb-3">
+                    <mat-form-field class="material-input-full">
+                      <input matInput placeholder="Routing Number" type='text'  [(ngModel)]="accountObj.abanumber" value="" formControlName="abanumber" >
+                      <mat-error>
+                        <control-messages [isSubmitted]="isSubmitted" [control]="accountForm.controls['abanumber']"></control-messages>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>	
+                  
+			    <!-- <div class="mb-3">
+					 <mat-form-field class="material-input-full">
+					  <mat-select placeholder="Account Type" [(ngModel)]="accountObj.accounttype" formControlName="accounttype" >
+					   <mat-option  value="s">
+						 Saving
+					   </mat-option>   
+					  <mat-option value="c">
+						 Checking
+					   </mat-option>     			   
+					</mat-select>
+                   <mat-error>					
+					<control-messages [isSubmitted]="isSubmitted" [control]="accountForm.controls['accounttype']"></control-messages>
+				    </mat-error>
+				 </mat-form-field>			 
+		        </div> -->
+		        <div class="mb-3"> 
+                <!-- <mat-checkbox [(ngModel)]="accountObj.ischecking" formControlName="ischecking">
+                    Checking account
+                 </mat-checkbox>               -->
+                  
+                 <mat-form-field>
+                  <mat-select placeholder="Bank Account Type" [(value)]="selectedAccountType" (change)="accountTypeSelectChange($event);">
+                    <mat-option *ngFor="let type of types" [value]="type.value">
+                      {{ type.viewValue }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                </div>
+                <div class="mb-3">
+                    <mat-checkbox [(ngModel)]="accountObj.isprimary" formControlName="isprimary">
+                        Default account for payments
+                     </mat-checkbox>
+                 </div> 
+                  <div class="mb-3">
+                        <button mat-raised-button color="primary" type="submit">Save</button>  
+                        <button mat-raised-button color="warn" type="button" (click)="triggerCancelForm()">Cancel</button>					  
+                  </div>
+              </form>
+          </mat-card>
+      </div>
+	   <div class="col-md-4">
+	     <img class='img-responsive' src='assets/admin/img/check.png'>
+	   </div>
+  </div>
+  

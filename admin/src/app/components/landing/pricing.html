@@ -1,0 +1,373 @@
+ <!-- Facebook Pixel Code -->
+
+<script>
+
+    !function(f,b,e,v,n,t,s)
+    
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    
+    s.parentNode.insertBefore(t,s)}(window,document,'script',
+    
+    'https://connect.facebook.net/en_US/fbevents.js');
+    
+    fbq('init', '256352801666442'); 
+    
+    fbq('track', 'PageView');
+    
+    </script>
+    
+        <noscript>
+
+            <img height="1" width="1" src="https://www.facebook.com/tr?id=256352801666442&ev=PageView&noscript=1" />
+    
+        </noscript>
+    
+    <!-- End Facebook Pixel Code -->
+ <ngx-spinner
+bdColor = "rgba(51, 51, 51, 0.8)"
+size = "large"
+color = "#241472"
+type = "ball-clip-rotate"
+></ngx-spinner>
+ <div class="bg-img" >
+       <!-- Pricing Tables -->
+    <section *ngIf="togglePricing && !showlogin" id="our-pricings" class="padding bglight" style="margin-top:5%;margin-left:2%;margin-right:2%;padding-top:2%;">
+        <div class="">
+            <div class="row">
+                <div class="col-md-8 offset-md-2 col-sm-12 text-center">
+                    <div class="heading-title wow fadeInUp" data-wow-delay="300ms">
+                        <span>Choose The Best One</span>
+                        <h2 class="darkcolor" >Our Packages</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row pricerow">
+                <div class="col-md-3 col-sm-12">
+                    <div class="price-table top60 wow fadeIn" data-wow-delay="400ms" style="margin-top:5%">
+                        <h3 class="bottom20 darkcolor">Sign-up<br>Free</h3>
+                        <p class="bottom30">Create a Flyp10 account</p>
+                        <h5>Essentials</h5>
+                        <ul class="top0 bottom20">
+                            <li><span>Connect with other users (teammates)</span></li>
+                            <li><span>Watch and comment on teammate videos</span></li>
+                            <li><span>Upload your routines through paid accounts</span></li>
+                        </ul>
+                        <h5>Scoring and Details</h5>
+                        <ul class="top0 bottom20">
+                            <li class="not-support"><span>Add fill-up funds to enable paid account and auto reload for endless scoring.
+</span></li>
+                            <li class="not-support"><span>Entrance into the daily world meet</span></li>
+                            <li class="not-support"><span>Faster queue for routing to judges</span></li>
+                            <li class="not-support"><span>Fastest queue for routing to judges</span></li>
+                            <li class="not-support"><span>Top scores are visible to verified college coaches.</span></li>
+
+                        </ul>
+                        <h5>Analytics</h5>
+                        <ul class="top0">
+                            <li class="not-support"><span>Analysis and trending of your scores and judges notes.</span></li>
+                            <li class="not-support"><span>Advanced analysis, with national trending comparisons.</span></li>
+
+                        </ul>
+                        <div class="clearfix"></div>
+                        <a href="javascript:void(0)" class="button btnprimary top50" (click)="getStarted('0')">Get Started </a>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <div class="price-table top60 wow fadeIn" data-wow-delay="400ms" style="margin-top:5%">
+                        <h3 class="bottom0 darkcolor">Account fill-up</h3>
+                        <div class="ammount">
+                            <span> <h3 style="font-size:22px !important" class="defaultcolor"><i class="fa fa-dollar"></i> {{credit}} <a (click)='getSportPricing();' data-toggle="modal" data-target="#myModalGetStart" style="color: blue ;font-weight: 600;font-size:12px;cursor: pointer;"><u>See Scoring Fees</u>  </a></h3></span>
+                        </div>
+                        <p>Add to purchase uploads for your routines</p>
+                        <h5>Essentials</h5>
+                        <ul class="top0 bottom20">
+                            <li><span>Connect with other users (teammates)</span></li>
+                            <li><span>Watch and comment on teammate videos</span></li>
+                            <li><span>Upload your routines through paid accounts</span></li>
+                        </ul>
+                        <h5>Scoring and Details</h5>
+                        <ul class="top0 bottom20">
+                            <li><span>Add fill-up funds to enable paid account and auto reload for endless scoring.
+</span></li>
+                            <li class="not-support"><span>Entrance into the daily world meet</span></li>
+                            <li class="not-support"><span>Faster queue for routing to judges</span></li>
+                            <li class="not-support"><span>Fastest queue for routing to judges</span></li>
+                            <li class="not-support"><span>Top scores are visible to verified college coaches.</span></li>
+
+                        </ul>
+                        <h5>Analytics</h5>
+                        <ul class="top0">
+                            <li class="not-support"><span>Analysis and trending of your scores and judges notes.</span></li>
+                            <li class="not-support"><span>Advanced analysis, with national trending comparisons.</span></li>
+
+                        </ul>
+                        <div class="clearfix"></div>
+                        <a href="javascript:void(0)" class="button btnprimary top50" (click)="getStarted('1')">Get Started </a>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <div class="price-table top60 wow fadeIn" data-wow-delay="400ms" style="margin-top:5%">
+                        <h3 class="bottom0 darkcolor">Premium</h3>
+                        <div class="ammount">
+                            <h2 class="defaultcolor"><i class="fa fa-dollar"></i> {{premium}} <span class="dur">/ year</span></h2>
+                        </div>
+                        <p>Subscribe to unlock features and enter our Flyp10 world meets</p>
+                        <h5>Essentials</h5>
+                        <ul class="top0 bottom20">
+                            <li><span>Connect with other users (teammates)</span></li>
+                            <li><span>Watch and comment on teammate videos</span></li>
+                            <li><span>Upload your routines through paid accounts</span></li>
+                        </ul>
+                        <h5>Scoring and Details</h5>
+                        <ul class="top0 bottom20">
+                            <li><span>Add fill-up funds to enable paid account and auto reload for endless scoring.
+</span></li>
+                            <li><span>Entrance into the daily world meet</span></li>
+                            <li><span>Faster queue for routing to judges</span></li>
+                            <li class="not-support"><span>Fastest queue for routing to judges</span></li>
+                            <li class="not-support"><span>Top scores are visible to verified college coaches.</span></li>
+
+                        </ul>
+                        <h5>Analytics</h5>
+                        <ul class="top0">
+                            <li><span>Analysis and trending of your scores and judges notes.</span></li>
+                            <li class="not-support"><span>Advanced analysis, with national trending comparisons.</span></li>
+
+                        </ul>
+                        <div class="clearfix"></div>
+                        <a href="javascript:void(0)" class="button btnprimary top50" (click)="getStarted('2')">Get Started </a>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-12">
+                    <div class="price-table top60 wow fadeIn" data-wow-delay="400ms" style="margin-top:5%">
+                        <h3 class="bottom0 darkcolor">Premium-Plus</h3>
+                        <div class="ammount">
+                            <h2 class="defaultcolor"><i class="fa fa-dollar"></i> {{premiumPlus}} <span class="dur">/ year</span></h2>
+                        </div>
+                        <p>Get all the speed, analytics, competition, connections you can handle.</p>
+                        <h5>Essentials</h5>
+                        <ul class="top0 bottom20">
+                            <li><span>Connect with other users (teammates)</span></li>
+                            <li><span>Watch and comment on teammate videos</span></li>
+                            <li><span>Upload your routines through paid accounts</span></li>
+                        </ul>
+                        <h5>Scoring and Details</h5>
+                        <ul class="top0 bottom20">
+                            <li><span>Add fill-up funds to enable paid account and auto reload for endless scoring.
+</span></li>
+                            <li><span>Entrance into the daily world meet</span></li>
+                            <li class="not-support"><span>Faster queue for routing to judges</span></li>
+                            <li><span>Fastest queue for routing to judges</span></li>
+                            <li><span>Top scores are visible to verified college coaches.</span></li>
+
+                        </ul>
+                        <h5>Analytics</h5>
+                        <ul class="top0">
+                            <li><span>Analysis and trending of your scores and judges notes.</span></li>
+                            <li><span>Advanced analysis, with national trending comparisons.</span></li>
+
+                        </ul>
+                        <div class="clearfix"></div>
+                        <a href="javascript:void(0)" class="button btnprimary top50" (click)="getStarted('3')">Get Started </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--Pricing Tables ends-->
+	
+	      <section  *ngIf="!togglePricing && !showlogin" id="our-pricings" class="padding bglight col-md-5" style="margin:0 auto;padding-top:0px;padding-bottom:50px;margin-top:10%;">
+		   <div class="col-md-10" style="margin:0 auto;"> 
+		       <div class="logo" style="text-align:center;padding-bottom:30px;padding-top:30px;">
+                 <a href="#"><img src="../../../assets/client/images/logo-dark.png" class="img-rounded" alt="Cinque Terre">
+                  <!-- <h3 *ngIf="userRole=='competitor'">Competitor Signup</h3>
+                  <h3 *ngIf="userRole=='judge'">Judge Signup</h3> -->
+                </a>    
+              </div>
+	         <form [formGroup]="cardInfo">
+			                            <div style="text-align:center;">
+										 <label><b>Package&nbsp;:</b></label>&nbsp;&nbsp;<label>{{this.desc}}</label>
+										</div>
+										<label><b>Card Details</b></label>
+										<div class="form-group"> 								
+											<img src="assets/admin/img/dc.png"  *ngIf="defaultCard.cardType=='DC'"/>
+											<img src="assets/admin/img/visa.png"  *ngIf="defaultCard.cardType=='VISA'"/>
+											<img src="assets/admin/img/discover.png" *ngIf="defaultCard.cardType=='DISC'"/>
+											<img src="assets/admin/img/jcb.png"  *ngIf="defaultCard.cardType=='JCB'"/>
+											<img src="assets/admin/img/amex.png"  *ngIf="defaultCard.cardType=='AMEX'"/>
+											<img src="assets/admin/img/master.png"  *ngIf="defaultCard.cardType=='MC'"/><span style="font-size:15px;">{{defaultCard.cardNumber}} </span>
+									  </div>	
+			                            <div class="form-group" *ngIf="!sel">
+                                            <label for="cc-name" class="control-label mb-1">Enter Amount($)</label>
+											   <input [attr.disabled]="disabled"  formControlName="amount" name="cc-amount" type="number" class="form-control cc-name" autocomplete="cc-amount" >                                         
+                                            <span class="invalid-feedback">Enter the name as shown on credit card</span>
+                                        </div>
+									 <div class="form-group" *ngIf="!sel">
+                                            <label for="cc-name" class="control-label mb-1">Enter Promocode</label>
+											   <input  formControlName="promocode" name="promocode" type="text" class="form-control cc-name" autocomplete="promocode" >                                         
+                                            <!--  <span class="invalid-feedback">Enter the name as shown on credit card</span> -->
+                                        </div>
+										     <div class="form-group" *ngIf="sel">
+                                                   <label for="cc-name" class="control-label mb-1">Amount</label>
+                                                    <select   [(ngModel)]='selectedamount' (change)='onAmountChange($event)' class="form-control"  placeholder="Amount" id="sel1" formControlName="amount">
+                                                        <option value="null" disabled="true" [selected]="true">Select the Amount..</option>
+                                                      <option *ngFor='let a of creditOptions' [value]="a">{{formatDollar(a)}}</option>
+ 													
+                                                    </select>
+                                                  <span *ngIf="cardInfo?.controls.state?.errors?.required && cardInfoSubmitted" style="color: red;">State is required</span>
+                                               </div> 
+                                      <!-- <div class="form-group has-success">
+                                            <label for="cc-name" class="control-label mb-1">Name as on credit card</label>
+
+											   <input formControlName="nameOnCard" name="cc-name" type="text" class="form-control cc-name" autocomplete="cc-name" >
+                                        
+                                            <span class="invalid-feedback">Enter the name as shown on credit card</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cc-number" class="control-label mb-1">Card number</label>
+                                            <input formControlName="cardNum" name="cc-number" type="tel" (keyup)="returnCardType($event)"  class="form-control cc-number identified " [ngClass]="cardType" mask="0000 0000 0000 0000">
+                                            <span *ngIf="cardType=='unknown'&&submitted" style="color:red;font-style: italic">Enter a valid 16 digit card number</span>
+                                           
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="cc-exp" class="control-label mb-1">Expiration</label>
+                                                    <input formControlName="expiresOn" name="cc-exp" type="tel" mask="00/00" class="form-control cc-exp" required placeholder="MM / YY" autocomplete="cc-exp">
+                                                    <span class="invalid-feedback">Enter the expiration date</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                <label for="x_card_code" class="control-label mb-1">Security code</label>
+                                                <div class="input-group">
+                                                    <input formControlName="cvv" name="x_card_code" type="tel" mask="000" class="form-control cc-cvc" required autocomplete="off">
+                                                    <span class="invalid-feedback order-last">Enter the 3-digit code on back</span>
+                                                    <div class="input-group-append">
+                                                        <div class="input-group-text">
+                                                        <span class="fa fa-question-circle fa-lg" data-toggle="popover" data-container="body" data-html="true" data-title="Security Code" 
+                                                        data-content="<div class='text-center one-card'>The 3 digit code on back of the card..<div class='visa-mc-cvc-preview'></div></div>"
+                                                        data-trigger="hover"></span>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="cc-exp" class="control-label mb-1">Address</label>
+                                                    <div class="input-group">
+                                                        <input formControlName="address" name="cc-exp" type="text" class="form-control cc-exp" autocomplete="cc-exp">
+                                                        <span *ngIf="cardInfo?.controls.address?.errors?.required && cardInfoSubmitted" style="color: red;">Address is required</span>
+                                                    </div>                                        
+                                                </div>
+                                            </div>
+                                            <div class="col-8">
+                                                <div class="form-group">
+                                                   <label for="x_card_code" class="control-label mb-1">State</label>
+                                                    <select class="form-control"  placeholder="State" id="sel1" formControlName="state">
+                                                      <option value="" selected disabled>Select State</option>
+                                                      <option *ngFor="let state of statelist" >{{state.name}}</option>									
+                                                    </select>
+                                                  <span *ngIf="cardInfo?.controls.state?.errors?.required && cardInfoSubmitted" style="color: red;">State is required</span>
+                                               </div> 
+                                            </div>
+                                            
+                                            <div class="col-4">
+                                            
+                                                <div class="form-group">
+                                                  <label for="x_card_code" class="control-label mb-1">Zip code</label>
+                                                   <div class="input-group">
+                                                    <input formControlName="zipcode" name="x_card_code" type="number" class="form-control cc-cvc" autocomplete="off">
+                                                    <span *ngIf="cardInfo?.controls.zipcode?.errors?.required && cardInfoSubmitted" style="color: red;">Zip Code is required</span>
+                                                  </div>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                    <div class="row" style="padding: 0px 15px;margin-top:10px;">                                                
+                                          <div >											  							 
+										      <button type="button" class="formBtn" (click)="makepayment()">Make Payment</button> 
+										      <button type="button" class="formBtn" (click)="cancelButton()" style="background-color:#972347;width:120px" >Cancel</button>				
+										</div> 
+								   </div> 										
+                            </form>
+							</div>
+							</section>
+							<section  *ngIf="!togglePricing && showlogin" id="our-pricings" class="padding bglight col-md-5" style="margin:0 auto;padding-top:0px;padding-bottom:50px;margin-top:10%;">
+							    <div class="logo" style="text-align:center;padding-bottom:30px;padding-top:30px;">
+								 <a href="#"><img src="../../../assets/client/images/logo-dark.png" class="img-rounded" alt="Cinque Terre">
+								  <!-- <h3 *ngIf="userRole=='competitor'">Competitor Signup</h3>
+								  <h3 *ngIf="userRole=='judge'">Judge Signup</h3> -->
+								</a>    
+							  </div>
+							  <div style="text-align: center;color: #2e3192;font-weight: bold;">
+							   <a href="/">Goto Home</a>
+							  </div>
+							  <div  style="cursor:pointer;text-align: center;color: #2e3192;font-weight: bold; margin: 25px;">
+							   <a  (click)="gotoLogin()">Goto Login</a>
+							  </div>
+                            </section>
+                            
+                            <div class="modal fade" id="myModalGetStart" role="dialog" style="overflow-y: hidden !important;background: linear-gradient(90deg, rgba(46, 49, 146, 0.52), rgba(190, 30, 45, 0.6));" >
+                                <div class="modal-dialog" style="  max-width: 50% ;">
+                                    <button type="button" style=" background: transparent;
+                                    float: right;margin-right: -45px;" class="btn btn-default" data-dismiss="modal">
+                                        <a href="javascript:void(0)"><img style="    width: 36px;
+                                            margin-right: -54px;
+                                            position: absolute;
+                                            right: 17px;
+                                            top: -22px;
+                                            z-index: 1;cursor: pointer;" src="assets/client/images/icons/close.png" alt="logo"> </a>
+                                        
+                                        </button>
+                                        
+                                  <!-- Modal content-->
+                                  <div class="modal-content">
+                                   
+                                    <div class="modal-body" style="padding:0px">
+                                 
+                                        <div class='row' style="padding: 14px;background: #2e3192;margin-left:0px;margin-right:0px;">
+                                            <div class='col-sm-4'>
+                                                <p style="color:#fff;" > Sport </p>
+                                            </div>
+                                            <div class='col-sm-4'>
+                                                <p style="color:#fff;"> Score Only </p>
+                                            </div>
+                                            <div class='col-sm-4'>
+                                                <p style="color:#fff;"> Score w/ Judges Notes </p>
+                                            </div>
+                                        </div>
+                                        <div class="row"  *ngFor="let a of pricelist" style="padding: 10px;border: 1px solid grey;margin-left:0px;margin-right:0px;">
+                                            <div class='col-sm-4'>
+                                                <p style="color:#6d6868;word-break: break-word;"> {{a.sport}} </p>
+                                            </div>
+                                           
+                                            <div class="col-sm-4">
+                                                        <p style="color:#6d6868;"> {{formatDollar(a.scoreonly[0]?a.scoreonly[0]:'N/A')}} </p>     
+                                             </div>
+                                             <div class="col-sm-4">
+                                                        <p style="color:#6d6868;" > {{formatDollar(a.scoreonlywithnotes[0]?a.scoreonlywithnotes[0]:'N/A')}} </p>      
+                                              </div>
+                                                                                  
+                                                    
+                                         
+                                      
+                                    </div>            
+                                  </div>
+								  <div class="modal-footer" style="background-color: #2e3192; color:#fff;">
+									<span>Prices subject to change without notice.</span>
+								  </div>
+                                  </div>
+                                  </div>
+ </div>

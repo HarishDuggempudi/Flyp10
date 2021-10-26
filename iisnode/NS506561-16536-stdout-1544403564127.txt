@@ -1,0 +1,2 @@
+development environment
+Mongoose default connection open to mongodb://localhost:27017/flyp10-dev

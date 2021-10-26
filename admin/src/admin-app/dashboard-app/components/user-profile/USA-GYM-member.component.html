@@ -1,0 +1,52 @@
+
+    <div class="view-wrapper">
+        <div class="row">
+            <div class="col-lg-6">
+                    <mat-card>    
+                                    <mat-card-title>
+                                       <b>Add</b> USA Gymnastics MemberID
+                                      </mat-card-title>
+                                   <form role="form" novalidate [formGroup]="MemberForm"  #f="ngForm" >
+                                      
+                                            <!-- <mat-form-field class="material-input-full">
+                                                <input matInput placeholder="Enter the SanctionID"  formControlName="SanctionID">          
+                                             </mat-form-field>  
+                                         
+                                         <mat-form-field style="width:100%">
+                                            <mat-select placeholder="Select Member Type"  formControlName="MemberType" >
+                                              <mat-option *ngFor="let mt of memberType" [value]="mt.value">
+                                                {{mt.type}}
+                                              </mat-option>
+                                            </mat-select>      
+                                    </mat-form-field>
+                                    <mat-form-field style="width:100%">
+                                        <mat-select placeholder="Select Discipline"  formControlName="Discipline" >
+                                          <mat-option *ngFor="let d of discipline" [value]="d.value">
+                                            {{d.disicipline}}
+                                          </mat-option>
+                                        </mat-select>      
+                                </mat-form-field> -->
+                                
+                                    <mat-form-field class="material-input-full">
+                                        <input matInput placeholder="Enter the memberID"  [formControl]="MemberForm.controls.MemberID">          
+                                     </mat-form-field>  
+                                     <mat-form-field class="material-input-full">
+                                      <input matInput placeholder="Enter the Email"  [formControl]="MemberForm.controls.Email">          
+                                   </mat-form-field>  
+                                        
+                                         
+                     <div class="col-lg-8">
+                       <button (click)="verifythemembership()"  *ngIf="!isUSAGMember" mat-raised-button color="primary" >
+                        Save</button>
+                        <button (click)="updateUSAGMember()" *ngIf="isUSAGMember" mat-raised-button color="primary" >
+                          Update</button>
+                       <button type="button" (click)="CancelForm()" mat-raised-button color="warn">
+                        Cancel
+                       </button>
+                     </div>    
+                    </form>
+	
+                    </mat-card>
+            </div>
+           
+        </div></div>

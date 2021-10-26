@@ -1,0 +1,34 @@
+<div class="row">
+    <div class='col-lg-6'>
+        <div class="d-flex flex-row-reverse">
+            <h1 class="nb-heading-one mr-auto">{{SanctionInfo.Name}} Setting</h1>
+        </div>
+        <mat-card class="material-card-sm">
+            <form role="form" novalidate [formGroup]="SanctionSettingForm" #form="ngForm" (ngSubmit)="saveSanctionSetting()">
+                <div class="mb-6">
+                    <label><b>Select Sort Order Option For Routine:</b></label>
+                    <div class="mb-3">
+                        <mat-radio-group [formControl]="SanctionSettingForm.controls.SortForJudges">
+                            <mat-radio-button class="col-lg-5" style="padding-left: 20px;" value="DateTimeAsc">DateTime Ascending</mat-radio-button>
+                            <mat-radio-button class="col-lg-5" style="padding-left: 20px;" value="DateTimeDesc">DateTime Descending</mat-radio-button>
+                            <mat-radio-button class="col-lg-5" style="padding-left: 20px;" value="LevelAsc">Level Ascending</mat-radio-button>
+                            <mat-radio-button class="col-lg-5" style="padding-left: 20px;" value="LevelDesc">Level Descending</mat-radio-button>
+                            <mat-radio-button class="col-lg-5" style="padding-left: 20px;" value="CustomLevelAsc">Custom Level Ascending</mat-radio-button>
+                            <mat-radio-button class="col-lg-5" style="padding-left: 20px;" value="CustomLevelDesc">Custom Level Descending</mat-radio-button>
+                        </mat-radio-group>
+                        <control-messages [isSubmitted]="isSubmitted" [control]="SanctionSettingForm.controls.SortForJudges"></control-messages>
+                    </div>
+                </div>
+                <div class="mb-6">
+
+                </div>
+                <div class="mb-6">
+                    <button mat-raised-button color="primary" type="submit">
+                     Update</button>
+                    <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
+                </div>
+            </form>
+        </mat-card>
+    </div>
+
+</div>

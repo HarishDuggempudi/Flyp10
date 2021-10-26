@@ -1,0 +1,570 @@
+<div *ngIf="eventService.progress>0 && eventService.progress<100; else eventmeetviewpage">
+    <h3>Download in progress...</h3>
+    <progress-bar [progress]="eventService.progress" [color]="'#488aff'">
+    </progress-bar>
+</div>
+<ng-template #eventmeetviewpage>
+    <div class='row'>
+        <div class='col-lg-6'>
+            <div class="d-flex flex-row-reverse">
+                <h1 class="nb-heading-one mr-auto">Event Details</h1>
+            </div>
+            <mat-card class="material-card-sm">
+                <form role="form" novalidate [formGroup]="AddEventMeetForm" (ngSubmit)="enroll()">
+                    <div class="mb-6">
+                        <mat-form-field class="material-input-full">
+                            <input matInput placeholder="Event Name" [(ngModel)]="eventMeetObj.EventName" [formControl]="AddEventMeetForm.controls.EventName" [disabled]="disable">
+                            <mat-error>
+                                <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.EventName"></control-messages>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-6">
+                        <mat-form-field class="material-input-full">
+                            <mat-label>Start Date</mat-label>
+                            <input [min]="minDate" [formControl]="AddEventMeetForm.controls.StartDate" matInput [matDatepicker]="picker">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker [startAt]="startDate" #picker></mat-datepicker>
+                            <mat-error>
+                                <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.StartDate"></control-messages>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-6">
+                        <mat-form-field class="material-input-full">
+                            <mat-label>End Date</mat-label>
+                            <input [min]="returnMinDate()" [formControl]="AddEventMeetForm.controls.EndDate" matInput [matDatepicker]="picker1">
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker [startAt]="startDate" #picker1></mat-datepicker>
+                            <mat-error>
+                                <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.EndDate"></control-messages>
+                            </mat-error>
+                        </mat-form-field>
+
+                    </div>
+                    <div class="mb-6">
+                        <mat-form-field class="material-input-full">
+                            <input matInput placeholder="Sport Name" [formControl]="AddEventMeetForm.controls.Sports">
+                        </mat-form-field>
+
+                    </div>
+                    <!-- <div class="mb-6">
+                <label>Events</label>
+                  <mat-chip-list *ngIf='informationToEdit'>
+                          <mat-chip style="margin:6px" *ngFor='let a of informationToEdit.EventNames'>{{a}}</mat-chip>
+                        
+                  </mat-chip-list>
+           
+        </div>
+        <div class="mb-6">
+            <label style="margin-top:10px">Levels</label>
+            <mat-chip-list *ngIf='informationToEdit'>
+                    <mat-chip style="margin:6px" *ngFor='let a of informationToEdit.LevelName'>{{a}}</mat-chip>
+                  
+            </mat-chip-list>
+      </div>
+      <div class="mb-6" *ngIf="userRole == '1' " >
+          <div class="mb-6">
+              <label style="margin-top:10px">Judges</label>
+              <mat-chip-list *ngIf='informationToEdit'>
+                      <mat-chip style="margin:6px" *ngFor='let a of informationToEdit.JudgeName'>{{a}}</mat-chip>
+                    
+              </mat-chip-list>
+        </div>
+      </div> -->
+                    <div class="mb-6">
+                        <mat-form-field class="material-input-full">
+                            <input matInput placeholder="Country" [formControl]="AddEventMeetForm.controls.Country">
+                        </mat-form-field>
+                    </div>
+
+
+                    <div class="mb-6">
+                        <mat-form-field class="material-input-full">
+                            <input matInput placeholder="State" [formControl]="AddEventMeetForm.controls.State">
+                            <mat-error>
+                                <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.State"></control-messages>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div *ngIf="userRole=='1' && !isSanctionEventMeet">
+                        <label><b>Pricing for score only ($)</b></label>
+                        <div class="mb-6">
+                            <mat-form-field class="material-input-full">
+                                <input matInput placeholder="Competitor" type="number" [(ngModel)]="eventMeetObj.ScompetitorPrice" [formControl]="AddEventMeetForm.controls.ScompetitorPrice">
+
+                            </mat-form-field>
+                        </div>
+                        <div class="mb-6">
+                            <mat-form-field class="material-input-full">
+                                <input matInput type="number" placeholder="Judge" [(ngModel)]="eventMeetObj.SjudgePrice" [formControl]="AddEventMeetForm.controls.SjudgePrice">
+
+                            </mat-form-field>
+                        </div>
+                        <div class="mb-6">
+                            <mat-form-field class="material-input-full">
+                                <input matInput type="number" placeholder="Technician" [(ngModel)]="eventMeetObj.StechnicianPrice" [value]="AddEventMeetForm.controls.StechnicianPrice" [formControl]="AddEventMeetForm.controls.StechnicianPrice">
+                                <mat-error>
+                                    <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.StechnicianPrice"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <label><b>Pricing for score with judge notes ($)</b></label>
+                        <div class="mb-6">
+                            <mat-form-field class="material-input-full">
+                                <input matInput placeholder="Competitor" type="number" [(ngModel)]="eventMeetObj.NcompetitorPrice" [formControl]="AddEventMeetForm.controls.NcompetitorPrice">
+
+                            </mat-form-field>
+                        </div>
+                        <div class="mb-6">
+                            <mat-form-field class="material-input-full">
+                                <input matInput placeholder="Judge" type="number" [(ngModel)]="eventMeetObj.NjudgePrice" [formControl]="AddEventMeetForm.controls.NjudgePrice">
+
+                            </mat-form-field>
+                        </div>
+                        <div class="mb-6">
+                            <mat-form-field class="material-input-full">
+                                <input matInput placeholder="Technician" type="number" [(ngModel)]="eventMeetObj.NtechnicianPrice" [value]="AddEventMeetForm.controls.NtechnicianPrice" [formControl]="AddEventMeetForm.controls.NtechnicianPrice">
+                                <mat-error>
+                                    <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.NtechnicianPrice"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                    </div>
+
+                    <div class="mb-6" *ngIf="userRole=='1' || isUSAGMeetDirector">
+                        <mat-checkbox [formControl]="AddEventMeetForm.controls.active" [checked]="eventMeetObj.active">
+                            Active
+                        </mat-checkbox>
+                        <span *ngIf="userRole == '1' && isSanctionEventMeet">
+                <button mat-raised-button color="default">
+                USAG Sanction Event Meet</button>
+                </span>
+                    </div>
+                    <div *ngIf="userRole=='3'&& !isUSAGMeetDirector" class="mb-6">
+                        <button *ngIf="!enrolled" mat-raised-button color="primary" type="submit">
+                <i class="fas fa-save"></i> Enroll </button>
+                        <!-- <button *ngIf="enrolled" mat-raised-button color="primary"  disabled='disabled'>
+                    <i class="fas fa-tick"></i> Enrolled </button> -->
+                        <!-- <span *ngIf="isSanctionEventMeet && enrolled">
+                      <button type="button" mat-raised-button color="primary" data-toggle="modal"  data-target="#ranking" >
+                        <i class="fas fa-list-ol"></i> Ranking </button>
+                      </span>  -->
+                        <button mat-raised-button color="warn" type="button" (click)="triggerCancelForm()">Cancel</button>
+                    </div>
+                    <div *ngIf="(userRole == '1' || isUSAGMeetDirector) && isSanctionEventMeet" class="mb-6">
+
+                        <button type="button" *ngIf="Ranking.length>0" mat-raised-button color="primary" data-toggle="modal" data-target="#ranking">
+                  <i class="fas fa-list-ol"></i> Event Level Ranking </button>
+                        <button type="button" *ngIf="LevelRanking.length>0" mat-raised-button color="primary" data-toggle="modal" data-target="#levelranking">
+                    <i class="fas fa-list-ol"></i> Level Ranking </button>
+                        <br>
+                        <br>
+                        <button type="button" mat-raised-button color="primary" (click)="downloadscore()">
+                      <i class="fas fa-download"></i> Download score</button>
+                        <button *ngIf="IsOnGoingEventMeet" type="button" mat-raised-button color="primary" data-toggle="modal" data-target="#startcode1">
+                <i class="fa fa-paper-plane"></i> Send Start Code </button>
+                        <br *ngIf="IsOnGoingEventMeet">
+                        <br *ngIf="IsOnGoingEventMeet">
+                        <button type="button" *ngIf="filterAthleteInfo.length>0" mat-raised-button color="primary" data-toggle="modal" data-target="#athlete">
+                    <i class="fas fa-user-circle"></i> Athlete Activity</button>
+
+                    </div>
+                </form>
+            </mat-card>
+        </div>
+        <div class="col-lg-6" *ngIf="userRole=='1' || isUSAGMeetDirector">
+
+            <ul class="list-group" *ngIf=' !isSanctionEventMeet'>
+                <li class="list-group-item"><span><strong>Judges Details </strong> </span></li>
+                <div *ngFor="let sport of sportDetails;let i=index">
+                    <div class="vl"></div>
+                    <li class="list-group-item"><span>
+                  <strong>Event: </strong>{{sport.EventName}}
+                <!-- <button mat-mini-fab class="material-icon-sm" color="warn" (click)="delete(i)">
+                  <i class="fa fa-trash" style="padding-bottom: 5px;"></i>
+               </button> -->
+               </span></li>
+                    <div *ngFor="let sports of sport.JudgeName;let j=index">
+                        <li class="list-group-item" style="text-align:initial">
+                            <span><strong>Judge: </strong>{{sports}}
+    <!-- <button *ngIf="sport.JudgeName.length>1" mat-mini-fab class="material-icon-sm" color="warn" (click)="deletejudge(i,j)">
+        <i class="fa fa-trash" style="padding-bottom: 5px;"></i>
+     </button> -->
+   </span>
+
+                        </li>
+                    </div>
+                    <div *ngIf="sport.TechnicianName">
+                        <li class="list-group-item" style="text-align:initial">
+                            <span><strong>Technician: </strong>{{sport.TechnicianName}}
+      <button mat-mini-fab class="material-icon-sm" color="warn">
+          <i class="fa fa-trash" style="padding-bottom: 5px;"></i>
+       </button>
+     </span>
+
+                        </li>
+                    </div>
+                </div>
+                <div *ngIf="sportDetails.length==0" class="vl"></div>
+                <li *ngIf="sportDetails.length==0" class="vl" class="list-group-item"><span><strong>No data to display</strong> </span></li>
+
+
+            </ul>
+            <ul class="list-group" *ngIf="isSanctionEventMeet">
+                <li class="list-group-item"><span><strong>Judges Details</strong> </span></li>
+                <div *ngFor="let  jp of EventMeetJudgespanelBylevelevent;let i=index">
+                    <div class="vl" style=" margin-left: 165px !important;"></div>
+                    <li class="list-group-item"><span>
+                <strong>Level: </strong>{{jp.levelName}}  <strong>Event: </strong>{{jp.eventName}}
+           
+             </span></li>
+                    <div *ngFor="let judgespanel of jp.JudgesbyPanel;let j=index">
+                        <div *ngFor="let judge of judgespanel.JudgeName;let k=index">
+                            <li class="list-group-item" style="text-align:initial">
+
+                                <span><strong>{{judgespanel.PanelName}}: </strong>{{judge.name}} -{{judge.USAGID}}
+    
+    </span>
+
+
+                            </li>
+                        </div>
+                    </div>
+
+                </div>
+                <div *ngIf="EventMeetJudgespanelBylevelevent.length==0" class="vl" style=" margin-left: 165px !important;"></div>
+                <li *ngIf="EventMeetJudgespanelBylevelevent.length==0" class="list-group-item"><span><strong>No data to display</strong> </span></li>
+
+
+            </ul>
+            <br>
+            <ul class="list-group">
+                <li class="list-group-item"><span><strong>Mapped Competitors</strong> </span></li>
+
+                <div class="vl"></div>
+                <!-- <li class="list-group-item" ><span>
+                <strong>Competitors</strong>
+              <button mat-mini-fab class="material-icon-sm" color="warn" (click)="delete(i)">
+                <i class="fa fa-trash" style="padding-bottom: 5px;"></i>
+             </button>
+             </span></li> -->
+                <div *ngFor="let comp of Competitors;let j=index">
+                    <li class="list-group-item" style="text-align:initial">
+                        <span>{{comp.competitors.username}}
+  
+  </span>
+
+                    </li>
+
+                </div>
+                <div *ngIf="Competitors.length==0" class=""></div>
+                <li *ngIf="Competitors.length==0" class="list-group-item"><span><strong>No data to display</strong> </span></li>
+
+
+            </ul>
+
+        </div>
+    </div>
+</ng-template>
+
+
+<div class="modal fade" id="startcode1" role="dialog" style="overflow-y: hidden !important;background: linear-gradient(90deg, rgba(46, 49, 146, 0.52), rgba(190, 30, 45, 0.6));">
+    <div class="modal-dialog " style="  max-width: 50% ;display:block;margin:0 auto;margin-top:20px !important">
+
+
+        <!-- Modal content-->
+        <div class="modal-content" style="overflow-y: hidden">
+            <div class="modal-header" style="background:#3f51b5;color: white;">
+                <h5 class="modal-title">Start Code</h5>
+                <button type="button" class="close" data-dismiss="modal" id="close" style="color:white">&times;</button>
+            </div>
+            <div class="modal-body" style="padding:0px;overflow: hidden;position: relative; min-height:170px!important">
+
+                <form role="form" novalidate [formGroup]="startCodeForm" style="margin:20px !important">
+
+
+                    <div class="mb-3">
+                        <mat-form-field class="material-input-full">
+                            <input matInput placeholder="startcode" type="text" formControlName="startcode" [(ngModel)]="startcode">
+
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-3 text-center">
+                        <button mat-raised-button color="primary" (click)="sendstartcode()">
+            Start code</button>
+
+                    </div>
+                </form>
+
+
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ranking" role="dialog" style="overflow-y: scroll !important;background: linear-gradient(90deg, rgba(46, 49, 146, 0.52), rgba(190, 30, 45, 0.6));">
+    <div class="modal-dialog " style="  max-width: 45% ;display:block;margin:0 auto;margin-top:20px !important">
+
+
+        <!-- Modal content-->
+        <div class="modal-content" style="overflow-y: scroll">
+
+            <div class="modal-body" style="padding:0px;overflow: hidden;position: relative; min-height:300px!important">
+                <mat-form-field style="margin: 10px;">
+                    <input matInput placeholder="Search by Name" (keyup)="applyFilterRanking($event.target.value)">
+                </mat-form-field>
+                <button type="button" style="    background: #be1e2d;
+                float: right;
+                margin: 10px;
+                height: 21px;
+                width: 43px;
+                padding: 0;
+                font-size: 12px;
+                line-height: 10px;
+                 
+                color: white;" class="btn btn-default" data-dismiss="modal">
+                  Close
+                  
+                  </button>
+                <div class="col-md-12 word-wrap" style="margin-top:10px;">
+                    <mat-card>
+                        <div id="rankingtable" #rankingtable>
+                            <h4>Ranking</h4>
+                            <div *ngIf="Ranking.length; else showNull">
+                                <div class="row" style="margin-top:20px;padding:2px;color:#3f51b5">
+                                    <div class="col-sm-1">
+                                        <span><b>Rank</b></span>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <span><b>USAGID</b></span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <span><b>Username</b></span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <span><b>Name</b></span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <span><b>Score</b></span>
+                                    </div>
+
+                                </div>
+                                <div *ngFor="let rank of filterRanking">
+                                    <div class="row" *ngIf="rank.users.length > 0" style="margin-top:20px;padding:2px;background: #3f51b5;color:white">
+                                        <div class="col-sm-12 text-center">
+                                            <span><b>{{rank.levelName}} - {{rank.eventName}}</b></span>
+                                        </div>
+                                    </div>
+
+
+                                    <div *ngIf="rank.users.length > 0">
+                                        <div class="row" *ngFor="let user of rank.users;let i = index" style="margin-top:20px;">
+                                            <div class="col-sm-1">
+                                                <span>{{user.rank}}</span>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <span>{{user.USAGID}}</span>
+                                            </div>
+
+                                            <div class="col-sm-3">
+                                                <span>{{user.athlete}}</span>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <span>{{user.firstName}} {{user.lastName}}</span>
+                                            </div>
+
+                                            <div class="col-sm-3">
+                                                <span>{{user.score}}</span>
+                                            </div>
+
+
+                                        </div>
+                                        <hr>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <ng-template #showNull>
+                                <div class="text-center" style="padding-bottom: 8px">
+                                    <span class="font-italic" style="color: lightgray">No data found</span>
+                                </div>
+
+                            </ng-template>
+                            <hr/>
+                        </div>
+
+
+                    </mat-card>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="levelranking" role="dialog" style="overflow-y: scroll !important;background: linear-gradient(90deg, rgba(46, 49, 146, 0.52), rgba(190, 30, 45, 0.6));">
+    <div class="modal-dialog " style="  max-width: 45% ;display:block;margin:0 auto;margin-top:20px !important">
+
+
+        <!-- Modal content-->
+        <div class="modal-content" style="overflow-y: scroll">
+
+            <div class="modal-body" style="padding:0px;overflow: hidden;position: relative; min-height:300px!important">
+                <mat-form-field style="margin: 10px;">
+                    <input matInput placeholder="Search by Name" (keyup)="applyFilterLevelRanking($event.target.value)">
+                </mat-form-field>
+                <button type="button" style="    background: #be1e2d;
+                    float: right;
+                    margin: 10px;
+                    height: 21px;
+                    width: 43px;
+                    padding: 0;
+                    font-size: 12px;
+                    line-height: 10px;
+                     
+                    color: white;" class="btn btn-default" data-dismiss="modal">
+                      Close
+                      
+                      </button>
+                <div class="col-md-12 word-wrap" style="margin-top:10px;">
+                    <mat-card>
+                        <div>
+                            <h4>Ranking</h4>
+                            <div *ngIf="LevelRanking.length; else showNull">
+                                <div class="row" style="margin-top:20px;padding:2px;color:#3f51b5">
+                                    <div class="col-sm-1">
+                                        <span><b>Rank</b></span>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <span><b>USAGID</b></span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <span><b>Username</b></span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <span><b>Name</b></span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <span><b>Score</b></span>
+                                    </div>
+
+                                </div>
+                                <div *ngFor="let rank of filterLevelRanking">
+
+                                    <div class="row" *ngIf="rank.users.length > 0" style="margin-top:20px;padding:2px;background: #3f51b5;color:white">
+                                        <div class="col-sm-12 text-center">
+                                            <span><b>{{rank.levelName}}</b></span>
+
+                                        </div>
+                                    </div>
+
+
+                                    <div *ngIf="rank.users.length > 0">
+                                        <div class="row" *ngFor="let user of rank.users;let i = index" style="margin-top:20px;">
+                                            <div class="col-sm-1">
+                                                <span>{{user.rank}}</span>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <span>{{user.USAGID}}</span>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <span>{{user.athlete}}</span>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <span>{{user.firstName}} {{user.lastName}}</span>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <span>{{user.score}}</span>
+                                            </div>
+
+
+                                        </div>
+                                        <hr>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <ng-template #showNull>
+                                <div class="text-center" style="padding-bottom: 8px">
+                                    <span class="font-italic" style="color: lightgray">No data found</span>
+                                </div>
+
+                            </ng-template>
+
+                        </div>
+
+
+                    </mat-card>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="athlete" role="dialog" style="overflow-y: scroll !important;background: linear-gradient(90deg, rgba(46, 49, 146, 0.52), rgba(190, 30, 45, 0.6));">
+    <div class="modal-dialog " style="  max-width: 75% ;display:block;margin:0 auto;margin-top:20px !important">
+
+
+        <!-- Modal content-->
+        <div class="modal-content" style="overflow-y: scroll">
+
+            <div class="modal-body" style="padding:0px;overflow: hidden;position: relative; min-height:300px!important">
+                <mat-form-field style="margin: 10px;">
+                    <input matInput placeholder="Search by Name" (keyup)="applyFilterAthleteInfo($event.target.value)">
+                </mat-form-field>
+                <button type="button" style="    background: #be1e2d;
+                    float: right;
+                    margin: 10px;
+                    height: 21px;
+                    width: 43px;
+                    padding: 0;
+                    font-size: 12px;
+                    line-height: 10px;
+                     
+                    color: white;" class="btn btn-default" data-dismiss="modal">
+                      Close
+                      
+                      </button>
+                <div class="col-md-12 word-wrap" style="margin-top:10px;">
+                    <mat-card>
+                        <div>
+                            <h4>Athlete Activity</h4>
+
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" *ngFor="let header of Headers">{{header}}</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let athlete of filterAthleteInfo;let i = index">
+
+                                        <td>{{athlete.Name}}</td>
+                                        <td>{{athlete.Club}}</td>
+                                        <td>
+                                            <span *ngIf="athlete.routine.length > 0">{{athlete.routine[0].level}}</span>
+                                            <span *ngIf="athlete.routine.length==0">{{athlete.Level}}</span>
+                                        </td>
+                                        <td *ngFor="let Event of SportEvent">
+
+                                            <span *ngIf="athlete[Event._id] == '0' || athlete[Event._id] == '5'" style="color:#3f51b5"><b><i class="fa fa-hourglass-1"></i></b></span>
+                                            <span *ngIf="athlete[Event._id] == '-1'" style="color:red"><b><i class="fa fa-times"></i></b></span>
+                                            <span *ngIf="athlete[Event._id] == '1'" style="color:forestgreen"><span><b><i class="fa fa-check"></i></b></span></span>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </mat-card>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

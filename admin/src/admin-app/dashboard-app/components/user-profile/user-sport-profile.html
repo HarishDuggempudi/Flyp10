@@ -1,0 +1,149 @@
+
+    <div class="view-wrapper">
+        <div class="row">
+            <div class="col-lg-6">
+                    <mat-card>    
+                                    <mat-card-title>
+                                       <b>Add</b> Sports Profile
+                                      </mat-card-title>
+                                   <form role="form" novalidate [formGroup]="SportForm" (ngSubmit)="addSportdetail()" #f="ngForm" *ngIf="loginobjUser.userRole=='3'">
+                                        <div class="col-lg-8" >
+                                                <mat-form-field style="width:100%">
+                                                        <mat-select placeholder="Select Sport" formControlName="sportName" (change)="OnSportChange($event.value)">
+                                                       <mat-option *ngFor="let sport1 of sportObj" [value]="sport1.sportName">
+                                                         {{sport1.sportName}}
+                                                       </mat-option>
+                                                     </mat-select>
+                                                </mat-form-field>
+                                         </div>
+                                         <div class="col-lg-8" >
+                                                <mat-form-field style="width:100%">
+                                                        <mat-select placeholder="Select Sport Level"  formControlName="level" (change)="OnLevelChange($event.value)">
+                                                          <mat-option *ngFor="let sport2 of levelObj" [value]="sport2.level">
+                                                            {{sport2.level}}
+                                                          </mat-option>
+                                                        </mat-select>      
+                                                </mat-form-field>
+
+                                                <!-- <input type="hidden" name="username" formControlName="username"/>        -->
+                                        </div>   
+                                         
+                     <div class="col-lg-8">
+                       <button type="submit" mat-raised-button color="primary" >
+                        Save</button>
+                       <button type="button" (click)="triggerCancelForm()" mat-raised-button color="warn">
+                        Cancel
+                       </button>
+                     </div>    
+                    </form>
+		<form role="form" novalidate [formGroup]="SportjudgeForm" (ngSubmit)="saveUser()" #f="ngForm" *ngIf="loginobjUser.userRole=='2'">
+
+          <div class="mb-3" > 
+            
+              <div formArrayName="sportdetail">   
+                 <div *ngFor="let sport of SportjudgeForm.controls.sportdetail['controls']; let i=index" >  
+                           
+                  <div [formGroupName]="i">
+                   
+                     <mat-form-field style="width:100%">
+                    <mat-select placeholder="Select Sport" formControlName="sportName" (change)="OnSportChange($event.value)">
+                   <mat-option *ngFor="let sport1 of sportObj" [value]="sport1.sportName">
+                     {{sport1.sportName}}
+                   </mat-option>
+                 </mat-select>
+               </mat-form-field>
+               <mat-form-field style="width:100%">
+                 <mat-select placeholder="Select Sport Level"  formControlName="level" (change)="OnLevelChange($event.value)" >
+                   <mat-option *ngFor="let sport2 of levelObj" [value]="sport2.level">
+                     {{sport2.level}}
+                   </mat-option>
+                 </mat-select>      
+               </mat-form-field> 
+               
+              <div *ngIf ="selectedsportid == MFigureSkating || selectedsportid == WFigureSkating">
+                <label><b>Uploading For:</b></label><br>
+                <mat-checkbox   value="technician" (click)="Onuploadingfor('technician')">
+                    Technician
+                </mat-checkbox>
+                <mat-checkbox   value='judge' (click)="Onuploadingfor('judge')">
+                  Judge
+              </mat-checkbox>
+              <mat-error *ngIf="!uploadingFor" >
+                *Required
+              </mat-error>
+            </div> 
+            
+               <div class="mb-3">
+                <mat-form-field class="material-input-full">
+                   <input matInput placeholder="Describe Document"  formControlName="docdescription">          
+                </mat-form-field>
+               </div>
+                <div style="margin-bottom:5px;"><b>Verification Document</b> (required)</div>
+                   
+                     <div class="row" style="margin-left:2px;" *ngIf="togglechoose">
+                          <input name="file" type="file"  (change)="onFileChange($event,i)" style="margin-bottom: 5px">
+                          <span *ngIf="isinvalidfile" style="color: red">*file size should be less then 5MB</span>
+                          <input type="hidden" name="fileHidden" formControlName="sportdocname"/> <!-- Validation Field -->
+                          <input type="hidden" name="fileHidden" formControlName="file"/>
+                          <input type="hidden" name="fileHidden" formControlName="username"/>
+                        <!--   <button type="button" *ngIf="i!= 0" (click)="remove(i)" mat-raised-button color="warn" style="margin-left:10px;">
+                          Remove
+                        </button>  -->  
+                     </div>
+                               
+                 </div>             
+              </div>
+                 <!-- <button  type="button" mat-raised-button color="info" *ngIf="addmorebutton" style="color: #fff;background-color: #4a4949;margin-bottom: 15px;margin-top: 15px" (click)="addMoreSports()">Add More</button>  -->
+              </div>
+            </div>
+         
+              <div class="mb-3">
+                <button type="submit" mat-raised-button color="primary">
+                  Save</button>
+                <button type="button" (click)="triggerCancelForm()" mat-raised-button color="warn">
+                  Cancel
+                </button>
+          </div>
+        </form>
+                    </mat-card>
+            </div>
+            <div class="col-lg-6">              
+                    <ul class="list-group">
+                        <li class="list-group-item"><span><strong>Sport Details</strong> </span></li>                   
+                            <div *ngFor="let sport of usersportObj| groupBy:'sportid'">
+                             <div *ngIf="sport.key!=null" class="vl"></div>
+                             <li class="list-group-item" ><strong>Sport: </strong>{{sport.value[0].sportinfo?sport.value[0].sportinfo.sportName:""}}</li>
+							 <div *ngFor="let sports of sport.value">
+								 <li class="list-group-item" style="text-align:initial">
+								 <span><strong>Level: </strong>{{sports.levelinfo.level}}
+								     <i *ngIf="sports.status=='1' && loginobjUser.userRole=='2'" class="far fa-check-circle" style="color:green;padding-left:3px;"></i>
+									 <i *ngIf="sports.status=='0' && loginobjUser.userRole=='2'" class="fas fa-hourglass-half" style="color:#34a6da;padding-left:3px;"></i>
+									 <i *ngIf="sports.status=='2' && loginobjUser.userRole=='2'" class="fas fa-user-times" style="color:#b3154b;padding-left:3px;"></i>
+                   <i *ngIf="sports.status=='3' && loginobjUser.userRole=='2'"class="far fa-calendar-times" style="color:#d88812;padding-left:3px;"></i>
+                   <span *ngIf="sports.uploadingfor == '1'&& objUser.userRole=='2'">- <b><i>Technician</i></b></span>
+                   <span *ngIf="(sports.uploadingfor == '2' ||sports.uploadingfor == ''||sports.uploadingfor =='0') && objUser.userRole=='2'">- <b><i>Judge</i></b></span>
+                   <span *ngIf="sports.uploadingfor == '3'&& objUser.userRole=='2'">- <b><i>Technician & Judge</i></b></span>
+								 </span>
+								  <button mat-mini-fab class="material-icon-sm" color="warn" (click)="delete(sports._id)">
+										<i class="fa fa-trash" style="padding-bottom: 5px;"></i>
+								 </button>
+								 </li>
+								<!--  <li class="list-group-item" *ngIf="sports.originalfilename" >
+									<p class="zeromarbottom"><strong>Document</strong></p>
+									<a href="/api/user/judge/downloadfile/{{sports.docName}}" class="downloadlink" >{{sports.originalfilename}}</a>
+								</li> -->
+								 <!-- <li class="list-group-item">									
+								    <button mat-mini-fab class="material-icon-sm" color="warn" (click)="delete(sports._id)">
+										<i class="fa fa-trash"></i>
+									</button>
+								</li> -->
+                            </div>
+                        </div>
+                        <div *ngIf="usersportObj.length==0"  class="vl"></div>
+                        <li  *ngIf="usersportObj.length==0"  class="vl" class="list-group-item"><span><strong>No data to display</strong> </span></li>
+                        
+                         
+                    </ul>
+            
+            </div>
+        </div></div>

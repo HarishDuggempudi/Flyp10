@@ -1,0 +1,261 @@
+<div class="row">
+    <div class='col-lg-6'>
+        <div class="d-flex flex-row-reverse">
+            <h1 class="nb-heading-one mr-auto">Event Meet Judge Mapping</h1>
+
+        </div>
+        <div *ngIf="calculationNone" style="color:red ;margin-top: 15px;">* There was no score card configured for this level and event. please contact our administrator.<br> </div>
+        <mat-card class="material-card-sm">
+            <form role="form" novalidate [formGroup]="AddEventMeetForm" #form="ngForm" (ngSubmit)="saveEventMeetJudgeMap('1')">
+                <div class="mb-6">
+                    <mat-form-field class="material-input-full">
+                        <mat-select (change)="OnEventMeetChange()" [formControl]="AddEventMeetForm.controls.EventMeet" placeholder="EventMeet Name">
+
+                            <mat-option *ngFor="let ev of allEventMeets" [value]="ev._id">
+                                {{ev.EventName}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>
+                            <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.EventMeet"></control-messages>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mb-6">
+                    <mat-form-field class="material-input-full">
+                        <mat-select [formControl]="AddEventMeetForm.controls.Sports" disabled placeholder="Sport">
+
+                            <mat-option *ngFor="let ev of filteredSports" [value]="ev._id">
+                                {{ev.sportName}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>
+                            <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.Sports"></control-messages>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="mb-6">
+                    <mat-form-field class="material-input-full">
+                        <mat-select (change)="OnLevelChange()" [formControl]="AddEventMeetForm.controls.Levels" placeholder="Level">
+                            <!-- <mat-option>
+                          <ngx-mat-select-search [formControl]="AddEventMeetForm.controls.inputCompetitors"
+                               [placeholderLabel]="'Search Competitors'" 
+                                       [noEntriesFoundLabel]="'No matching competitors found'"
+                          ><i ngxMatSelectSearchClear class="fa fa-times" aria-hidden="true"></i></ngx-mat-select-search>
+                        </mat-option> -->
+                            <mat-option *ngFor="let ev of filteredEventMeetLevels" [value]="ev._id">
+                                {{ev.level}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>
+                            <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.Levels"></control-messages>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mb-6">
+                    <mat-form-field class="material-input-full">
+                        <mat-select (change)="onEventChange()" [formControl]="AddEventMeetForm.controls.Events" placeholder="Event">
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="AddEventMeetForm.controls.inputCompetitors" [placeholderLabel]="'Search Competitors'" [noEntriesFoundLabel]="'No matching competitors found'"><i ngxMatSelectSearchClear class="fa fa-times" aria-hidden="true"></i></ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option *ngFor="let ev of filteredEventMeetsEvents" [value]="ev._id">
+                                {{ev.Event}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>
+                            <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.Events"></control-messages>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6" *ngIf="ScoreCalculation">
+                    <button mat-raised-button color="defalut" type="submit">
+                    <b>Score Calculation: </b>{{ScoreCalculation}}</button>
+                </div>
+                <br>
+                <div class="mb-6" style="margin-top: 15px;
+                margin-bottom: 25px;" [ngStyle]="{'display':showJudges?'none':''}">
+                    <a class="addjudge" style="border: 2px solid #2e3192;
+                  color: #2e3192;
+                  padding: 8px;
+                  font-weight: 600;cursor: pointer;" (click)="addjudges()"><i class="fas fa-plus"></i> Add Judges</a>
+
+
+                </div>
+
+                <div [ngStyle]="{'display':!showJudges?'none':''}">
+                    <div class="d-flex ">
+                        <h1 class="nb-heading-one">Add Judges
+
+                        </h1>
+                        <button style="margin-left:10px" mat-mini-fab color="primary" type="button" (click)="saveJudgeByPanel()" title="Click here to add judges">
+                        <i class="fas fa-plus"></i> </button>
+                        <button style="margin-left:10px" mat-mini-fab color="warn" type="button" (click)="resetJudgesForm()" title="Click here to reset"> <i class="fas fa-undo"></i></button>
+
+                    </div>
+
+                    <form novalidate [formGroup]="AddJudgesForm" #f="ngForm">
+
+                        <div class="mb-6">
+                            <mat-form-field class="material-input-full">
+                                <mat-select [formControl]="AddJudgesForm.controls.Panel" (change)="onJudgePanelChange()" placeholder="Panel">
+
+                                    <mat-option *ngFor="let ev of judgepanels" [value]="ev._id">
+                                        {{ev.judgePanel}}
+                                    </mat-option>
+                                </mat-select>
+
+
+
+                                <mat-error *ngIf='isSubmittedJudgeForm'>
+                                    <control-messages [isSubmitted]="isSubmittedJudgeForm" [control]="AddJudgesForm.controls.Panel"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+
+                        <div class="mb-6">
+                            <mat-form-field class="material-input-full">
+                                <mat-select placeholder="Select Judges" [formControl]="AddJudgesForm.controls.Judges" multiple>
+
+                                    <mat-option [value]='state._id' *ngFor="let state of JudgesToShow">{{state.firstName}} {{state.lastName}}-<b>({{state.MemberID}})</b></mat-option>
+                                </mat-select>
+
+                                <mat-error *ngIf='isSubmittedJudgeForm'>
+                                    <control-messages [isSubmitted]="isSubmittedJudgeForm" [control]="AddJudgesForm.controls.Judges"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+
+
+
+                    </form>
+
+
+                </div>
+                <div class="mb-6">
+                    <button mat-raised-button color="primary" type="submit">
+                      <i class="fas fa-map-signs"></i> Map</button>
+
+                </div>
+            </form>
+        </mat-card>
+    </div>
+    <div class="col-lg-6">
+        <ul class="list-group">
+            <li class="list-group-item"><span><strong>Judges Details</strong> </span></li>
+            <div class="vl" style=" margin-left: 165px !important;"></div>
+            <li class="list-group-item text-center" *ngIf="levelName && eventName"><span>
+              <strong>Level: </strong>{{levelName}} <strong>Event: </strong>{{eventName}}
+           </span></li>
+            <div *ngFor="let judge of judgeDetails;let i=index">
+                <div class="vl" style=" margin-left: 165px !important;"></div>
+                <li class="list-group-item text-center"><span>
+                    <strong>Panel: </strong>{{judge.PanelName}}
+                  <button mat-mini-fab class="material-icon-sm" color="warn" (click)="delete(i)">
+                    <i class="fa fa-trash" style="padding-bottom: 5px;"></i>
+                 </button>
+                 </span></li>
+                <div *ngFor="let judges of judge.JudgeName;let j=index">
+                    <li class="list-group-item text-center" style="text-align:initial">
+                        <span><span *ngIf="!judges.firstName">{{judges.name}}</span> <span *ngIf="judges.firstName">{{judges.firstName}} {{judges.lastName}}</span>-{{judges.USAGID}}
+                        <button mat-mini-fab class="material-icon-sm" color="primary" title="Swap judge" data-toggle="modal" data-target="#swapjudge" (click)="swapjudge(i,j)">
+                            <i class="fa fa-exchange-alt" style="padding-bottom: 5px;"></i>
+                         </button>
+                        <button *ngIf="judge.JudgeName.length>1" mat-mini-fab class="material-icon-sm" color="warn" (click)="deletejudge(i,j)">
+          <i class="fa fa-trash" style="padding-bottom: 5px;"></i>
+       </button>
+
+                        </span>
+
+                    </li>
+                </div>
+
+            </div>
+            <div *ngIf="judgeDetails.length==0" class="vl" style=" margin-left: 165px !important;"></div>
+            <li *ngIf="judgeDetails.length==0" class="list-group-item"><span><strong>No data to display</strong> </span></li>
+
+
+        </ul>
+    </div>
+    <!-- <div class="col-lg-6">
+          <ul class="list-group">
+            <li class="list-group-item"><span><strong>Mapped Competitors</strong> </span></li>                   
+                 <div  class="vl"></div>
+      <div *ngFor="let comp of MappedCompetitors;let j=index">
+      <li class="list-group-item" style="text-align:initial">
+      <span>{{comp.username}}
+      
+      </span>
+      <button mat-mini-fab class="material-icon-sm" color="warn" style="float: right;
+      bottom: 8px;" (click)="deleteCompetitors(comp)">
+        <i class="fa fa-trash" style="padding-bottom: 5px;"></i>
+     </button>
+      </li>
+      
+      </div>
+      <div *ngIf="MappedCompetitors.length==0"  class="vl"></div>
+      <li  *ngIf="MappedCompetitors.length==0"  class="list-group-item"><span><strong>No data to display</strong> </span></li>
+          
+             
+        </ul>
+        </div> -->
+</div>
+<br>
+<br>
+<div *ngIf="eventmeetid && (filteredEventMeetLevels.length == 0 || filteredEventMeetsEvents.length == 0)">
+    <p style="font-size: 15px; color: royalblue">Please wait Event meet levels and events are Loading...</p>
+</div>
+<div class="modal fade" id="swapjudge" role="dialog" style="overflow-y: hidden !important;background: linear-gradient(90deg, rgba(46, 49, 146, 0.52), rgba(190, 30, 45, 0.6));">
+    <div class="modal-dialog " style="  max-width: 50% ;display:block;margin:0 auto;margin-top:20px !important">
+
+
+        <!-- Modal content-->
+        <div class="modal-content" style="overflow-y: hidden">
+            <div class="modal-header" style="background:#3f51b5;color: white;">
+                <h5 class="modal-title">Swap Judge</h5>
+                <button type="button" class="close" data-dismiss="modal" id="close" style="color:white">&times;</button>
+            </div>
+            <div class="modal-body" style="padding:0px;overflow: hidden;position: relative; min-height:170px!important">
+
+                <form novalidate [formGroup]="swapJudgeForm" #swapform="ngForm" style="margin:20px !important">
+
+
+                    <div class="mb-3">
+                        <mat-form-field class="material-input-full">
+                            <input matInput placeholder="Reason for swapping" type="text" [formControl]="swapJudgeForm.controls.reason">
+                            <mat-error>
+                                <control-messages [isSubmitted]="isSwapJudgeFormSubmitted" [control]="swapJudgeForm.controls.reason"></control-messages>
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="material-input-full">
+                            <input matInput placeholder="Panel" type="text" [formControl]="swapJudgeForm.controls.panel" readonly>
+                        </mat-form-field>
+                        <mat-form-field class="material-input-full">
+                            <input matInput placeholder="Swap Judge From" type="text" [formControl]="swapJudgeForm.controls.JudgeChangeFrom" readonly>
+                        </mat-form-field>
+
+                        <label><b>Select Judge For Swap</b></label>
+                        <select style="width:100%;height:38px" [formControl]="swapJudgeForm.controls.JudgeChangeTo">
+              <option disabled selected="true" value=''>Select</option>
+            <option *ngFor='let j of swappingJudgesToShow;let i = index' [value]="j._id">{{j.firstName}} {{j.lastName}} -{{j.memberInfo.MemberID}}</option>
+             
+            </select>
+                        <mat-error>
+                            <control-messages [isSubmitted]="isSwapJudgeFormSubmitted" [control]="swapJudgeForm.controls.JudgeChangeTo"></control-messages>
+                        </mat-error>
+
+                    </div>
+                    <div class="mb-3 text-center">
+                        <button mat-raised-button color="primary" (click)="swap()">
+        Swap</button>
+
+                    </div>
+                </form>
+
+
+                <br>
+            </div>
+        </div>
+    </div>
+</div>

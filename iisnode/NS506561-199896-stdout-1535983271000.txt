@@ -1,0 +1,2 @@
+development environment
+Mongoose default connection open to mongodb://nodebeatstest:nodebeatstest@ds239359.mlab.com:39359/prj_nodebeatstest

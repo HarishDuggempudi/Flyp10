@@ -1,0 +1,194 @@
+<nav class="navbar navbar-expand-lg navbar-light">
+  <div class="ml-auto pr-4" id="navbarSupportedContent">
+    <ul class="navbar-nav">
+      <li class="nav-item" *ngIf="userRole=='1'">
+          <a target="_blank" routerLink="/" style="color: #fff !important;" class="nav-link">Visit Site</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="user" href="javascript:void(0)" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+          <img [src]="imageSrc" alt="{{userName}}"> 
+          <span class="username">{{userName}}</span>
+          <i class="fas fa-angle-down"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" routerLink="/profile">
+            <i class="fas fa-user"></i>Profile</a>
+          <a class="dropdown-item" href="javascript:void(0)" (click)="logout()">
+            <i class="fas fa-sign-out-alt"></i>Log Out</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="user" (change)="toggled($event)" *ngIf="loggedInUserDetails.userRole != '1'" href="javascript:void(0)" id="notificationDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-bell" style="font-size: 25px;margin-top: 7px;"></i>
+          <span *ngIf="notifications.length" class="unreadNotifications"></span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right notificationDropdown keep-open" aria-labelledby="notificationDropdown">
+          <form>
+              <mat-tab-group (selectedTabChange)="tabChanged($event)" [selectedIndex]="0" style="background: #fff !important;" #tabGroup>
+                  <mat-tab label="Unread({{ notifications.length }})">
+                      <!-- <pre>{{notifications | json}}</pre> -->
+                      <ul class="list-group">    
+                        <div *ngIf="notifications.length">
+                            <li class="list-group-item" *ngFor="let user of notifications" style="padding:0px;">
+                                <div *ngIf="user.notificationType === '0'">
+                                    <div class="row">
+                                        <div class="col-md-2" style="padding-top: 8px;">
+                                          <i class="fas fa-user-plus"></i>
+                                        </div>
+                                        <div class="col-md-10" style="padding-left: 0px;">
+                                            New teammate request from {{user.firstName}} {{user.lastName}} 
+                                        </div>
+                                      </div> 
+                                      <div style="text-align: center;margin-top: 8px;">
+                                          <button mat-raised-button style="background: #28a745;color:#fff" (click)="acceptRequest(user)">
+                                              <i class="fas fa-check"></i> Accept</button>   
+                                          <button mat-raised-button color="warn" (click)="declineRequest(user)">
+                                              <i class="fas fa-times"></i> Decline</button>   
+                                      </div>  
+                                </div>   
+                                <div *ngIf="user.notificationType === '1'" class="alert alert-success" style="margin-bottom:0px;">
+                                    <div class="row">
+                                        <div class="col-md-2" style="padding-top: 8px;text-align: center;">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <div class="col-md-10" style="padding-left: 0px;">
+                                            {{user.firstName}} {{user.lastName}} has accepted your teammate request
+                                        </div>
+                                      </div>
+                                      <button type="button" style="position: absolute; right: 6px; top: 20px;" (click)="markAsRead(user)" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>  
+                                </div> 
+                                <div *ngIf="user.notificationType === '2'" class="alert alert-danger" style="margin-bottom:0px;">
+                                    <div class="row">
+                                        <div class="col-md-2" style="padding-top: 8px;text-align: center;">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                        <div class="col-md-10" style="padding-left: 0px;">
+                                            {{user.firstName}} {{user.lastName}} has declined your teammate request
+                                        </div>
+                                      </div> 
+                                      <button type="button" style="position: absolute; right: 6px; top: 20px;" (click)="markAsRead(user)" class="close" data-dismiss="alert" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>   
+                                </div>
+								  <div *ngIf="user.notificationType === '3'"  class="alert alert-warning" style="margin-bottom:0px;">
+                                    <div class="row">
+                                        <div class="col-md-2" style="padding-top: 8px;text-align: center;">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                        </div>
+                                        <div class="col-md-10" style="padding-left: 0px;">
+                                            {{user.message}}
+                                        </div>
+                                      </div> 
+                                      <button type="button" style="position: absolute; right: 6px; top: 20px;" (click)="markAsRead(user)" class="close" data-dismiss="alert" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>   
+                                </div>
+								 <div *ngIf="user.notificationType === '4'" class="alert alert-danger" style="margin-bottom:0px;">
+                                    <div class="row">
+                                        <div class="col-md-2" style="padding-top: 8px;text-align: center;">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                        <div class="col-md-10" style="padding-left: 0px;">
+                                            {{user.message}}
+                                        </div>
+                                      </div> 
+                                      <button type="button" style="position: absolute; right: 6px; top: 20px;" (click)="markAsRead(user)" class="close" data-dismiss="alert" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>   
+                                </div>
+								<div *ngIf="user.notificationType === '5'" class="alert alert-success" style="margin-bottom:0px;">
+                                    <div class="row">
+                                        <div class="col-md-2" style="padding-top: 8px;text-align: center;">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                        <div class="col-md-10" style="padding-left: 0px;">
+                                            {{user.message}}
+                                        </div>
+                                      </div> 
+                                      <button type="button" style="position: absolute; right: 6px; top: 20px;" (click)="markAsRead(user)" class="close" data-dismiss="alert" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>   
+                                </div>
+                              </li>
+                        </div>       
+                        <li class="list-group-item list-group-item-light text-center" *ngIf="!notifications.length">
+                            You have no new notifications 
+                          </li> 
+                          
+
+                          <!-- <li class="list-group-item list-group-item-success" *ngFor="let ack of acceptedAck">
+                            <div *ngIf="notications.length && notications.type === '1'">
+                                <div class="row">
+                                    <div class="col-md-2" style="padding-top: 8px;text-align: center;">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="col-md-10" style="padding-left: 0px;">
+                                        {{ack.firstName}} {{ack.lastName}} has accepted your teammate request
+                                    </div>
+                                  </div>
+                                  <button type="button" style="position: absolute; right: 6px; top: 20px;" (click)="markAsRead(ack)" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>  
+                            </div>
+                          </li>
+                          <li class="list-group-item list-group-item-danger" *ngFor="let ack of rejectedAck">
+                              <div class="row">
+                                  <div class="col-md-2" style="padding-top: 8px;text-align: center;">
+                                      <i class="fas fa-check"></i>
+                                  </div>
+                                  <div class="col-md-10" style="padding-left: 0px;">
+                                      {{ack.firstName}} {{ack.lastName}} has declined your teammate request
+                                  </div>
+                                </div> 
+                                <button type="button" style="position: absolute; right: 6px; top: 20px;" (click)="markAsRead(ack)" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>   
+                            </li> -->
+                
+                          <!-- <li class="list-group-item list-group-item-warning">
+                              <div class="row">
+                                <div class="col-md-2" style="padding-top: 8px;text-align: center;">
+                                    <i class="fas fa-info"></i>
+                                </div>
+                                <div class="col-md-10" style="padding-left: 0px;">
+                                  Your subscription is ending soon!
+                                </div>
+                              </div>               
+                            </li>
+                           -->
+                        </ul>
+                        
+          
+                  </mat-tab>
+                  <mat-tab label="Requests({{requests.length}})">
+                      <li class="list-group-item" *ngFor="let user of requests">
+                          <div class="row" *ngIf="requests.length">
+                            <div class="col-md-2" style="padding-top: 8px;">
+                              <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="col-md-10" style="padding-left: 0px;">
+                                New teammate request from {{user.firstName}} {{user.lastName}}
+                            </div>
+                          </div> 
+                          <div style="text-align: center;margin-top: 8px;">
+                              <button mat-raised-button style="background: #28a745;color:#fff" (click)="acceptRequest(user)">
+                                  <i class="fas fa-check"></i> Accept</button>   
+                              <button mat-raised-button color="warn" (click)="declineRequest(user)">
+                                  <i class="fas fa-times"></i> Decline</button>   
+                          </div>      
+                        </li>
+                        <li class="list-group-item list-group-item-light text-center" *ngIf="!requests.length">
+                            You have no teammate requests 
+                          </li>
+                  </mat-tab>
+                </mat-tab-group>
+          </form>
+        </div>
+      </li>
+      <!-- Notifications list -->
+    </ul>
+  </div>
+</nav>

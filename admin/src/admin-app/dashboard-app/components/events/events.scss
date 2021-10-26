@@ -1,0 +1,101 @@
+.drop-container{
+    padding: 50px 0px;
+    text-align: center;
+    background: #2f309033;
+    border: 2px dashed #2f3090;
+    border-radius: 20px;
+    color: #2f3090;
+    font-size: 15px;
+    margin-bottom: 25px;
+}
+.upload-routine{
+    width: 100% !important;
+    background: -webkit-gradient(linear, left top, right top, from(#be1e2d), to(#2e3192));
+    background: linear-gradient(to right, #be1e2d 0%, #2e3192 100%);
+}
+
+a{
+    color: #303191 !important;
+}
+.badge-primary {
+    color: #fff;
+    background-color: #303191 !important;
+}
+
+.card-header {
+    padding: .75rem 1.25rem;
+    margin-bottom: 0;
+    color: #fff;
+    background-color: rgb(48, 48, 144) !important;
+    border-bottom: 1px solid rgba(0,0,0,.125);
+    cursor: pointer;
+}
+
+.card-header > a {
+    color: #fff !important;
+}
+.no-data{
+     margin: 15px;
+     font-size: 15px;
+     color:#303090;
+     font-weight: bold;
+     text-align: center;
+}
+.midbutton{
+    width: 40px !important;
+    height: 40px !important;
+}
+.buttondivcontainer{
+    text-align: center;
+    margin-top: 10px;
+}
+.pad-icon{
+    padding-right: 10px;
+}
+.material-card-sm {
+ max-width: 100% !important; 
+}
+
+.fc-event, .fc-event-dot {
+    background-color: #303191;
+    color: #fff !important;
+    border: 1px solid #35308d;
+}
+
+.fc-event, .fc-event-dot {
+    background-color: #303191 !important;
+}
+
+.mat-header-row, .mat-row {
+    display: flex;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    align-items: center;
+    padding: 0 10px !important;
+    padding-right: 0 !important;
+    box-sizing: border-box;
+}
+
+.mat-header-row[_ngcontent-c8]{
+    background: #f3f3f3 !important;
+}
+
+.mat-form-field {
+    display: inline-block;
+    position: relative;
+    text-align: left;
+    width: 80% !important;
+}
+
+.mat-cell, .mat-header-cell {
+    flex: 1;
+    overflow: hidden;
+    font-size: 11px !important;
+    word-wrap: break-word;
+}
+
+.mat-header-row{
+    position: sticky !important;
+    top: 58px !important;
+    background: #f7f7f7;
+}

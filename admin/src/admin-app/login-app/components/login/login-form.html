@@ -1,0 +1,78 @@
+<div id="nb-wrapper">
+    <div class="nb-welcome-page">
+        <mat-card class="form-card text-center">
+            <mat-card-content>
+                <div class="text-center">
+
+                    <img src="../../../../assets/admin/img/logo.png" width="50%"/>
+                </div>
+                <div *ngIf="showTokenMsg">
+                    <div class="alert alert-danger" *ngIf="tokenResponse && !tokenResponse.status">{{tokenResponse.message}}</div>
+                    <div class="alert alert-success" *ngIf="tokenResponse && tokenResponse.status">{{tokenResponse.message}}</div>                    
+                </div>
+                <div class="card-body" *ngIf="!isValidLogin">
+                    <div *ngIf="!tfaEnabled">
+                        <div class="alert alert-danger" role="alert" *ngIf="objResponse">{{objResponse}} 
+                            <span style="text-align: center;font-size:15px" *ngIf="sendLink"><br>If you didn't get the activation email  <a  style="text-decoration: underline" href="javascript:void(0)" (click)="resendActivationMail()">Click here</a> to receive another one</span></div>
+                        <form class="generic-form"  role="form" novalidate [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                            <!-- <h1 class="text-center">Flyp10 Login</h1> -->
+                            <mat-form-field class="full-width">
+                                <input [formControl]="username" matInput placeholder="User Name">
+                                <mat-error *ngIf="!username.valid && (username.dirty||isSubmitted)">User Name is <strong>required</strong></mat-error>
+                            </mat-form-field>
+                            <mat-form-field class="full-width">
+                                <input [formControl]="password" type="{{passwordType}}" matInput placeholder="Password">
+                                <i class="icon-change-type fa {{viewEye}}" (click)="showPass()"></i>
+                                <mat-error *ngIf="!password.valid && (password.dirty||isSubmitted)">
+                                    Password is
+                                    <strong>required</strong>
+                                </mat-error>
+                            </mat-form-field>
+                            <div class="btn-wrap">
+                                <button type="submit" *ngIf="showLoginbtn" class="nb-btn-blue full-width" mat-raised-button>Log In</button>
+								 <button type="submit" disabled='true' *ngIf="!showLoginbtn" class="nb-btn-blue full-width" mat-raised-button>Processing...</button>
+                            </div>
+                            <a [routerLink]="['/forgot-password']">Forgot Password ?</a>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-body" *ngIf="tfaEnabled">
+                   <!--  <h1 class="text-center">Nodebeats 2FA Login</h1>
+                    <div [@slideMsg]="slide" class="alert alert-danger auth-message" role="alert" *ngIf="objResponse">{{objResponse}}
+                    </div>
+                    <form class="generic-form" role="form" novalidate [formGroup]="tfaForm" (ngSubmit)="onVerifyTfa()">
+                        <mat-form-field class="full-width">
+                            <input [formControl]="token" matInput placeholder="Enter the token from your authenticator app">
+                            <mat-error *ngIf="!token.valid &&( token.dirty ||isSubmitted)">
+                                Token from your authenticator app is
+                                <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                        <div class="btn-wrap">
+                            <button type="submit" processing class="nb-btn-blue full-width" mat-raised-button>Verify</button>
+                        </div>
+                    </form> -->
+                </div>
+                <div class="card-body" *ngIf="isValidLogin">
+                    <div class="text-center">
+                        <h4>You are already logged In</h4>
+                        <p>Please Go to
+                            <a href="https://flyp10.com">Home</a>
+                        </p>
+                        <p>
+                            <b>OR</b>
+                        </p>
+                        <p>Please Go to
+                            <a  href="https://flyp10.com/admin">Dashboard</a>
+                        </p>
+                        <button mat-raised-button role="button" type="button" (click)="logout()" class="nb-btn-blue full-width">
+                            <i class="fa fa-sign-out"></i>Log out
+                        </button>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+

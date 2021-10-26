@@ -1,0 +1,170 @@
+<!-- Page Heading -->
+<div class="d-flex flex-row-reverse">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb nb-breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/dashboard']">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Wallet Editor</li>
+    </ol>
+  </nav>
+ <!--  <h1 class="nb-heading-one mr-auto" *ngIf="type=='1'">Add Credit</h1>
+  <h1 class="nb-heading-one mr-auto"*ngIf="type=='2'">Upgrade Subscription</h1> -->
+</div>
+<!-- /.row -->
+
+  <!-- <div class="row">
+      <div class="col-md-8">
+	  
+          <mat-card class="material-card-sm">
+          <form *ngIf="objUser.cardToken" role="form" novalidate [formGroup]="tokenForm" (ngSubmit)="makeTokenPayment()">
+			  <div *ngIf="type=='2'">
+				<div><label><b>Select Package</b></label> <a style="float:right;" href="http://flyp10.com:105/#our-pricings" target="_blank">View package details here</a></div>
+				<div class="mb-3" style="margin-top:10px;">     	
+					<mat-radio-group formControlName="selectedpackage"  (change)="onPackageChange($event)">
+					  <mat-radio-button  value="2">Premium $20 / year</mat-radio-button>
+					  <mat-radio-button style="padding-left: 10px;" value="3">Premium-Plus $100 / year</mat-radio-button>
+					</mat-radio-group>
+				</div>
+			</div>
+			 <div class="mb-3" *ngIf="type!='1'">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Amount" type="number"  formControlName="amount" >
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="tokenForm.controls['amount']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div>
+		 <div class="mb-3"  *ngIf="type=='1'">
+          <mat-form-field class="material-input-full">
+            <mat-select placeholder="Amount"  formControlName="amount" name="amount">
+              <mat-option [value]="25">$ 25.00</mat-option>
+			  <mat-option [value]="50">$ 50.00</mat-option>
+			  <mat-option [value]="100">$ 100.00</mat-option>
+            </mat-select>
+           <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="tokenForm.controls['amount']"></control-messages>
+          </mat-error>
+          </mat-form-field>
+           </div>   
+          <div class="mb-3">
+			  <button type="submit" mat-raised-button color="primary">
+				Pay now</button>
+			  <button type="button" (click)="triggerCancelForm()" mat-raised-button color="warn">
+				Cancel
+			  </button>
+          </div>		   
+		 </form>
+   <form *ngIf="!objUser.cardToken" role="form" novalidate [formGroup]="cardForm" (ngSubmit)="makePayment()">
+            <div *ngIf="type=='2'">
+				<div><label><b>Select Package</b></label> <a style="float:right;" href="http://flyp10.com:105/#our-pricings" target="_blank">View package details here</a></div>
+				<div class="mb-3">     	
+					<mat-radio-group formControlName="selectedpackage"  (change)="onPackageChange($event)">
+					  <mat-radio-button  value="2">Premium $20 / year</mat-radio-button>
+					  <mat-radio-button style="padding-left: 10px;" value="3">Premium-Plus $100 / year</mat-radio-button>
+					</mat-radio-group>
+				</div>
+			</div>
+		  <div class="mb-3" *ngIf="type!='1'">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Amount" type="number"  formControlName="amount">
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['amount']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div>
+		<div class="mb-3"  *ngIf="type=='1'">
+          <mat-form-field class="material-input-full">
+            <mat-select placeholder="Amount"  formControlName="amount" name="amount">
+              <mat-option [value]="25">$ 25.00</mat-option>
+			  <mat-option [value]="50">$ 50.00</mat-option>
+			  <mat-option [value]="100">$ 100.00</mat-option>
+            </mat-select>
+           <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['amount']"></control-messages>
+          </mat-error>
+          </mat-form-field>
+        </div>
+           <div class="mb-3">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Name as on credit card"   formControlName="name">
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['name']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div>
+         
+		   <div class="mb-3">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Card number" class="cc-number" [ngClass]="cardType" (keyup)="returnCardType($event)"  type="text" mask="0000-0000-0000-0000"   formControlName="cardnumber">
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['cardnumber']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+			<span *ngIf="cardType=='unknown' && isChecked" style="color:red;font-style: italic">Invalid card number</span>
+           </div>
+		   
+		   <div class="mb-3">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Expire date (MM/YY)"  type="text" mask="00/00"  formControlName="expdate">
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted"  [control]="cardForm.controls['expdate']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div>
+		    <div class="row">
+			 <div class="col-md-10" style="padding-right:0px;">
+              <mat-form-field class="material-input-full">
+                <input matInput placeholder="Security code" type="text" [mask]="cvvMask" formControlName="cvv">
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['cvv']"></control-messages>
+              </mat-error>
+             </mat-form-field>
+            </div>
+			<div class="col-md-2" style="padding-left:0px;">
+			  <button mat-mini-fab class="material-icon-sm" color="primary"  title="View" href="javascript:void(0)" style="margin-left:10px;background-color:#2f3191;" type="button" (click)="whatisCVV()">
+                          <i class="fa fa-question" ></i>
+                </button>
+			</div>
+		  </div>
+		
+		   <div class="mb-3">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Address"   formControlName="address">
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['address']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div>
+		    <div class="mb-3">
+            <mat-form-field class="material-input-full">
+               <mat-select placeholder="State"  formControlName="state" name="state">
+              <mat-option *ngFor="let state of statelist" [value]="state.name">
+                {{state.name}}
+              </mat-option>
+            </mat-select>
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['state']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div>
+		    <div class="mb-3">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Zip code"   formControlName="zip">
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['zip']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div>
+		     <div class="mb-3">
+          <button type="submit" mat-raised-button color="primary">
+            Pay now</button>
+          <button type="button" (click)="triggerCancelForm()" mat-raised-button color="warn">
+            Cancel
+          </button>
+    </div>
+		  </form>
+          </mat-card>
+      </div>
+  </div> -->
+  

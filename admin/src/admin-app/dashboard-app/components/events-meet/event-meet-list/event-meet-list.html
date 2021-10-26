@@ -1,0 +1,216 @@
+<!-- <div *ngIf="sanctionid && !isOpenSanction">
+  <button mat-raised-button color="primary" (click)="viewSanctionInfo()">
+    <i class="fa fa-eye"></i>View Sanction Details</button>
+</div> -->
+<div class="col-lg-12" *ngIf="isSanctionEventMeetDirector">
+    <mat-card>
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="nb-heading-one mr-auto">Sanction Details
+                    <!-- <a  class="editlink" style="float: right;" (click)="isOpenSanction = false"> <i class="fa fa-times-circle"></i></a>                       -->
+                </h1>
+
+            </div>
+
+
+
+        </div>
+
+        <div class="col-lg-12">
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label class="col-sm-4 form-control-label">Sanction Name</label>
+                    <label class="form-control-static">{{SanctionInfo.Name}}</label>
+                </div>
+                <div class="col-sm-6">
+                    <label class="col-sm-4 form-control-label">Sport Name</label>
+                    <label class="form-control-static">{{SanctionInfo.DisciplineType}}</label></div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label class="col-sm-4 form-control-label">Start Date</label>
+                    <label class="form-control-static">{{formatDate(SanctionInfo.CompetitionStartDate)}}</label>
+                </div>
+                <div class="col-sm-6">
+                    <label class="col-sm-4 form-control-label">End Date</label>
+                    <label class="form-control-static">{{formatDate(SanctionInfo.CompetitionEndDate)}}</label>
+                </div>
+            </div>
+            <button mat-raised-button color="primary" data-toggle="modal" data-target="#myModal">
+            <i class="fa fa-eye"></i> Flyp10 Account Status</button>
+
+
+        </div>
+
+
+    </mat-card>
+</div>
+<br>
+<div class="pb-4" *ngIf="userRole == '1' ||  isSanctionEventMeetDirector">
+    <button mat-raised-button color="primary" (click)="addSportsElement()">
+      <i class="fa fa-plus-circle"></i> Add Event Meet</button>
+    <mat-form-field class='float-right'>
+        <input matInput placeholder="Search" (keyup)="applyFilter($event.target.value)">
+    </mat-form-field>
+</div>
+<mat-card class="nb-dashboard-table">
+    <mat-table #table [dataSource]="dataSource">
+        <ng-container matColumnDef="SN">
+            <mat-header-cell class="symbol-no" *matHeaderCellDef> SN </mat-header-cell>
+            <mat-cell class="symbol-no" *matCellDef="let event let i=index"> {{preIndex+(i+1)}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="EventName">
+            <mat-header-cell *matHeaderCellDef> Event Name </mat-header-cell>
+            <mat-cell *matCellDef="let event"> <span style="color: #04088f;cursor: pointer;" (click)="view(event._id)">{{event.EventName}}</span> </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="SportName">
+            <mat-header-cell *matHeaderCellDef>Sport Name </mat-header-cell>
+            <mat-cell *matCellDef="let event"> {{event.SportName}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="StartDate">
+            <mat-header-cell *matHeaderCellDef>Start Date </mat-header-cell>
+            <mat-cell *matCellDef="let event"> {{formatDate(event.StartDate)}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="EndDate">
+            <mat-header-cell *matHeaderCellDef>End Date </mat-header-cell>
+            <mat-cell *matCellDef="let event"> {{formatDate(event.EndDate)}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="active">
+            <mat-header-cell class="text-center" *matHeaderCellDef>Active</mat-header-cell>
+            <mat-cell class="text-center" *matCellDef="let element">
+                <i *ngIf="element.active" class="fa green fa-check" aria-hidden="true"></i>
+                <i *ngIf="!element.active" class="fa red fa-times" aria-hidden="true"></i>
+            </mat-cell>
+        </ng-container>
+        <ng-container *ngIf="userRole !='1'" matColumnDef="enrolled">
+            <mat-header-cell class="text-center" *matHeaderCellDef>Enrolled</mat-header-cell>
+            <mat-cell class="text-center" *matCellDef="let element">
+                <i *ngIf="element.enrolled" class="fa green fa-check" aria-hidden="true"></i>
+                <i *ngIf="!element.enrolled" class="fa red fa-times" aria-hidden="true"></i>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Actions">
+            <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+            <mat-cell class="nb-icon-cell" *matCellDef="let element">
+                <button *ngIf="userRole == '1'|| isSanctionEventMeetDirector " mat-mini-fab class="material-icon-sm" color="primary" title="edit" (click)="edit(element._id)">
+              <i class="far fa-edit"></i>
+            </button>
+                <button mat-mini-fab class="material-icon-sm" color="warn" title="View" (click)="view(element._id)">
+              <i class="fa fa-eye"></i>
+            </button>
+                <button *ngIf="userRole == '1'&& isSanctionEventMeetDirector" mat-mini-fab [matMenuTriggerFor]="menu" aria-label="More options" class="material-icon-sm" color="primary" (click)="enableMenu(element)">
+                <i class="fa fa-ellipsis-v"></i>
+          </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="routine(element._id)" class="material-icon-sm" color="primary">
+                    <i class="fas fa-video" style="color:#3f51b5"></i>
+              <span>Routine Management</span>
+            </button>
+                    <button mat-menu-item (click)="eventmeetmapping(element._id)" class="material-icon-sm" color="primary" [disabled]="!isEnablemenu">
+                    <i class="fas fa-map-signs" style="color:#3f51b5"></i>
+              <span>Eventmeet Mapping</span>
+            </button>
+                    <button mat-menu-item (click)="eventmeetjudgemap(element._id)" class="material-icon-sm" color="primary" [disabled]="!isEnablemenu">
+                    <i class="fa fa-users" style="color:#3f51b5"></i>
+              <span>Eventmeet Judge Map</span>
+            </button>
+                </mat-menu>
+            </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <div class="p-3 text-center" *ngIf=" eventMeetList.length==0 && (userRole !='1' && !sanctionid) ">
+        No Records Found
+    </div>
+    <div class="p-3 text-center" *ngIf=" data.length ==0 && (userRole =='1' || sanctionid)">
+        No Records Found
+    </div>
+</mat-card>
+<mat-paginator *ngIf="objListResponse?.response?.dataList?.length>0" [length]="totalItems" [pageSize]="perPage" [pageSizeOptions]="pageSizeOptions" (page)="pageChanged($event)">
+</mat-paginator>
+<div class="modal fade" id="myModal" role="dialog" style="overflow-y: scroll !important;background: linear-gradient(90deg, rgba(46, 49, 146, 0.52), rgba(190, 30, 45, 0.6));">
+    <div class="modal-dialog " style="  max-width: 70% ;display:block;margin:0 auto;margin-top:20px !important">
+
+
+        <!-- Modal content-->
+        <div class="modal-content" style="overflow-y: scroll">
+
+            <div class="modal-body" style="padding:0px;overflow: scroll;position: relative; min-height:300px!important">
+                <button type="button" style="    background: #be1e2d;
+				float: right;
+				margin: 10px;
+				height: 21px;
+				width: 43px;
+				padding: 0;
+				font-size: 12px;
+				line-height: 10px;
+			   
+				color: white;" class="btn btn-default" data-dismiss="modal">
+				  Close
+					
+					</button>
+                <div class="col-md-12 word-wrap" style="margin-top:50px;">
+                    <mat-card>
+                        <div>
+                            <h4>Flyp10 Account Status</h4>
+                            <mat-form-field>
+                                <input matInput placeholder="Search by Name" (keyup)="applyFilterSanctionUser($event.target.value)">
+                            </mat-form-field>
+                            <div class="row" style="margin-top:20px;">
+                                <div class="col-sm-3">
+                                    <span><b>Club Name</b></span>
+                                </div>
+                                <div class="col-sm-3">
+                                    <span><b>Name</b></span>
+                                </div>
+                                <div class="col-sm-2">
+                                    <span><b>USAG ID</b></span>
+                                </div>
+                                <div class="col-sm-1">
+                                    <span><b>Role</b></span>
+                                </div>
+                                <div class="col-sm-3">
+                                    <span><b>Flyp10 Account Status</b></span>
+                                </div>
+
+
+
+                            </div>
+
+                            <hr>
+                            <div *ngIf="filteredSanctionUser.length > 0">
+                                <div class="row" *ngFor="let user of filteredSanctionUser" style="margin-top:20px;">
+                                    <div class="col-sm-3">
+                                        <span>{{user.ClubName}}</span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <span>{{user.FirstName}} {{user.LastName}}</span>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <span>{{user.MemberID}}</span>
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                        <span>{{user.Type}}</span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <span *ngIf="user.Flyp10User == '1'"><b style="color:forestgreen">Available</b></span>
+                                        <span *ngIf="user.Flyp10User == '0'"><b style="color:red">Not Available</b></span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <hr/>
+                        </div>
+
+
+                    </mat-card>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

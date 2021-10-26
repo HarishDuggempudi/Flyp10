@@ -1,0 +1,71 @@
+<!-- Page Heading -->
+<!-- <div class="d-flex flex-row-reverse">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb nb-breadcrumb">
+        <li class="breadcrumb-item">
+            <button type="button" mat-raised-button color="primary">
+                Send my ID
+              </button>
+        </li>
+      </ol>
+    </nav>
+  </div> -->
+
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="nb-heading-one mr-auto">My teammates</h1>
+        <mat-form-field>
+            <input matInput placeholder="Search" (keyup)="applyFilter($event.target.value)">
+        </mat-form-field>
+        <div class="flex-container">
+            <mat-card (click)="addTeamMate()" style="padding: 40px 15px !important;cursor: pointer !important;">
+                <div class="addCard">
+                    <div class="add-user">
+                        <i class="fas fa-user-plus"></i><br>
+                    </div>
+                    <span>Add teammate</span>
+                </div>
+            </mat-card>
+            <mat-card style="padding: 40px 15px !important;cursor: pointer !important;" *ngFor="let user of filteredusersList">
+                <div class="userCard" (click)="viewUserDetails(user)" *ngIf="usersList.length">
+                    <img *ngIf="user.imageName" style="    width: 64px;
+                            border-radius: 35px;" src="https://flyp10.com/public/uploads/images/users/{{user.imageName}}" alt="{{userName}}">
+
+                    <div *ngIf="!user.imageName" class="display-img">
+                        <i class="fas fa-user"></i><br>
+                    </div>
+                    <h6 class="user-name">{{user.firstName}} {{user.lastName}}</h6><br>
+                    <span class="user-sport">@{{user.username}}</span>
+                </div>
+            </mat-card>
+
+        </div>
+    </div>
+    <!-- <div class="col-md-4">
+        <h1 class="nb-heading-one mr-auto">Teammate requests</h1>
+        
+        <div class="requestItem" *ngFor="let request of requestUserData; let i = index">
+            <div class="row">
+              <div class="col-md-3" style="padding-top: 8px;">
+                  <div class="display-img">
+                      <i class="fas fa-user"></i><br>
+                  </div> 
+              </div>
+              <div class="col-md-9" style="padding-left: 0px;">
+                <div class="row" style="padding-top: 19px;">
+                    <div class="col-md-7" style="padding-top: 8px;">
+                        <span style="text-align:left !important">{{request.firstName}} {{request.lastName}}</span> 
+                    </div>
+                    <div class="col-md-5">
+                        <button mat-icon-button style="background: #303090;color:#fff" (click)="acceptRequest(request)">
+                            <i class="fas fa-check"></i></button>   
+                        <button mat-icon-button style="background: #dc3545;color:#fff" (click)="addSport()">
+                            <i class="fas fa-times"></i></button> 
+                    </div>
+                </div>
+              </div>          
+            </div> 
+        </div>
+              
+    </div> -->
+</div>

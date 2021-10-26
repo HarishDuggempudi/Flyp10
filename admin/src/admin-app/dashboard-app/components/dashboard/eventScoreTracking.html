@@ -1,0 +1,86 @@
+<mat-card style="min-height:610px">
+  <mat-progress-bar *ngIf="loadChart" mode="indeterminate"></mat-progress-bar>
+
+  <div class="example-container mat-elevation-z8">
+    <div style="text-align: center;color:#ccc;">
+     
+      <div class="row scoreCard" style="background-color: #fff !important;margin-right: 0px !important; margin-left: 10px !important;">
+          <mat-form-field style="width: 18%; margin: 0px 8px !important;">
+              <mat-select placeholder="Date" [(value)]="eventsScoreDaysSelected" (change)="drawChartByDays($event);">
+                <mat-option value="1">Today</mat-option>
+                <mat-option value="7">Last 7 days</mat-option>
+                <mat-option value="30">Last 30 days</mat-option>
+                <mat-option value="90">Last 90 days</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field style="width: 18%; margin: 0px 8px !important;">
+                <mat-select placeholder="Sport" (change)="drawChartBySport($event)">
+                  <!-- <mat-select placeholder="Sport" [(value)]="eventsChartScoreSportSelected" (change)="drawChartBySport($event)"> -->
+                  <mat-option *ngFor="let sport of userSportsForCharting|groupBySports:'OrgSportName'" [value]="sport.value">{{sport.key}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field style="width: 18%; margin: 0px 8px !important;">
+                <!-- <mat-select placeholder="Level" [(value)]="eventsChartScoreLevelSelected" (change)="drawChartByLevel($event)"> -->
+                  <mat-select placeholder="Level" (change)="drawChartByLevel($event)">
+                    <mat-option *ngFor="let level of userLevelsForCharting" [value]="level">{{level.Orglevel}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field style="width: 18%; margin: 0px 8px !important;">
+                  <mat-select placeholder="Event" (change)="drawChartByEvent($event)">
+                    <!-- <mat-select placeholder="Event" [(value)]="eventsChartScoreEventSelected" (change)="drawChartByEvent($event)"> -->
+                    <mat-option *ngFor="let event of userEventsForCharting" [value]="event.event">{{event.event}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field *ngIf="subscriptionType == '3'" style="width: 18%; margin: 0px 8px !important;">
+                    <mat-select placeholder="Compare" [(value)]="eventsChartScoreCompareSelected" (change)="compareCharting($event)">
+                      <mat-option value="Select">Select</mat-option>
+                      <mat-option value="Teammates">Teammates</mat-option>
+                      <mat-option value="National">National</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field *ngIf="subscriptionType == '2'" style="width: 18%; margin: 0px 8px !important;">
+                    <mat-select placeholder="Compare" [(value)]="eventsChartScoreCompareSelected" (change)="compareCharting($event)">
+                      <mat-option value="Select">Select</mat-option>
+                      <mat-option value="Teammates">Teammates</mat-option>
+           
+                    </mat-select>
+                  </mat-form-field>
+      </div>
+      <div style="display: block">
+          
+        <canvas *ngIf="!loadChart && !noDataToDisplay && !chartCriNotMet" baseChart
+            [datasets]="eventsChartData"
+            [labels]="eventsChartLabels"
+            [options]=chartOptions
+            [legend]="lineChartLegend"
+            lineTension=0
+            [chartType]="lineChartType"
+            (chartHover)="chartHovered($event)"
+            (chartClick)="chartClicked($event)"></canvas>
+
+            <!-- <div *ngIf="!(eventsChartScoreCompareSelected == 'Teammates' || eventsChartScoreCompareSelected == 'National') && !loadChart && noDataToDisplay && !noTeammateFound" style="height: 200px;margin-top: 15%;color: #444;font-size: medium;"> -->
+        <div *ngIf="!loadChart && noDataToDisplay && !noTeammateFound" style="height: 200px;margin-top: 15%;color: #444;font-size: medium;">
+          No data to display
+        </div>
+        
+        <div *ngIf="(eventsChartScoreCompareSelected == 'Teammates' || eventsChartScoreCompareSelected == 'National') && !loadChart && chartCriNotMet" style="height: 200px;margin-top: 15%;color: #444;font-size: medium;">
+          Please select an event to compare
+        </div>
+
+        <div *ngIf="eventsChartScoreCompareSelected == 'Teammates' && noTeammateFound && !loadChart && !noDataToDisplay && !chartCriNotMet" style="min-height: 270px;margin-top: 15%;color: #444;font-size: medium;text-align: center">
+          You do not have a teammate to compare... You can simply add a teammate by <a routerLink="/team/add-teammate" target="_blank">clicking this link</a>
+        </div>
+
+        <!-- noNationalDataFound -->
+
+        <div *ngIf="noNationalDataFound && !loadChart" style="min-height: 270px;margin-top: 15%;color: #444;font-size: medium;text-align: center">
+          No players in the state have participated in the selected event
+        </div>
+
+      </div>
+    </div> 
+</div>
+</mat-card>
+
+        
+    

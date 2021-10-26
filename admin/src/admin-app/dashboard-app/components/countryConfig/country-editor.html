@@ -1,0 +1,55 @@
+<div class="d-flex flex-row-reverse">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb nb-breadcrumb">
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/dashboard']">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Country Editor</li>
+      </ol>
+    </nav>
+    <h1 class="nb-heading-one mr-auto">Conuntry Currency Config Editor</h1>
+  </div>
+  <mat-card class="material-card-sm">
+    <form role="form" novalidate [formGroup]="countryForm" (ngSubmit)="saveCountry()">
+      <div class="mb-3">
+        <mat-form-field class="material-input-full">
+            <mat-select placeholder="Select Country"  formControlName="country" (change)="onchangeCountry($event)">
+                <mat-option *ngFor="let c of countrylist"  [value]="c.Name">
+                   {{c.Name}}
+                </mat-option>                
+            </mat-select>
+          <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="countryForm.controls['country']"></control-messages>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="mb-3">
+        <mat-form-field class="material-input-full">
+          <input matInput  list="currency" formControlName="currency" (change)="onChangecurrency()" placeholder="Currency">
+          <datalist id="currency">
+            <option *ngFor="let f of filteredCurrencyList" [value]="f.currencycode"> 
+          </datalist>
+          <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="countryForm.controls['currency']"></control-messages>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="mb-3">
+        <mat-form-field class="material-input-full">
+          <input matInput placeholder="Exponents" formControlName="decimalpoint">
+          <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="countryForm.controls['decimalpoint']"></control-messages>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="mb-3">
+        <mat-checkbox formControlName="active">
+          Active
+        </mat-checkbox>
+      </div>
+      <div class="mb-3">
+        <button mat-raised-button type="submit" color="primary">Save</button>
+        <button mat-raised-button type="button" color="warn" (click)="triggerCancelForm()">Cancel</button>
+      </div>
+    </form>
+  </mat-card>

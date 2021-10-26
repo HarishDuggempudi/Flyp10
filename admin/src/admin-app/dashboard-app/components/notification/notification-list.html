@@ -1,0 +1,218 @@
+    <div class="col-md-6">
+        <mat-card style="padding: 0px !important;    margin-bottom: 18px;" *ngIf="notifications.length">
+            <h4 style="padding: 12px;color: gray;margin-bottom: 0;">Recent</h4>
+            <mat-divider></mat-divider>
+            <div>
+                    <div *ngFor="let user of notifications">
+                            <div class="requestItem" *ngIf="user.notificationType == '0'">
+                                    <div class="row" style="margin-right: 0px;margin-left: 0px;padding-top: 6px;">
+                                      <div class="col-md-2" style="padding-top: 8px;">
+                                          <div class="display-img">
+                                              <i class="fas fa-user"></i><br>
+                                          </div> 
+                                      </div>
+                                      <div class="col-md-10" style="padding: 0px;">
+                                        <div class="row">
+                                            <div style="padding-left: 18px;">
+                                                <span style="text-align: left !important;line-height: 30px;">New teammate request from  {{user.firstName}} {{user.lastName}}</span><br> 
+                                                <button style="background: transparent;color: #303090;border: 1px solid #303090;padding: 7px 10px;border-radius: 5px;" (click)="acceptRequest(user)">
+                                                    Accept</button>   
+                                                <button style="background: transparent;color: #303090;border: 1px solid #303090;padding: 7px 10px;border-radius: 5px;" (click)="declineRequest(user)">
+                                                    Decline</button>
+                                            </div>
+                                            <span style="position: absolute;right: 11px;top: 26px;color: darkgray;">{{user.notificationTime | timeAgo}}</span>
+                                        </div>
+                                      </div>          
+                                    </div> 
+                                    <mat-divider></mat-divider>
+                                </div>
+                                <div class="requestItem" style="background: #28ff4426;" *ngIf="user.notificationType == '1'">
+                                        <div class="row" style="margin-right: 0px;margin-left: 0px;padding-top: 6px;">
+                                          <div class="col-md-2" style="padding-top: 8px;">
+                                              <div class="display-img">
+                                                  <i class="fas fa-user"></i><br>
+                                              </div> 
+                                          </div>
+                                          <div class="col-md-10" style="padding: 0px;">
+                                            <div class="row">
+                                                <div style="padding-left: 18px;margin-top: 20px;">
+                                                    <span style="text-align: left !important;line-height: 30px;">{{user.firstName}} {{user.lastName}} accepted your request</span><br> 
+                                                </div>
+                                                <span style="position: absolute;right: 11px;top: 26px;color: darkgray;">{{user.notificationTime | timeAgo}}</span>
+                                            </div>
+                                          </div>          
+                                        </div> 
+                                        <mat-divider></mat-divider>
+                                    </div> 
+                                    <div class="requestItem" style="background: #ff282826;" *ngIf="user.notificationType == '2'">
+                                            <div class="row" style="margin-right: 0px;margin-left: 0px;padding-top: 6px;">
+                                              <div class="col-md-2" style="padding-top: 8px;">
+                                                  <div class="display-img">
+                                                      <i class="fas fa-user"></i><br>
+                                                  </div> 
+                                              </div>
+                                              <div class="col-md-10" style="padding: 0px;">
+                                                <div class="row">
+                                                    <div style="padding-left: 18px;margin-top: 20px;">
+                                                        <span style="text-align: left !important;line-height: 30px;">{{user.firstName}} {{user.lastName}} rejected your request</span><br> 
+                                                    </div>
+                                                    <span style="position: absolute;right: 11px;top: 26px;color: darkgray;">{{user.notificationTime | timeAgo}}</span>
+                                                </div>
+                                              </div>          
+                                            </div> 
+                                        </div>  
+				        <div *ngIf="user.notificationType === '3'"  class="alert alert-warning" style="margin-bottom:0px;">
+                                    <div class="row">
+                                        <div class="col-md-2" style="padding-top: 8px;text-align: center;">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                        </div>
+                                        <div class="col-md-10" style="padding-left: 0px;">
+                                            {{user.message}}
+                                        </div>
+										<span style="position: absolute;right: 11px;top: 26px;color: darkgray;padding-top:5px;">{{user.notificationTime | timeAgo}}</span>
+                                      </div>                       							
+                                </div>
+								 <div *ngIf="user.notificationType === '4'" class="alert alert-danger" style="margin-bottom:0px;">
+                                    <div class="row">
+                                        <div class="col-md-2" style="padding-top: 8px;text-align: center;">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                        <div class="col-md-10" style="padding-left: 0px;">
+                                            {{user.message}}
+                                        </div>
+										<span style="position: absolute;right: 11px;top: 26px;color: darkgray;padding-top:5px">{{user.notificationTime | timeAgo}}</span>
+                                      </div>                                   										
+                                </div>
+								<div *ngIf="user.notificationType === '5'" class="alert alert-success" style="margin-bottom:0px;">
+                                    <div class="row">
+                                        <div class="col-md-2" style="padding-top: 8px;text-align: center;">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                        <div class="col-md-10" style="padding-left: 0px;">
+                                            {{user.message}}
+                                        </div>
+										<span style="position: absolute;right: 11px;top: 26px;color: darkgray;padding-top:5px">{{user.notificationTime | timeAgo}}</span>
+                                      </div> 
+                                </div>
+                    </div>
+            </div>
+            
+            <!-- <div *ngIf="!notifications.length">
+                <div class="requestItem text-center" style="min-height: 50px;padding-top: 16px;color: gray;">
+                    All caught up!
+                </div>
+            </div> -->
+            
+        </mat-card> 
+        <mat-card style="padding: 0px !important;    margin-bottom: 18px;" *ngIf="!notifications.length">
+                <h4 style="padding: 12px;color: gray;margin-bottom: 0;">Recent</h4>
+                <mat-divider></mat-divider>               
+                <div *ngIf="!notifications.length">
+                    <div class="requestItem text-center" style="min-height: 50px;padding-top: 16px;color: gray;">
+                        All caught up!
+                    </div>
+                </div>
+                
+            </mat-card>  
+        <mat-card style="padding: 0px !important;" *ngIf="readNotifications.length">
+                <h4 style="padding: 12px;color: gray;margin-bottom: 0;">Earlier</h4>
+                <mat-divider></mat-divider>
+                <div *ngFor="let user of readNotifications">
+                        <div class="requestItem" *ngIf="user.notificationType == '0'">
+                                <div class="row" style="margin-right: 0px;margin-left: 0px;padding-top: 6px;">
+                                  <div class="col-md-2" style="padding-top: 8px;">
+                                      <div class="display-img">
+                                          <i class="fas fa-user"></i><br>
+                                      </div> 
+                                  </div>
+                                  <div class="col-md-10" style="padding: 0px;">
+                                    <div class="row">
+                                        <div style="padding-left: 18px;">
+                                            <span style="text-align: left !important;line-height: 30px;">{{user.firstName}} {{user.lastName}} wants you to connect as a teammate</span><br> 
+                                            <button style="background: transparent;color: #303090;border: 1px solid #303090;padding: 7px 10px;border-radius: 5px;" (click)="acceptRequest(user)">
+                                                Accept</button>   
+                                            <button style="background: transparent;color: #303090;border: 1px solid #303090;padding: 7px 10px;border-radius: 5px;" (click)="declineRequest(user)">
+                                                Decline</button>
+                                        </div>
+                                        <span style="position: absolute;right: 11px;top: 26px;color: darkgray;">{{user.notificationTime | timeAgo}}</span>
+                                    </div>
+                                  </div>          
+                                </div> 
+                                <mat-divider></mat-divider>
+                            </div>
+                            <div class="requestItem" style="background: #28ff4426;" *ngIf="user.notificationType == '1'">
+                                    <div class="row" style="margin-right: 0px;margin-left: 0px;padding-top: 6px;">
+                                      <div class="col-md-2" style="padding-top: 8px;">
+                                          <div class="display-img">
+                                              <i class="fas fa-user"></i><br>
+                                          </div> 
+                                      </div>
+                                      <div class="col-md-10" style="padding: 0px;">
+                                        <div class="row">
+                                            <div style="padding-left: 18px;margin-top: 20px;">
+                                                <span style="text-align: left !important;line-height: 30px;">{{user.firstName}} {{user.lastName}} accepted your request</span><br> 
+                                            </div>
+                                            <span style="position: absolute;right: 11px;top: 26px;color: darkgray;">{{user.notificationTime | timeAgo}}</span>
+                                        </div>
+                                      </div>          
+                                    </div> 
+                                    <mat-divider></mat-divider>
+                                </div> 
+                                <div class="requestItem" style="background: #ff282826;" *ngIf="user.notificationType == '2'">
+                                        <div class="row" style="margin-right: 0px;margin-left: 0px;padding-top: 6px;">
+                                          <div class="col-md-2" style="padding-top: 8px;">
+                                              <div class="display-img">
+                                                  <i class="fas fa-user"></i><br>
+                                              </div> 
+                                          </div>
+                                          <div class="col-md-10" style="padding: 0px;">
+                                            <div class="row">
+                                                <div style="padding-left: 18px;margin-top: 20px;">
+                                                    <span style="text-align: left !important;line-height: 30px;">{{user.firstName}} {{user.lastName}} rejected your request</span><br> 
+                                                </div>
+                                                <span style="position: absolute;right: 11px;top: 26px;color: darkgray;">{{user.notificationTime | timeAgo}}</span>
+                                            </div>
+                                          </div>          
+                                        </div> 
+										
+                                    </div>  
+							<div *ngIf="user.notificationType === '3'"  class="alert alert-warning" style="margin-bottom:0px;">
+                                    <div class="row">
+                                        <div class="col-md-2" style="padding-top: 8px;text-align: center;">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                        </div>
+                                        <div class="col-md-10" style="padding-left: 0px;">
+                                            {{user.message}}
+                                        </div>
+										<span style="position: absolute;right: 11px;top: 26px;color: darkgray;padding-top:5px">{{user.notificationTime | timeAgo}}</span>
+                                      </div>   
+                                </div>
+								 <div *ngIf="user.notificationType === '4'" class="alert alert-danger" style="margin-bottom:0px;">
+                                    <div class="row">
+                                        <div class="col-md-2" style="padding-top: 8px;text-align: center;">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                        <div class="col-md-10" style="padding-left: 0px;">
+                                            {{user.message}}
+                                        </div>
+										<span style="position: absolute;right: 11px;top: 26px;color: darkgray;padding-top:5px">{{user.notificationTime | timeAgo}}</span>
+                                      </div> 
+                                </div>
+								<div *ngIf="user.notificationType === '5'" class="alert alert-success" style="margin-bottom:0px;">
+                                    <div class="row">
+                                        <div class="col-md-2" style="padding-top: 8px;text-align: center;">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                        <div class="col-md-10" style="padding-left: 0px;">
+                                            {{user.message}}
+                                        </div>
+										<span style="position: absolute;right: 11px;top: 26px;color: darkgray;padding-top:5px">{{user.notificationTime | timeAgo}}</span>
+                                      </div> 
+                                </div>
+                </div>
+                
+                
+            </mat-card>  
+    </div>
+
+    

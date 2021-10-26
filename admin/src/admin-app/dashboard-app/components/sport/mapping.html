@@ -1,0 +1,349 @@
+<!-- <div class="pb-4">
+  <div class="row">
+        <mat-checkbox class="checkboxContainer" (change)="toggleEventCheckbox($event)" color="primary">Add Event</mat-checkbox>
+        <mat-checkbox class="checkboxContainer" (change)="toggleLevelCheckbox($event)" color="primary">Add Level</mat-checkbox>
+        <mat-checkbox class="checkboxContainer" (change)="toggleCategoryCheckbox($event)" color="primary">Add Category</mat-checkbox>
+        <mat-checkbox class="checkboxContainer" (change)="toggleElementCheckbox($event)" color="primary">Add Element</mat-checkbox>
+        <mat-checkbox class="checkboxContainer" (change)="toggleElementGroupCheckbox($event)" color="primary">Add Element Group</mat-checkbox>
+        <mat-checkbox class="checkboxContainer" (change)="toggleBaseCheckbox($event)" color="primary">Add Base</mat-checkbox>
+  </div>
+</div> -->
+<div class="row">
+  <div class="col-md-8">
+      <mat-card class="material-card">
+          <form role="form" [formGroup]="AddElementForm" novalidate (ngSubmit)="saveSportsEvent()">
+            <div class="mb-3" style="margin-bottom: 0px !important;">
+              <mat-form-field class="material-input-full">
+                  <mat-select [formControl]="AddElementForm.controls.sportName" placeholder="Sport Name" [(value)]="selectedSport" (change)="sportSelectChange($event);">
+                      <mat-option *ngFor="let obj of sports" [value]="obj">
+                          {{obj.sportName}}
+                      </mat-option>         
+                  </mat-select>
+              </mat-form-field>
+              <mat-form-field class="material-input-full" *ngIf="selectedSport && configFields.levelMapping.added">
+                    <mat-select [formControl]="AddElementForm.controls.levelName" placeholder="Select level" [(value)]="dispLevels" multiple (change)="levelSelectChange($event)">
+                      <!-- <mat-select placeholder="Select level" multiple (change)="levelSelectChange($event)"> -->
+                        <mat-option>
+                            <ngx-mat-select-search [formControl]="AddElementForm.controls.levelSearch"
+                                 [placeholderLabel]="'Search Level'" 
+                                 [noEntriesFoundLabel]="'No matching event found'"
+                            ><i ngxMatSelectSearchClear class="fa fa-times" aria-hidden="true"></i></ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option *ngFor="let obj of filteredEvents" [value]="obj._id">
+                            {{obj.level}}
+                        </mat-option>         
+                    </mat-select>  
+                </mat-form-field>                  
+            </div>
+            <div class="mb3">
+            <div class="mb-3" *ngIf="selectedSport; else showIntro">
+                <form [formGroup]="mappingForm">
+                        <ng-container formArrayName="mappingFields">
+                                <div class="flex-container">
+                                    <div *ngFor="let ctrl of mappingForm.get('mappingFields')['controls']; let i = index" [formGroupName]="i">
+                                        <!-- <mat-form-field class="material-input-full" *ngIf="configFields.levelMapping.added">
+                                            <mat-select placeholder="Select level" formControlName="level" [(value)]="selectedLevels[i]" (change)="levelSelectChange($event)">
+                                                <mat-option *ngFor="let obj of levels" [value]="obj.level">
+                                                    {{obj.level}}
+                                                </mat-option>         
+                                            </mat-select>  
+                                        </mat-form-field> -->
+                                        <mat-form-field class="material-input-full" *ngIf="configFields.eventMapping.added">
+                                            <mat-select placeholder="Select Events" formControlName="event" (change)="showSelectedEventsById($event)">
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="mappingForm.controls.eventSearch"
+                                                         [placeholderLabel]="'Search Event'" 
+                                                         [noEntriesFoundLabel]="'No matching event found'"
+                                                    ><i ngxMatSelectSearchClear class="fa fa-times" aria-hidden="true"></i></ngx-mat-select-search>
+                                                  </mat-option>
+                                        <mat-option *ngFor="let obj of filteredeventss" [value]="obj._id">
+                                            {{obj.Event}} - {{obj.eventFullname}}
+                                        </mat-option>  
+                                            </mat-select>  
+                                        </mat-form-field>
+                                        <mat-form-field class="material-input-full" *ngIf="configFields.categoryMapping.added">
+                                            <mat-select placeholder="Select Categories" formControlName="category" (change)="showSelectedCategoriesById($event)">
+                                                <mat-option *ngFor="let obj of categories" [value]="obj._id">
+                                                    {{obj.categoryName}}
+                                                </mat-option>         
+                                            </mat-select>  
+                                        </mat-form-field> 
+                                        <mat-form-field class="material-input-full" *ngIf="configFields.elementMapping.added">
+                                            <mat-select placeholder="Select Element" formControlName="element" (change)="showSelectedElementsById($event)">
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="mappingForm.controls.elementSearch"
+                                                         [placeholderLabel]="'Search Element'" 
+                                                         [noEntriesFoundLabel]="'No matching event found'"
+                                                    ><i ngxMatSelectSearchClear class="fa fa-times" aria-hidden="true"></i></ngx-mat-select-search>
+                                                  </mat-option>
+                                        <mat-option *ngFor="let element of filteredElement" [value]="element._id">
+                                            {{element.elementName}}
+                                        </mat-option>        
+                                            </mat-select>  
+                                        </mat-form-field>
+                                        <mat-form-field class="material-input-full" *ngIf="configFields.elementGroupMapping.added">
+                                            <mat-select placeholder="Select Element Group" formControlName="elementGroup" (change)="showSelectedElementGroupsById($event)">
+                                                <mat-option *ngFor="let elementG of elementGroup" [value]="elementG._id">
+                                                    {{elementG.elementGroup}}
+                                                </mat-option>         
+                                            </mat-select>  
+                                        </mat-form-field>                                         
+                                        <mat-form-field class="material-input-full" *ngIf="configFields.baseMapping.added">
+                                          <input matInput type="number" formControlName="base" (input)="baseValChange($event)" placeholder="Enter base value">
+                                        </mat-form-field>
+                                        <button mat-raised-button type="button" color="warn" (click)="removeMappingFields(i)">
+                                                <i class="fas fa-times"></i></button>
+                                    </div>
+                                    
+                                </div>
+                        </ng-container>
+                    </form>
+                    <button type="button" mat-raised-button style="background:#444;color: #fff;margin-left: 10px;" color="gray-dark" (click)="addMappingFields()">
+                            Add more</button>
+                    
+            </div>
+            <ng-template #showIntro>
+                <div style="text-align: center !important; margin-bottom: 40px !important;">
+                    <a href="http://www.animatedimages.org/cat-hands-81.htm"><img src="http://www.animatedimages.org/data/media/81/animated-hand-image-0091.gif" border="0" alt="animated-hand-image-0091" /></a> <br>
+                    <h3>Please select a sport to start mapping</h3>
+                </div>
+                    
+            </ng-template>                             
+                    
+            </div>
+            <div class="mb-3" *ngIf="toggleLevel">
+              <mat-form-field class="material-input-full">
+                  <mat-select placeholder="Select levels" [(value)]="selectedLevels" [disabled]="!selectedSport" (change)="levelSelectChange($event)">
+                      <mat-option *ngFor="let obj of levels" [value]="obj.level">
+                          {{obj.level}}
+                      </mat-option>         
+                  </mat-select>  
+                  <span *ngIf="!selectedSport" style="font-style: italic; color: #929292">(Select a sport to enable)</span> 
+              </mat-form-field>  
+                                       
+            </div>
+            <div class="mb-3" *ngIf="toggleEvent">
+              <mat-form-field class="material-input-full">
+                  <mat-select placeholder="Select Events" [(value)]="selectedEvents" [disabled]="!selectedSport">
+                      <mat-option *ngFor="let obj of events" [value]="obj.Event">
+                          {{obj.Event}} - {{obj.eventFullname}}
+                      </mat-option>  
+                      <span *ngIf="!selectedSport" style="font-style: italic; color: #929292">(Select a sport to enable)</span>        
+                  </mat-select>  
+              </mat-form-field>                            
+            </div>
+            <div class="mb-3" *ngIf="toggleCategory">
+                <mat-form-field class="material-input-full">
+                    <mat-select placeholder="Select Categories" [(value)]="selectedCategories" [disabled]="!selectedSport">
+                        <mat-option *ngFor="let obj of categories" [value]="obj.categoryName">
+                            {{obj.categoryName}}
+                        </mat-option>         
+                    </mat-select>  
+                </mat-form-field>                            
+              </div>
+              <div class="mb-3" *ngIf="toggleElement">
+                  <mat-form-field class="material-input-full">
+                      <mat-select placeholder="Select Element" [(value)]="selectedElements" [disabled]="!selectedSport">
+                          <mat-option *ngFor="let element of elements" [value]="element.name">
+                              {{element.name}}
+                          </mat-option>         
+                      </mat-select>  
+                  </mat-form-field>                            
+                </div>
+
+                <div class="mb-3" *ngIf="toggleElementGroup">
+                    <mat-form-field class="material-input-full">
+                        <mat-select placeholder="Select Element Group" [(value)]="selectedElementsGroup" [disabled]="!selectedSport">
+                            <mat-option *ngFor="let elementG of elementGroup" [value]="elementG.name">
+                                {{elementG.name}}
+                            </mat-option>         
+                        </mat-select>  
+                    </mat-form-field>                            
+                  </div>
+
+                <div class="mb-3" *ngIf="toggleBase">
+                    <mat-form-field class="material-input-full">
+                      <input matInput type="number" (input)="baseValChange($event)" placeholder="Enter base value">
+                    </mat-form-field>
+                </div>
+            <div class="mb-3">
+              <button mat-raised-button color="primary" type="submit">
+                <i class="fas fa-save"></i> Save</button>
+              <button mat-raised-button color="warn" type="button" (click)="triggerCancelForm()">Cancel</button>
+            </div>
+          </form>
+      </mat-card>
+  </div>
+  <div class="col-md-4">
+       <!-- <div class="row">
+          <div class="col-md-5">
+            <span><strong>Selected Sport: </strong></span>
+          </div>
+          <div class="col-md-7">
+            <span>{{selectedSport.sportName}}</span>
+          </div>        
+      </div>
+      <div class="row">
+            <div class="col-md-5">
+              <span><strong>Selected Levels: </strong></span>
+            </div>
+            <div class="col-md-7">
+              <div class="selectedItemContainer" *ngFor="let level of selectedLevels">
+                      <span class="selectedItem">{{level}}</span>
+                    </div>
+            </div>        
+        </div>
+
+        <ul class="list-group">
+          <li class="list-group-item disabled"><strong>Event: </strong>Prizewinner</li>
+          <li class="list-group-item"><strong>Category: </strong>1 M - 101C</li>
+          <li class="list-group-item"><strong>Element: </strong>Throw Jumps</li>
+          <li class="list-group-item"><strong>Element Group: </strong>sdsds</li>
+          <li class="list-group-item"><strong>Base: </strong>1.3</li>
+        </ul>  -->
+
+        <ul class="list-group" style="width: 100% !important;" *ngIf="isFieldsLoaded">
+            <li class="list-group-item" style="padding: .75rem !important;"><span><strong>Selected Sport: </strong> {{selectedSport.sportName}}</span></li>
+            <li class="list-group-item" style="padding: .75rem !important;" *ngIf="selectedLevels.length>0"><span><strong>Selected Levels: </strong></span> 
+                <div class="selectedItemContainer" *ngFor="let level of selectedLevels">
+                    <span class="selectedItem">{{level}}</span>
+                </div>                
+            </li>
+            <li class="list-group-item" style="padding: .75rem !important;" *ngIf="selectedEvents.length>0"><span><strong>Selected Events: </strong></span> 
+              <div class="selectedItemContainer" *ngFor="let event of selectedEvents">
+                  <span class="selectedItem">{{event.name}}</span>
+              </div>              
+            </li>
+            <li class="list-group-item" style="padding: .75rem !important;" *ngIf="selectedCategories.length>0"><span><strong>Selected Categories: </strong></span> 
+              <div class="selectedItemContainer" *ngFor="let cat of selectedCategories">
+                  <span class="selectedItem">{{cat.name}}</span>
+              </div>              
+            </li>
+            <li class="list-group-item" style="padding: .75rem !important;" *ngIf="selectedElements.length>0"><span><strong>Selected Elements: </strong></span> 
+              <div class="selectedItemContainer" *ngFor="let elem of selectedElements">
+                  <span class="selectedItem">{{elem.name}}</span>
+              </div>              
+            </li>
+            <li class="list-group-item" style="padding: .75rem !important;" *ngIf="selectedElementsGroup.length>0"><span><strong>Selected Element Groups: </strong></span> 
+              <div class="selectedItemContainer" *ngFor="let elemGroup of selectedElementsGroup">
+                  <span class="selectedItem">{{elemGroup.name}}</span>
+              </div>              
+            </li>            
+            
+            <!-- <div *ngFor="let item of mappingForm.value.mappingFields;">
+                <div *ngIf="item.event!=null || item.category!=null || item.element!=null || item.elementGroup!=null || item.base!=null" class="vl"></div>
+                <li class="list-group-item" *ngIf="item.event!=null"><strong>Event: </strong>{{item.event}}</li>
+                <li class="list-group-item" *ngIf="item.category!=null"><strong>Category: </strong>{{item.category}}</li>
+                <li class="list-group-item" *ngIf="item.element!=null"><strong>Element: </strong>{{item.element}}</li>
+                <li class="list-group-item" *ngIf="item.elementGroup!=null"><strong>Element Group: </strong>{{item.elementGroup}}</li>
+                <li class="list-group-item" *ngIf="item.base!=null"><strong>Base: </strong>{{item.base}}</li>
+            </div> -->
+          
+        </ul>
+
+
+
+      <!-- <span><strong>Selected Sport: </strong>{{selectedSport.sportName}}</span> -->
+      
+        
+        <!-- <pre>Selected Levels: {{selectedLevels | json}}</pre> -->
+        <!-- <pre>{{mappingForm.value | json}}</pre> -->
+      <!-- <mat-card class="material-card-sm" style="background: #f1f1f1 !important;">
+          <span class="cardTitle">Review mapping</span>
+          <mat-card-content>
+              <mat-list>
+                  <mat-list-item>
+                      <div class="row" style="width: 100%;">
+                        <div class="col-md-5">
+                          <strong>Selected Sport</strong>
+                        </div>
+                        <div class="col-md-7">
+                          <div *ngIf="selectedSport==''; else showSport"><span style="font-style: italic">no sport selected</span></div>
+                          <ng-template #showSport>{{selectedSport}}</ng-template>                            
+                        </div>
+                      </div>                    
+                  </mat-list-item>
+                  <mat-list-item *ngIf="toggleLevel">
+                    <div class="row" style="width:100%">
+                      <div class="col-md-5">
+                        <strong>Selected Levels</strong>
+                      </div>
+                      <div class="col-md-7">
+                        <div *ngIf="selectedLevels.length==0; else showLevels"><span style="font-style: italic">no level selected</span></div>
+                        <ng-template #showLevels>
+                            <div class="selectedItemContainer" *ngFor="let level of selectedLevels">
+                                <span class="selectedItem">{{level}}</span>
+                              </div>
+                        </ng-template> 
+
+                
+                      </div>
+                    </div>                    
+                  </mat-list-item>
+                  <mat-list-item *ngIf="toggleEvent">
+                    <div class="row" style="width:100%"> 
+                      <div class="col-md-5">
+                        <strong>Selected Events</strong>
+                      </div>
+                      <div class="col-md-7">
+                          <div *ngIf="selectedEvents.length==0; else showEvents"><span style="font-style: italic">select an event to display</span></div>
+                          <ng-template #showEvents>
+                              <div class="selectedItemContainer" *ngFor="let event of selectedEvents">
+                                  <span class="selectedEvent">{{event}}</span>
+                                </div>
+                          </ng-template> 
+                          
+                      </div>
+                    </div>                    
+                  </mat-list-item>
+                  <mat-list-item *ngIf="toggleCategory">
+                      <div class="row" style="width:100%">
+                        <div class="col-md-5">
+                          <strong>Selected Categories</strong>
+                        </div>
+                        <div class="col-md-7">
+                          <div *ngIf="selectedCategories.length==0; else showCategories"><span style="font-style: italic">no category selected</span></div>
+                          <ng-template #showCategories>
+                              <div class="selectedItemContainer" *ngFor="let cat of selectedCategories">
+                                  <span class="selectedItem">{{cat}}</span>
+                                </div>
+                          </ng-template>    
+  
+                        
+                        </div>
+                      </div>                    
+                    </mat-list-item>
+                    <mat-list-item *ngIf="toggleElement">
+                        <div class="row" style="width:100%">
+                          <div class="col-md-5">
+                            <strong>Selected Elements</strong>
+                          </div>
+                          <div class="col-md-7">
+                            <div *ngIf="selectedElements.length==0; else showElements"><span style="font-style: italic">no element selected</span></div>
+                            <ng-template #showElements>
+                                <div class="selectedItemContainer" *ngFor="let element of selectedElements">
+                                    <span class="selectedItem">{{element}}</span>
+                                  </div>
+                            </ng-template> 
+    
+                        
+                          </div>
+                        </div>                    
+                      </mat-list-item>
+                      <div *ngIf="toggleBase">
+                        <div class="row" style="width:100%;padding-top: 10px;padding-bottom: 10px;">
+                            <div class="col-md-5">
+                              <strong style="font-size: 16px;    padding-left: 15px;">Entered base value</strong>
+                            </div>
+                            <div class="col-md-7">
+                              <div *ngIf="baseVal==null;"><span style="font-style: italic; font-size: 16px;">enter a base value to display</span></div>   
+                              <div *ngIf="baseVal!=null;"><span style="font-weight: bolder;font-size: 16px;">{{baseVal}}</span></div>   
+                            
+                            </div>
+                          </div> 
+                      </div>
+                 </mat-list>
+          </mat-card-content>
+      </mat-card> -->
+  </div>
+</div>

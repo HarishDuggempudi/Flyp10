@@ -1,0 +1,178 @@
+<!-- /.row -->
+<div class="pb-4" style="padding-left: 15px;padding-bottom: 15px !important;">
+  <button *ngIf="loginuserinfo.userRole=='1'" mat-raised-button color="primary" (click)="addEvent()">
+    <i class="fa fa-calendar-plus"></i> &nbsp;Add Event</button>
+  <!-- <button mat-raised-button color="primary" (click)="uploadFromCSV()">
+    <i class="fa fa-calendar-plus"></i> &nbsp;Upload Events from CSV</button>
+  <input type="file" class="upload" (change)="changeListener($event.target.files)"> -->
+</div>
+<div class="row">
+    <div class="col-md-8">
+        <mat-card>
+          <div *ngIf="calendarOptions">
+            <ng-fullcalendar #ucCalendar [options]="calendarOptions" [(eventsModel)]="eventss"  (eventClick)="eventClick($event.detail)" (eventDrop)="updateEvent($event.detail)"
+                (eventResize)="updateEvent($event.detail)"  ></ng-fullcalendar>
+          </div>
+          <ng-template #content1 let-modal let-d="dismiss">
+              <div class="modal-header">
+                <h4 style="text-align:center;width:100%" class="modal-title">Event</h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <div class="row" style="margin:40px 20px 20px 0px">
+                      <div class="col-4">
+                          <i  style="color:#2f3090;font-size: 25px;display: table;margin: auto;" class="fas fa-trophy"></i>
+                          <p style="text-align:center;font-size:18px;margin-top:20px" [innerHTML]="title"></p>
+                      </div>
+                      <div class="col-4">
+                          <i style="color:#2f3090;font-size: 25px;display: table;margin: auto;" class="fas fa-flag"></i>
+                          <p style="text-align:center;font-size:18px;margin-top:20px">{{country}}</p>
+                        </div>
+                        <div class="col-4">
+                            <i style="color:#2f3090;font-size: 25px;display: table;margin: auto;" class="fas fa-calendar"></i>
+                            <p style="text-align:center;font-size:18px;margin-top:20px">{{formatdate(start)}}</p>
+                          </div>
+
+                    </div>
+              </div>
+              <div class="modal-footer">
+                <button style="background:#2f3090;color:white" type="button" class="btn btn-light" (click)="d('Cross click')">Close</button>
+                <button style="background:#fd0015;color:white" type="button" class="btn btn-light" (click)="d('Cross click')" (click)="removeEvent()">Remove Event</button>
+              </div>
+            </ng-template>
+        </mat-card>
+      </div>
+      <div class="col-md-4">
+        <mat-card *ngIf="loginuserinfo.userRole=='1'" style="max-height: 580px; overflow-y: scroll;">
+            <h4>Events</h4>
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let event of allEvents">
+                  <div class="row">
+                    <div class="col-md-2" style="margin-right: -15px;">
+                        <i class="fas fa-calendar-alt" style="font-size: 22px; color: #313191;padding-top: 4px;"></i>
+                    </div>
+                    <div class="col-md-8">
+                       <p style="margin-bottom: 0;"><b [innerHTML]="event.title"></b></p>
+                       <p style="margin-bottom: 0;">{{formatdate(event.start)}}</p>
+
+                    </div>
+                    <div class="col-md-2" style="padding: 0 !important;text-align: right;
+                    margin-top: 8px;">
+                        <i class="fas fa-edit" style="color: darkslategray;cursor: pointer" (click)="edit(event)"></i><i class="fas fa-trash" (click)="deleteEvent(event)" style="color: #fd0015;margin-left: 6px; margin-right: -7px;cursor: pointer"></i>
+                    </div>
+                  </div>                   
+                </li>
+              </ul>
+			    <div class="p-3 text-center" *ngIf="allEvents.length==0">
+				  No events found
+				</div> 
+        </mat-card>
+        <mat-card *ngIf="loginuserinfo.userRole=='3' || loginuserinfo.userRole=='2'" style="max-height: 580px; overflow-y: scroll;padding: 24px 0px;padding-top: 0px;">
+          <!-- <h4 style="padding-left: 24px;">All Events</h4> -->
+          <div class="row" style="margin-right: 0px !important;
+          margin-left: 0px !important;
+          position: sticky;
+          top: 0;
+          background: #fff;
+          border-bottom-width: 1px;
+          border-bottom-style: solid;
+          border-bottom-color: rgba(0,0,0,.12);">
+              <div class="col-6">
+                <mat-form-field>
+                  <mat-select placeholder="All Sports" (change)="filterBySport($event)">
+                    <mat-option *ngFor="let sport of sports" [value]="sport">
+                      {{ sport }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-6">
+                  <mat-form-field>
+                      <mat-select placeholder="All States" (change)="filterByState($event)">
+                        <mat-option *ngFor="let state of states" [value]="state">
+                          {{ state}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+              </div>
+          </div>
+            <mat-table #table [dataSource]="dataSource">
+
+              <!--- Note that these columns can be defined in any order.
+                    The actual rendered columns are set as a property on the row definition" -->
+          
+              <!-- Position Column -->
+              <ng-container matColumnDef="Event">
+                <mat-header-cell *matHeaderCellDef> <b>Event</b> </mat-header-cell>
+                <mat-cell *matCellDef="let element"> <span [innerHTML]="element.title"></span></mat-cell>
+              </ng-container>
+          
+              <!-- Name Column -->
+              <ng-container matColumnDef="State">
+                <mat-header-cell *matHeaderCellDef style="text-align:center !important;"> <b>State</b> </mat-header-cell>
+                <mat-cell *matCellDef="let element" style="text-align:center !important;"> {{element.state}} </mat-cell>
+              </ng-container>
+          
+              <!-- Weight Column -->
+              <ng-container matColumnDef="Starts">
+                <mat-header-cell *matHeaderCellDef> <b>Starts</b> </mat-header-cell>
+                <mat-cell *matCellDef="let element">{{formatdate(element.start)}}</mat-cell>
+              </ng-container>
+               <ng-container matColumnDef="Ends">
+                <mat-header-cell *matHeaderCellDef> <b>Ends</b> </mat-header-cell>
+                <mat-cell *matCellDef="let element">{{formatdate(element.end)}}</mat-cell>
+              </ng-container>
+              <!-- Symbol Column -->
+              <ng-container matColumnDef="addrem">
+                <mat-header-cell *matHeaderCellDef style="text-align:center !important;"> +/- </mat-header-cell>
+                <mat-cell *matCellDef="let element" style="text-align:center !important;">
+                  <i class="fas fa-calendar-plus" style="color: #2f3090;cursor: pointer;font-size: 17px !important;" (click)="openVerticallyCentered(content)" ></i>
+
+                      <ng-template #content let-modal let-d="dismiss">
+                          <div class="modal-header">
+                            <h4 style="text-align:center;width: 100%" class="modal-title">Add Event</h4>
+                            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                              <div class="row" style="margin:40px 20px 20px 0px">
+                                  <div class="col-4">
+                                      <i  style="color:#2f3090;font-size: 25px;display: table;margin: auto;" class="fas fa-trophy"></i>
+                                      <p style="text-align:center;font-size:18px;margin-top:20px" [innerHTML]="element.title"></p>
+                                  </div>
+                                  <div class="col-4">
+                                      <i style="color:#2f3090;font-size: 25px;display: table;margin: auto;" class="fas fa-flag"></i>
+                                      <p style="text-align:center;font-size:18px;margin-top:20px">{{element.state}}</p>
+                                    </div>
+                                    <div class="col-4">
+                                        <i style="color:#2f3090;font-size: 25px;display: table;margin: auto;" class="fas fa-calendar"></i>
+                                        <p style="text-align:center;font-size:18px;margin-top:20px">{{formatdate(element.start)}}</p>
+                                      </div>
+      
+                                </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button style="background:#2f3090;color:white" type="button" class="btn btn-light" (click)="d('Cross click')">Close</button>
+                            <button style="background:#2f3090;color:white" type="button" class="btn btn-light" (click)="d('Cross click')" (click)="addEventToProfile(element)">Add Event</button>
+                          </div>
+                        </ng-template>
+                
+                    </mat-cell>
+               
+                
+              </ng-container>
+             
+          
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+			   <div class="p-3 text-center" *ngIf="futureeventList.length==0">
+				  No events available for adding to your Flyp10 calendar.
+				</div>
+      </mat-card>
+      </div>
+      
+</div>

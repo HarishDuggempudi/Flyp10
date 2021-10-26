@@ -1,0 +1,83 @@
+<div class="view-wrapper" *ngIf="objUser">
+    <h4 class="page-header">My profile</h4>
+    <div class="col-5 profilcmpltndiv">
+        <label><b>Profile Completion: {{profileval}}%</b></label>
+        <mat-progress-bar mode="determinate" [value]="profileval"></mat-progress-bar>
+    </div>
+    <h5 *ngIf="profileval<100" class="page-header profilcmpltndiv" >Complete your profile</h5>
+     <div class="col-5 profilcmpltndiv" *ngFor="let com of profileArray;let i=index;">
+         <div class="alert alert-primary text-center clickevent" (click)="RedirecttoPage(com.link)">
+            <strong>{{com.label}}</strong>
+         </div>
+   </div>
+    <mat-card class="material-card-sm mt-3">
+        <div class="mb-3">
+            <img [src]="imageSrc" width="150" height="150"/>
+        </div>
+        <div class="row">
+            <label class="nb-label-md col-6">First Name</label>
+            <label class="nb-label-md col-6">{{objUser.firstName}}</label>
+        </div>
+        <div class="row" *ngIf="objUser.middleName">
+            <label class="nb-label-md col-6">Middle Name</label>
+            <label class="nb-label-md col-6">{{objUser.middleName}}</label>
+        </div>
+        <div class="row" *ngIf="objUser.lastName">
+            <label class="nb-label-md col-6">Last Name</label>
+            <label class="nb-label-md col-6">{{objUser.lastName}}</label>
+        </div>
+        <div class="row">
+            <label class="nb-label-md col-6">Email</label>
+            <label class="nb-label-md col-6">{{objUser.email}}</label>
+
+        </div>
+        <div *ngIf="objUser.phoneNumber" class="row">
+            <label class="nb-label-md col-6">Phone Number</label>
+            <label class="nb-label-md col-6">{{objUser.phoneNumber}}</label>
+        </div>
+        <div class="row" *ngIf="objUser.mobileNumber">
+            <label class="nb-label-md col-6">Mobile Number</label>
+            <label class="nb-label-md col-6">{{objUser.mobileNumber}}</label>
+        </div>   
+        <div class="row" *ngIf="objUser.alwaysSharedRoutine">
+            <label class="nb-label-md col-6">Always share routines with teammates</label>
+            <br>
+            <label class="nb-label-md col-6" *ngIf="objUser.alwaysSharedRoutine == 'Y'">Yes</label>
+            <label class="nb-label-md col-6" *ngIf="objUser.alwaysSharedRoutine == 'N'">No</label>
+        </div>  
+        <div class="row" *ngIf="!objUser.alwaysSharedRoutine">
+            <label class="nb-label-md col-6">Always share routines with teammates</label>
+            <br>
+            
+            <label class="nb-label-md col-6" >No</label>
+        </div>   
+        <div class="row" *ngIf="!isaddUSAG">
+            <label class="nb-label-md col-6">USAG MemberID</label>
+            <label class="nb-label-md col-6">{{USAGMemberID}}<a (click)="editusag()" style="float:right"><i class="far fa-edit"></i></a></label>
+        </div>       
+
+        <!-- {{ objUser | json }} -->
+        <!-- <div class="row">
+            <label class="nb-label-md col-6">Security Question</label>
+            <label class="nb-label-md col-6">{{objUser.securityQuestion}}</label>
+        </div> -->
+
+        <div class="row">
+            <label class="nb-label-md col-6">User Role</label>
+            <label class="nb-label-md col-6" *ngIf="objUser.userRole=='1'">Admin User</label>
+            <label class="nb-label-md col-6" *ngIf="objUser.userRole=='2'">Judge</label>
+            <label class="nb-label-md col-6" *ngIf="objUser.userRole=='3'">Competitor</label>
+            <label class="nb-label-md col-6" *ngIf="objUser.userRole=='4'">Recruiter</label>
+        </div>
+        <div class="row" *ngIf="objUser.passphrase && objUser.userRole=='3'">
+            <label class="nb-label-md col-6">Flyp-phrase</label>
+            <!-- <label class="nb-label-md col-6">{{objUser.passphrase}}</label> -->
+        </div>
+        <div  *ngIf="objUser.passphrase && objUser.userRole=='3'" class="alert alert-info text-center">
+            <strong>{{objUser.passphrase}}</strong>
+        </div>
+       
+        <button mat-raised-button color="primary" (click)="onShowEdit()" ><i class="far fa-edit"></i> Edit</button>
+        <button mat-raised-button color="primary" *ngIf='isaddUSAG' (click)="addusagMemberID()" ><i class="far fa-plus"></i> Add USAG MemberID</button>
+    </mat-card>
+</div>

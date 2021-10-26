@@ -1,0 +1,5 @@
+<mat-tab-group (selectedIndexChange)="selectTab($event)">
+    <mat-tab label="Elements Value Summary"><eventValue *ngIf="selectedTab === 0"></eventValue>  </mat-tab>
+    <mat-tab label="Event Score Summary"> <eventScore *ngIf="selectedTab === 1"></eventScore> </mat-tab>
+    <mat-tab label="Event Score Tracking Chart"><EventScoreTracking *ngIf="selectedTab === 2"></EventScoreTracking></mat-tab>
+  </mat-tab-group>

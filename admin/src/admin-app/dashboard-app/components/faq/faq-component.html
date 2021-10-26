@@ -1,0 +1,27 @@
+<div class="col-md-10">
+    <h4>Frequently Asked Questions</h4>
+    <mat-card class="material-card-sm" *ngIf="faqlist.length" >
+     
+      <div class="card" *ngIf="faqlist.length==0">
+      <!-- <span class="no-data">No FAQ found</span> -->
+      </div>
+      <div id="accordion" *ngFor="let faq of faqlist;let i=index">
+      
+          <div class="card">
+              
+            <div class="card-header" data-toggle="collapse" [attr.href]="'#collapse0'+i">
+              <a class="card-link">
+                  <i>{{i+1}}</i>. {{faq.question}}
+              </a>
+            </div>
+            <div [attr.id]="'collapse0'+i" class="collapse " [ngClass]="{'show':i==0}" data-parent="#accordion">
+              <div class="card-body" [innerHTML]="faq.answer">
+                 <!-- {{faq.answer}} -->
+              </div>
+            </div>
+          </div>
+  
+        
+        </div>
+    </mat-card>
+</div>

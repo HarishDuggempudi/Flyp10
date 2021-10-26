@@ -1,0 +1,57 @@
+<!-- Page Heading -->
+<div class="d-flex flex-row-reverse">
+    <h1 class="nb-heading-one mr-auto">Video Editor</h1>
+  </div>
+  <!-- /.row -->
+  
+  <div class="row">
+      <div class="col-md-8">
+          <mat-card class="material-card-sm">
+              <form role="form" novalidate [formGroup]="videoForm" (ngSubmit)="saveVideo()">
+                <div class="mb-3">
+                    <mat-form-field class="material-input-full">
+                      <input matInput placeholder="Banner Title" [(ngModel)]="videoObj.title" value="" formControlName="title" >
+                      <mat-error>
+                        <control-messages [isSubmitted]="isSubmitted" [control]="videoForm.controls['title']"></control-messages>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="mb-3">
+                    <mat-form-field class="material-input-full">
+                      <input matInput placeholder="Banner SubTitle" [(ngModel)]="videoObj.subtitle" value="" formControlName="subtitle" >
+                      <mat-error>
+                        <control-messages [isSubmitted]="isSubmitted" [control]="videoForm.controls['subtitle']"></control-messages>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div  class="mb-3" *ngIf="showDoc">
+                    <a style="color: #007bff;text-decoration: underline;" >{{videoObj.filename}}</a>                  
+                    <a  style="color: #007bff;" (click)="editdoc()"><i class="far fa-edit"></i></a> 
+                  </div> 
+                  <div *ngIf="editDoc">
+                    <label><b>Upload Video</b></label>
+                    <div class="mb-3">
+                       
+                        <input name="file" type="file"  (change)="onFileChange($event)" style="margin-bottom: 5px">
+                        <input  [(ngModel)]="videoObj.filename" type="hidden" name="fileHidden" formControlName="filename"/>
+                        <span *ngIf="videoForm?.controls.filename?.errors?.required && isSubmitted" style="color: red;">required</span>
+                       
+                    </div>
+                    <span *ngIf="isinvalidfile" style="color:red;">{{filemessage}}</span>
+                  </div>
+               
+                  <div class="mb-3">
+                    <mat-checkbox formControlName="active" [checked]="videoObj.active"  [(ngModel)]="videoObj.active">
+                      Active
+                    </mat-checkbox>
+                  </div>
+                  <div class="mb-3">
+                      <button mat-raised-button color="primary" type="submit">Save</button>             
+                  </div>
+              </form>
+          </mat-card>
+      </div>
+  </div>
+  
+  
+  

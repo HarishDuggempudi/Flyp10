@@ -1,0 +1,161 @@
+<div class="row" *ngIf="routineList.length; else showNull">
+    <div class="col-md-7">
+        <div class="card" style="width: 18rem;">
+
+            <ngx-spinner></ngx-spinner>
+            <div class="card-body">
+                <video controls controlsList="nodownload" style="background-image: url('../../../assets/admin/img/defaults/video-bg.jpg'); width: 700px;height: 334.02px;" [src]="'https://flyp10.com/'+loadRoutine.path">
+        <!-- <source [src]="../../../../assets/client/video/flyp10video.mp4" type="video/mp4"> -->
+          <!-- <source *ngIf="loadRoutine.path" [src]="loadRoutine.path" [type]="loadRoutine.videoType"> -->
+      </video>
+                <h3 style="margin:10px 10px 0 10px">{{loadRoutine.title}}</h3>
+                <div class="row">
+                    <p class="col-md-4" style="font-size: 12px;color: grey;margin:4px 10px 10px 10px">Competitor: {{loadRoutine.athlete}}</p>
+                    <p class="col-md-4" style="font-size: 12px;color: grey;margin:4px 10px 10px 10px">Submitted by {{loadRoutine.submittedBy}}</p>
+                </div>
+
+                <!-- row starts -->
+                <div class="row" style="padding-left:4px!important;">
+                    <div class="col-md-2">
+                        <i class="fas fa-eye"></i>
+                        <p class="sub">{{loadRoutine.views}} views</p>
+                    </div>
+                    <div class="col-md-2">
+                        <i class="fas fa-football-ball"></i>
+                        <p class="sub">{{loadRoutine.sport}}</p>
+                    </div>
+                    <div class="col-md-2">
+                        <i class="fas fa-level-up-alt"></i>
+                        <p class="sub">{{loadRoutine.level}}</p>
+                    </div>
+                    <div class="col-md-2">
+                        <i class="fas fa-calendar-alt"></i>
+                        <p class="sub">{{loadRoutine.event}}</p>
+                    </div>
+                    <div class="col-md-2">
+                        <i class="fas fa-star"></i>
+                        <p class="sub">{{loadRoutine.score}} Pts</p>
+                    </div>
+                    <div class="col-md-2" *ngIf="loadRoutine.awards!='0'">
+                        <i class="fas fa-trophy"></i>
+                        <p class="sub" *ngIf="loadRoutine.awards=='1'">Gold</p>
+                        <p class="sub" *ngIf="loadRoutine.awards=='2'">Silver</p>
+                        <p class="sub" *ngIf="loadRoutine.awards=='3'">Bronze</p>
+                    </div>
+
+                </div>
+                <!-- row ends here -->
+                <!-- {{loadRoutine.comments.length}} -->
+                <!-- <span><h6 style="margin:10px;" *ngIf="loadRoutine.comments.length">Comments ({{loadRoutine.comments.length}})</h6></span>   -->
+                <div class="row">
+                    <div class="col-md-11">
+                        <input type="text" class="form-control" [(ngModel)]="videoComment" id="usr" placeholder="Add Comments...">
+                    </div>
+                    <div class="col-md-1">
+                        <button mat-mini-fab style="margin-left: -16px;margin-top: 3px;" class="material-icon-sm" color="primary" title="edit" (click)="postComment(loadRoutine)">
+          <i style="    margin-left: 0px;
+          color: #fff;" class="fas fa-paper-plane"></i>
+        </button>
+                    </div>
+                </div>
+                <div class="row" style="padding-top: 12px;" *ngFor="let comment of loadRoutine.comments">
+                    <div class="col-md-2">
+                        <img *ngIf="comment.userinfo.imageName && comment.userinfo.imageName!=''" style="width:50px;
+              border-radius: 35px;" src="https://flyp10.com/public/uploads/images/users/{{comment.userinfo.imageName}}" alt="{{userName}}">
+
+                        <!-- <div  *ngIf="!imageSrc" class="display-img">
+                      <i class="fas fa-user"></i><br>
+                  </div>   -->
+                        <div class="display-img" *ngIf="!comment.userinfo.imageName || comment.userinfo.imageName==''">
+                            <i class="fas fa-user"></i><br>
+                        </div>
+                    </div>
+                    <div class="col-md-10" style="padding-left: 0px !important;">
+                        <div class="row">
+                            <h5 class="col-md-8">{{comment.uname}}</h5>
+                            <span class="col-md-4" style="font-size:12px;text-align:right;color:#a09e9e;">{{timeAgo(comment.addedOn)}}</span>
+                        </div>
+                        <p>{{comment.comment}}</p>
+                    </div>
+                </div>
+
+            </div>
+            <!-- card body -->
+        </div>
+    </div>
+    <div class="col-md-5">
+        <h5 style="color: rgba(128, 128, 128, 0.658)">Suggested Videos</h5>
+        <mat-card>
+            <div class="row sortheader">
+                <div class="col-md-4 sortcol" (click)="sortLibrary('D')">
+                    Date
+                    <i *ngIf="!isdateSort" class="fas fa-sort"></i>
+                    <i *ngIf="isdateSort && dateSort" style="color:#303191;" class="fas fa-sort-up"></i>
+                    <i *ngIf="isdateSort && !dateSort" style="color:#303191;" class="fas fa-sort-down"></i>
+                </div>
+                <div class="col-md-4 sortcol" (click)="sortLibrary('S')">
+                    Score
+                    <i *ngIf="!isscoreSort" class="fas fa-sort"></i>
+                    <i *ngIf="isscoreSort && scoreSort" style="color:#303191;" class="fas fa-sort-up"></i>
+                    <i *ngIf="isscoreSort && !scoreSort" style="color:#303191;" class="fas fa-sort-down"></i>
+                </div>
+                <div class="col-md-4 sortcol" (click)="sortLibrary('V')">
+                    Views
+                    <i *ngIf="!isviewSort" class="fas fa-sort"></i>
+                    <i *ngIf="isviewSort && viewSort" style="color:#303191;" class="fas fa-sort-up"></i>
+                    <i *ngIf="isviewSort && !viewSort" style="color:#303191;" class="fas fa-sort-down"></i>
+                </div>
+            </div>
+
+            <a *ngFor="let routine of routineList" class="list-group-item" (click)="playVideo(routine)" style="cursor:pointer;border: none;">
+                <div class="row">
+                    <div class="col-sm-7" style=" padding:0;margin-right:0px!important">
+
+                        <video id="myVideo">
+                        <!-- <source src="../../../../assets/client/video/flyp10video.mp4" > -->
+                          <!-- <source [src]="'http://localhost:3005/'+routine.routineProperty.routinePath" > -->
+                            <source [src]="'https://flyp10.com/'+routine.videofilename" type="video/mp4">                            
+                        Your browser does not support HTML5 video.
+                      </video>
+                        <div class="overlayscore row">
+                            <div class="col-md-6" style="color:#fff!important;margin-bottom:2px">
+                                <p><i class="fas fa-star" style="margin-left: 0px;color:#fff"></i>&nbsp;{{routine.score}} Pts</p>
+
+                            </div>
+                            <div class="col-md-6" style="color:#fff!important;margin-bottom:2px" *ngIf="routine.awards!='0'">
+                                <p *ngIf="routine.awards=='1'"><i class="fas fa-trophy" style="margin-left: 0px;color:#fff"></i>&nbsp;Gold</p>
+                                <p *ngIf="routine.awards=='2'"><i class="fas fa-trophy" style="margin-left: 0px;color:#fff"></i>&nbsp;Silver</p>
+                                <p *ngIf="routine.awards=='3'"><i class="fas fa-trophy" style="margin-left: 0px;color:#fff"></i>&nbsp;Bronze</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <h6 style="font-size: 15px;">{{routine.title}}</h6>
+                        <p style="color:rgb(102, 102, 102)!important;margin-bottom:2px">{{routine.athlete}}</p>
+                        <!-- <p style="color:rgb(102, 102, 102)!important;margin-bottom:2px" *ngIf="routine.submissionfor=='2' && routine.athlete " >{{routine.athlete}}</p>						 -->
+                        <p style="color:rgb(161, 167, 167)!important;margin-bottom:2px">{{ routine.level }}</p>
+                        <p *ngIf="routine.view >1" style="color:rgb(161, 167, 167)!important;margin-bottom:2px">{{routine.view}}&nbsp;views</p>
+                        <p *ngIf="routine.view <2" style="color:rgb(161, 167, 167)!important;margin-bottom:2px">{{routine.view}}&nbsp;view</p>
+                        <p style="color:rgb(161, 167, 167)!important;">{{routine.judgedOn | date: 'dd/MM/yyyy'}}</p>
+                        <p *ngIf="routine.routinestatus=='1' && (routine.scoretype=='2' || routine.scoretype=='3')">
+
+                            <span class="badge " style="color:blue;text-decoration: underline;cursor: pointer;" (click)="commentPage(routine._id)">View judge notes</span>
+                        </p>
+                        <p *ngIf="routine.routinestatus=='1' && (routine.scoretype=='1')">
+                            <span class="badge " style="color:blue;text-decoration: underline;cursor: pointer;" (click)="commentPage(routine._id)">View over all comment</span>
+                        </p>
+                    </div>
+                </div>
+
+            </a>
+
+
+        </mat-card>
+    </div>
+
+
+</div>
+<ng-template #showNull>
+    <!-- No videos to display -->
+    <img src="../../../../assets/admin/img/no-videos.jpg" style="width: 30%; display: block; margin: auto; margin-top: 9%;">
+</ng-template>

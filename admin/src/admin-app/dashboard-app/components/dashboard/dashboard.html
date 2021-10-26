@@ -1,0 +1,497 @@
+<div class="nb-home" *ngIf="userRole=='1'">
+    <h1 class="">Dashboard
+      <small>Statistics Overview</small>
+    </h1>
+    <div class="row">
+      <div class="col-lg-6">
+        <user-count [viewId]="viewId"></user-count>
+      </div>
+      <div class="col-lg-3">
+        <div class="media">
+          <i class="fas fa-street-view orange"></i>
+          <div class="media-body p-2">
+            <h5>Active Users</h5>
+            <span class="count"><animate-counter [valueToCount]="activeUserCount"></animate-counter></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <page-view [viewId]="viewId"></page-view>
+      </div>
+    </div>
+    <div class="py-5">
+      <div class="chart-card">
+        <h3>Weekly Total Visit</h3>
+        <week-chart [viewId]="viewId"></week-chart>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="chart-card">
+            <h3>Browser Based Visit</h3>
+            <browser-chart [viewId]="viewId"></browser-chart>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="chart-card">
+            <h3>Country Based Visit</h3>
+            <country-chart [viewId]="viewId"></country-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="nb-home" *ngIf="userRole=='2'">
+    <h1 class="">Judges Dashboard</h1>
+    <div class="card-list">
+        <div class="card blue cursor" routerLink="/routines">
+          <div class="title">New Routines</div><span class="fas fa-file-video"></span>
+          <div class="value">{{judgeData.newRoutines}}</div>
+          <div class="stat"><!-- <b>13</b>% increase --></div>
+        </div>
+        <div class="card green cursor" routerLink="/routines">
+          <div class="title">Total Judged</div><span class="fas fa-gavel"></span>
+          <div class="value">{{judgeData.judgedRoutine}}</div>
+          <div class="stat"><!-- <b>4</b>% increase --></div>
+        </div>
+        <div class="card orange cursor" routerLink="/wallet">
+          <div class="title">Total credits Earned</div><span class="fas fa-gem"></span>
+          <div class="value">{{formatDollar(judgeData.creditsEarned)}}</div>
+          <div class="stat"><!-- <b>13</b>% decrease --></div>
+        </div> 
+        <div class="card red cursor" routerLink="/wallet">
+          <div class="title">Pending Credits</div><span class="fas fa-dollar-sign "></span>
+          <div class="value">{{formatDollar(judgeData.pendingCredits)}}</div>
+          <div class="stat" style="margin-top: 16px;" ><a onClick="remit()" style="color:white; cursor: pointer;"><span><b style="float: right!important" >Remit &nbsp; -></b></span></a></div>
+          
+        </div>
+       
+      
+      </div>
+      <div class="row">
+          <div class="col-lg-6">
+            <div class="chart-card">
+              <div style="text-align: center;color:#ccc;">
+                  <!-- <h3 style="font-size: 25px;"><i class="fas fa-chart-bar"></i></h3>-->
+                  <h3 style="color:#333;">Credits Earned Based On Sports</h3> 
+                  <div style="display: block">
+                    <canvas baseChart
+                            [datasets]="barChartData"
+                            [labels]="barChartLabels"
+                            [options]="barChartOptions"
+                            [legend]="barChartLegend"
+                            [chartType]="barChartType"
+                            [colors]="barChartColors"
+                            (chartHover)="chartHovered($event)"
+                            (chartClick)="chartClicked($event)"></canvas>
+                  </div>
+              </div>   
+             <!-- <browser-chart [viewId]="viewId"></browser-chart> -->
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="chart-card">
+                <div style="text-align: center;color:#ccc;">
+                  <h3 style="color:#333;">Judge Activity</h3> 
+                  <div style="display: block">
+                    <canvas baseChart
+                                [data]="lineChartData"
+                                [labels]="lineChartLabels"
+                                [options]="lineChartOptions"
+                                [legend]="lineChartLegend"
+                                [colors]="lineChartColors"
+                                [chartType]="lineChartType"
+                                (chartHover)="chartHovered($event)"
+                                (chartClick)="chartClicked($event)"></canvas>
+                  </div>
+                </div> 
+            </div>
+          </div>
+        </div>
+       
+  
+  </div>
+
+  <div class="nb-home" *ngIf="userRole=='3'">
+      <div class="card-list">
+          <div class="card blue cursor" routerLink="/routine">
+            <div class="title">total routines</div><span class="fas fa-file-video"></span>
+            <div class="value">{{dashboardData.totalRountine}}</div>
+            <div class="stat"><!-- <b>13</b>% increase --></div>
+          </div>
+          <div class="card green cursor" routerLink="/wallet">
+            <div class="title">available credit</div><span class="fas fa-gem"></span>
+            <div class="value">{{formatDollar(dashboardData.availableCredit)}}</div>
+            <div class="stat"><!-- <b>4</b>% increase --></div>
+          </div>
+          <div class="card orange cursor" routerLink="/wallet">
+            <div class="title">used credits</div><span class="far fa-gem"></span>
+            <div class="value">{{formatDollar(dashboardData.usedcredits)}}</div>
+            <div class="stat"><!-- <b>13</b>% decrease --></div>
+          </div>
+          <div class="card red cursor" routerLink="/library">
+            <div class="title">new comments</div><span class="fas fa-comment"></span>
+            <div class="value">{{dashboardData.newComment}}</div>
+            
+            <div class="stat"><!-- <b>13</b>% decrease --></div>
+          </div>
+        </div>
+        
+        <!-- <div class="row" style="margin-bottom: 25px;" *ngIf="subType == '2' || subType == '3'"> -->
+          <div class="row" style="margin-bottom: 25px;" *ngIf="subscriptionType == '2' || subscriptionType == '3'">
+          <div class="col-lg-6">
+              <div class="example-container mat-elevation-z8" style="height: 293px;overflow-y: scroll;">
+                  <h3 style="color: #fff;
+                  background: #c02f1f !important;
+                  font-size: 20px;
+                  padding: 10px 10px 0px 10px; text-align: center !important"><a routerLink="/reporting" style="color: #fff;text-decoration: underline;">Elements Value Summary</a></h3> 
+                  <!-- <div class="row scoreCard" *ngIf="showEventValueFilter" style="background: #c02f1f54 !important; margin-right: 0px !important; margin-left: 0px !important; margin-top: -10px !important;">
+                      <mat-form-field style="width: 90px; margin: 0px 3px !important;">
+                          <mat-select placeholder="Date" [ngModel]="elemValDaysSelected" (change)="filterPerformedRoutinesByDays($event);">
+                            <mat-option value="1">Today</mat-option>
+                            <mat-option value="7">Last 7 days</mat-option>
+                            <mat-option value="30">Last 30 days</mat-option>
+                            <mat-option value="90">Last 90 days</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                        <mat-form-field style="width:90px; margin: 0px 3px !important;">
+                            <mat-select placeholder="Sport" (change)="filterValuesBySport($event);">
+                              <mat-option *ngFor="let sport of userSports" [value]="sport">{{sport}}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          <mat-form-field style="width: 90px; margin: 0px 3px !important;">
+                              <mat-select placeholder="Level" (change)="filterValuesByLevel($event);">
+                                <mat-option *ngFor="let level of userLevels" [value]="level">{{level}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <mat-form-field style="width: 90px; margin: 0px 3px !important;">                                                                
+                              <mat-select placeholder="Event">
+                                <mat-option *ngFor="let event of userEvents" [value]="event">{{event}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <mat-form-field style="width: 90px; margin: 0px 3px !important;">
+                                <mat-select placeholder="Compare" (change)="compareElementsValueSummary($event)">
+                                  <mat-option value="Teammates">Teammates</mat-option>
+                                  <mat-option value="National">National</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                  </div> -->
+                  <!-- <div class="filter-button mat-elevation-z8" (click)="toggleValueFilter()" style="background: #c02f1f !important"><i class="fas fa-filter"></i></div> -->
+                  <mat-table #table [dataSource]="dataSource" style=" margin-top: -15px !important;background: #c02f1f">
+                
+                    <!--- Note that these columns can be defined in any order.
+                          The actual rendered columns are set as a property on the row definition" -->
+                
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="element">
+                      <mat-header-cell *matHeaderCellDef> <b>Element</b> </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element._id.element}} </mat-cell>
+                    </ng-container>
+                
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="performed">
+                      <mat-header-cell *matHeaderCellDef> <b>Performed</b> </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.groupedItem.length}} </mat-cell>
+                    </ng-container>
+                
+                    <!-- Weight Column -->
+                    <ng-container matColumnDef="average">
+                      <mat-header-cell *matHeaderCellDef> <b>Avg Value</b> </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{roundOffValue(element.average)}} </mat-cell>
+                    </ng-container>
+                
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="highest">
+                      <mat-header-cell *matHeaderCellDef> <b>Highest</b> </mat-header-cell>
+                      <mat-cell *matCellDef="let element" (click)="maxElement(element)" style="color: #2f3191 !important;text-decoration: underline !important;cursor: pointer"> {{element.max}} <img src="../../../../assets/admin/img/play.png" style="width: 24%; margin-left: 5px;cursor: pointer" alt=""> </mat-cell>
+                    </ng-container>
+  
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="lowest">
+                      <mat-header-cell *matHeaderCellDef> <b>Lowest</b> </mat-header-cell>
+                      <mat-cell *matCellDef="let element" (click)="minElement(element)" style="color: #a32140 !important;text-decoration: underline !important;;cursor: pointer"> {{element.min}} <img src="../../../../assets/admin/img/play.png" style="width: 24%; margin-left: 5px;cursor: pointer" alt=""></mat-cell>
+                    </ng-container>
+                
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                  </mat-table>
+                  <div class="p-3 text-center" *ngIf="eventsValueData?.length==0">
+                      No Records Found
+                    </div>
+                </div>
+            <!-- <div class="chart-card">
+              <div style="text-align: center;color:#ccc;"> -->
+                  <!-- <h3 style="font-size: 25px;"><i class="fas fa-chart-bar"></i></h3>-->
+                  <!-- <h3 style="color:#333;">Sports Activity</h3> 
+                  <div style="display: block">
+                    <canvas baseChart
+                            [datasets]="barChartData"
+                            [labels]="barChartLabels"
+                            [options]="barChartOptions"
+                            [legend]="barChartLegend"
+                            [chartType]="barChartType"
+                            [colors]="barChartColors"
+                            (chartHover)="chartHovered($event)"
+                            (chartClick)="chartClicked($event)"></canvas>
+                  </div> -->
+  
+              <!-- </div>    -->
+             <!-- <browser-chart [viewId]="viewId"></browser-chart> -->
+            <!-- </div> -->
+          </div>
+          <div class="col-lg-6">
+              <div class="example-container mat-elevation-z8" style="height: 293px;overflow-y: scroll;">
+                  <h3 style="background-color: #2298F1;color: #fff;font-size: 20px;padding: 10px 10px 0px 10px;  text-align: center !important"><a routerLink="/reporting" style="color: #fff;text-decoration: underline;">Event Score Summary</a></h3> 
+                  <!-- <div class="filter-button mat-elevation-z8" (click)="toggleFilter()"><i class="fas fa-filter"></i></div> -->
+                  <!-- <div class="row scoreCard" *ngIf="showEventScoreFilter" style="background-color: #2298f170 !important;margin-right: 0px !important; margin-left: 0px !important; margin-top: -10px !important;">
+                      <mat-form-field style="width: 110px; margin: 0px 5px !important;">
+                          <mat-select placeholder="Date" [ngModel]="eventsScoreDaysSelected" (change)="filterEventsScoreByDays($event);">
+                            <mat-option value="1">Today</mat-option>
+                            <mat-option value="7">Last 7 days</mat-option>
+                            <mat-option value="30">Last 30 days</mat-option>
+                            <mat-option value="90">Last 90 days</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                        <mat-form-field style="width: 110px; margin: 0px 5px !important;">
+                            <mat-select placeholder="Sport" (change)="filterEventScoreBySport($event);">
+                              <mat-option *ngFor="let sport of userSports" [value]="sport">{{sport}}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          <mat-form-field style="width: 110px; margin: 0px 5px !important;">
+                              <mat-select placeholder="Level" (change)="filterEventScoresByLevel($event);">
+                                <mat-option *ngFor="let level of userLevelsforEventsScore" [value]="level">{{level}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <mat-form-field style="width: 110px; margin: 0px 5px !important;">
+                                <mat-select placeholder="Compare" (change)="compareEventScoreSummary($event)">
+                                  <mat-option value="Teammates">Teammates</mat-option>
+                                  <mat-option value="National">National</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                  </div> -->
+                  <mat-table #eventsTable [dataSource]="eventsDataSource" style=" margin-top: -15px !important;background-color: #2298F1 !important;">
+                
+                    <!--- Note that these columns can be defined in any order.
+                          The actual rendered columns are set as a property on the row definition" -->
+                
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="element">
+                      <mat-header-cell *matHeaderCellDef> <b>Event</b> </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.event}} </mat-cell>
+                    </ng-container>
+                
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="performed">
+                      <mat-header-cell *matHeaderCellDef> <b>Performed</b> </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.count}} </mat-cell>
+                    </ng-container>
+                
+                    <!-- Weight Column -->
+                    <ng-container matColumnDef="average">
+                      <mat-header-cell *matHeaderCellDef> <b>Avg Value</b> </mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{roundOffValue(element.average)}} </mat-cell>
+                    </ng-container>
+                
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="highest">
+                      <mat-header-cell *matHeaderCellDef> <b>Highest</b> </mat-header-cell>
+                      <mat-cell *matCellDef="let element" (click)="maxEvent(element)" style="color: #2f3191 !important;text-decoration: underline !important;cursor: pointer"> {{element.max}}<img src="../../../../assets/admin/img/play.png" style="width: 24%; margin-left: 5px;cursor: pointer" alt=""></mat-cell>
+                    </ng-container>
+  
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="lowest">
+                      <mat-header-cell *matHeaderCellDef> <b>Lowest</b> </mat-header-cell>
+                      <mat-cell *matCellDef="let element" (click)="minEvent(element)" style="color: #a32140 !important;text-decoration: underline !important;cursor: pointer"> {{element.min}}<img src="../../../../assets/admin/img/play.png" style="width: 24%; margin-left: 5px;cursor: pointer" alt=""></mat-cell>
+                    </ng-container>
+                
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                  </mat-table>
+                  <div class="p-3 text-center" *ngIf="eventsScoreData?.length==0">
+                      No Records Found
+                    </div>
+                </div>
+          </div>
+        </div>
+        <div class="row" style="margin-bottom: 25px;">
+          <div class="col-lg-12" *ngIf="subscriptionType == '2' || subscriptionType == '3'">
+              <div class="example-container mat-elevation-z8">
+                  <div style="text-align: center;color:#ccc;">
+                    <h3 style="color: #333;
+                    font-size: 20px;
+                    padding: 10px;"><a routerLink="/reporting" style="color: #007bff;text-decoration: underline;">Event Score Tracking Chart</a></h3> 
+                    <!-- <div class="row scoreCard" style="background-color: #fff !important;margin-right: 0px !important; margin-left: 10px !important; margin-top: -10px !important;">
+                        <mat-form-field style="width: 118px; margin: 0px 8px !important;">
+                            <mat-select placeholder="Date" [value]="eventsScoreDaysSelected" (change)="drawChartByDays($event);">
+                              <mat-option value="1">Today</mat-option>
+                              <mat-option value="7">Last 7 days</mat-option>
+                              <mat-option value="30">Last 30 days</mat-option>
+                              <mat-option value="90">Last 90 days</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          <mat-form-field style="width: 118px; margin: 0px 8px !important;">
+                              <mat-select placeholder="Sport" [(value)]="eventsChartScoreSportSelected" (change)="drawChartBySport($event)">
+                                <mat-option *ngFor="let sport of userSportsForCharting" [value]="sport">{{sport}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <mat-form-field style="width: 118px; margin: 0px 8px !important;">
+                                <mat-select placeholder="Level" [(value)]="eventsChartScoreLevelSelected" (change)="drawChartByLevel($event)">
+                                  <mat-option *ngFor="let level of userLevelsForCharting" [value]="level">{{level}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                              <mat-form-field style="width: 118px; margin: 0px 8px !important;">
+                                <mat-select placeholder="Event" [(value)]="eventsChartScoreEventSelected" (change)="drawChartByEvent($event)">
+                                  <mat-option *ngFor="let event of userEventsForCharting" [value]="event">{{event}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                              <mat-form-field style="width: 118px; margin: 0px 8px !important;">
+                                  <mat-select placeholder="Compare" [(value)]="eventsChartScoreCompareSelected" (change)="compareCharting($event)">
+                                    <mat-option value="Select">Select</mat-option>
+                                    <mat-option value="Teammates">Teammates</mat-option>
+                                    <mat-option value="National">National</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                    </div> -->
+                    <div style="display: block">
+                      <!-- <canvas *ngIf="chartingCanvasLoading" baseChart
+                                  [datasets]="lineChartData"
+                                  [labels]="lineChartLabels"
+                                  [options]=chartOptions
+                                  [legend]="lineChartLegend"
+                                  lineTension=0
+                                  [chartType]="lineChartType"
+                                  (chartHover)="chartHovered($event)"
+                                  (chartClick)="chartClicked($event)"></canvas> -->
+                        
+                      <canvas *ngIf="!loadChart" baseChart
+                          [datasets]="eventsChartData"
+                          [labels]="eventsChartLabels"
+                          [options]=chartOptions
+                          [legend]="lineChartLegend"
+                          lineTension=0
+                          [chartType]="lineChartType"
+                          (chartHover)="chartHovered($event)"
+                          (chartClick)="chartClicked($event)"></canvas>
+
+                      <div *ngIf="!loadChart && noDataToDisplay" style="height: 200px;margin-top: 15%;color: #444;font-size: medium;">
+                        No data to display
+                      </div>
+
+                      <div *ngIf="eventsChartScoreCompareSelected == 'Teammates' && !loadChart && chartCriNotMet" style="height: 200px;margin-top: 15%;color: #444;font-size: medium;">
+                        Please select an event to compare
+                      </div>
+                    </div>
+                  </div> 
+              </div>
+          </div>
+          <!-- <div class="col-lg-4">
+              <div class="media">
+                  <i class="fas fa-video orange"></i>
+                  <div class="media-body p-2">
+                    <h5>Total Completed Routines</h5>
+                    <span class="count">{{dashboardData.completedRoutine}}</span>
+                  </div>
+                </div>
+                <div class="media">
+                    <a  class="media-link" ></a>
+                    <i class="fas fa-clock blue"></i>
+                    <div class="media-body p-2">
+                      <h5>Pending Routines</h5>
+                      <span class="count">{{dashboardData.pendingRoutine}}</span>
+                    </div>
+                  </div>
+                  <div class="media">
+                      <i class="fas fa-user-plus rd "></i>
+                      <div class="media-body p-2">
+                        <h5>Pending Requests</h5>
+                        <span class="count">{{dashboardData.pendingRequested}}</span>
+                      </div>
+                    </div>
+                    <div class="media">
+                        <i class="fas fa-users grn"></i>
+                        <div class="media-body p-2">
+                          <h5>Connected users</h5>
+                          <span class="count">{{dashboardData.connecteduser}}</span>
+                        </div>
+                      </div>
+          </div> -->
+        </div>
+        <div class="row">
+          <div class="col-lg-3 cursor"  routerLink="/routine">
+            <div class="media">
+              <i class="fas fa-video orange"></i>
+              <div class="media-body p-2">
+                <h5>Total Completed Routines</h5>
+                <span class="count">{{dashboardData.completedRoutine}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 cursor" routerLink="/routine">
+    
+            <div class="media">
+              <a  class="media-link" ></a>
+              <i class="fas fa-clock blue"></i>
+              <div class="media-body p-2">
+                <h5>Pending Routines</h5>
+                <span class="count">{{dashboardData.pendingRoutine}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+         
+            <div class="row">
+              <div class="col-lg-6 cursor" routerLink="/team">
+                <div class="media">
+                  <i class="fas fa-user-plus rd "></i>
+                  <div class="media-body p-2">
+                    <h5>Pending Requests</h5>
+                    <span class="count">{{dashboardData.pendingRequested}}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 cursor"  routerLink="/team">
+                <div class="media">
+                  <i class="fas fa-users grn"></i>
+                  <div class="media-body p-2">
+                    <h5>Connected users</h5>
+                    <span class="count">{{dashboardData.connecteduser}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="row" style="margin-top:25px;">
+           <div class="col-lg-6">
+           <div class="chart-card">
+           <div style="background-color: #303191;color: #fff;padding-top: 13px;height: 40px;" class="row">
+               <div class="col-lg-6">
+                <span>Event List</span>  
+             </div>
+              <div class="col-lg-6">
+                <span style="float:right;cursor:pointer" (click)="navigateToEvent()" ><i class="fas fa-calendar-times"></i>&nbsp;Add Event</span>  
+             </div>
+            </div>
+            <h3 *ngIf="eventList.length==0" style="text-align:center;color:#8e8787;margin-top:16%;">No event to display</h3>
+           <ul class="list-group" *ngFor="let event of eventList">
+            <li class="list-group-item ">Cras justo odio</li>
+            <li class="list-group-item">Dapibus ac facilisis in</li>
+            <li class="list-group-item">Morbi leo risus</li>
+            <li class="list-group-item">Porta ac consectetur ac</li>
+            <li class="list-group-item">Vestibulum at eros</li>
+                   </ul>
+         </div>           
+           </div>
+        </div> -->
+  
+  </div>
+  
+    <div class="nb-home" *ngIf="userRole=='4'">
+      <div class="card-list">
+          <div class="card blue">
+            <div class="title">total routines</div><span class="fas fa-file-video"></span>
+            <div class="value">{{relibraryCount}}</div>
+            <div class="stat"><!-- <b>13</b>% increase --></div>
+          </div>
+		</div>
+</div>

@@ -1,0 +1,267 @@
+<head>
+    <meta property="og:title" content="The Rock" />
+    <meta property="og:description" content="Directed by Michael Bay.  With Sean Connery, Nicolas Cage, Ed Harris, John Spencer." />
+    <meta property="og:url" content="http://www.imdb.com/title/tt0117500/" />
+    <meta property="og:image" content="http://ia.media-imdb.com/images/rock.jpg" />
+</head>
+
+<div class="row">
+    <div class="col-md-6">
+        <mat-card class="material-card-sm">
+            <h4>{{routineObj.title}}</h4>
+            <div *ngIf="routineObj.thumbnailPath">
+                <div [ngStyle]="{'background-image':'url(https://flyp10.com/' + routineObj.thumbnailPath + ')'}" style='background-repeat: no-repeat;height:200px;text-align: center;' width="100%">
+                </div>
+            </div>
+            <!-- <video *ngIf="routineObj.videofilename!='' && routineObj.videofilename!=null" controls controlsList="nodownload" #toJudgeVideo width="100%" (timeupdate)="setCurrentTime($event)" (loadedmetadata)="onMetadata($event, toJudgeVideo)">
+                <source [src]="'https://flyp10.com/'+routineObj.videofilename" type="video/mp4" />
+                Browser not supported
+            </video> -->
+
+
+        </mat-card>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-group ">
+                    <ul class="list-group">
+                        <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
+                         Duration
+                          <span class="badge " style="font-size:14px">{{formatduration(routineObj.duration)}}</span>
+                        </li> -->
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Sports
+                            <span class="badge " style="font-size:14px">{{routineObj.sport}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Level
+                            <span class="badge " style="font-size:14px">{{routineObj.level}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Event
+                            <span class="badge " style="font-size:14px">{{routineObj.event}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Athlete
+                            <span class="badge " style="font-size:14px">{{routineObj.athlete}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Submitted by
+                            <span class="badge " style="font-size:14px">{{routineObj.submittedBy}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Submitted on
+                            <span class="badge " style="font-size:14px">{{formatdate(routineObj.submittedOn)}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Status
+                            <span class="badge" style="font-size:14px" *ngIf="routineObj.routinestatus=='0'">In Queue</span>
+                            <span class="badge" style="font-size:14px" *ngIf="routineObj.routinestatus=='1'">Judged</span>
+                            <span class="badge" style="font-size:14px" *ngIf="routineObj.routinestatus=='3'">Incomplete</span>
+                            <span class="badge" style="font-size:14px" *ngIf="routineObj.routinestatus=='4'">Inappropriate</span>
+                            <span class="badge" style="font-size:14px" *ngIf="routineObj.routinestatus=='5'">Evaluating</span>
+
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="routineObj.score">
+                            Score
+                            <span class="badge " style="font-size:14px">{{routineObj.score}}</span>
+                        </li>
+                    </ul>
+                </ul>
+            </div>
+            <div class="col-md-12" *ngIf="routineObj.uploadingType == '2' && routineObj.routinestatus == '1'">
+                <table class="col-md-12 table">
+                    <tr style="border: 1px solid rgba(0,0,0,.125);">
+                        <th colspan="2" style="text-align: center;"><i class="fa fa-flag"></i> &nbsp;&nbsp;Ranking</th>
+                    </tr>
+                    <tr style="border: 1px solid rgba(0,0,0,.125);">
+                        <td style="border: 1px solid rgba(0,0,0,.125);text-align: center;"><b>Rank {{EventLevelRank}}</b></td>
+                        <td style="border: 1px solid rgba(0,0,0,.125);text-align: center;"><b>Rank {{EventMeetLevelRank}}</b></td>
+
+                    </tr>
+                    <tr style="border: 1px solid rgba(0,0,0,.125);">
+                        <td style="border: 1px solid rgba(0,0,0,.125);text-align: center;"><a data-toggle="modal" data-target="#ranking">{{routineObj.level}} - {{routineObj.event}}</a></td>
+                        <td style="border: 1px solid rgba(0,0,0,.125);text-align: center;"><a data-toggle="modal" data-target="#levelranking">{{routineObj.EventMeetName}} - {{routineObj.level}}</a></td>
+
+                    </tr>
+                </table>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="ranking" role="dialog" style="overflow-y: scroll !important;background: linear-gradient(90deg, rgba(46, 49, 146, 0.52), rgba(190, 30, 45, 0.6));">
+    <div class="modal-dialog " style="  max-width: 45% ;display:block;margin:0 auto;margin-top:20px !important">
+
+
+        <!-- Modal content-->
+        <div class="modal-content" style="overflow-y: scroll">
+
+            <div class="modal-body" style="padding:0px;overflow: scroll;position: relative; min-height:300px!important">
+                <button type="button" style="    background: #be1e2d;
+			float: right;
+			margin: 10px;
+			height: 21px;
+			width: 43px;
+			padding: 0;
+			font-size: 12px;
+			line-height: 10px;
+			 
+			color: white;" class="btn btn-default" data-dismiss="modal">
+			  Close
+			  
+			  </button>
+                <div class="col-md-12 word-wrap" style="margin-top:50px;">
+                    <mat-card>
+                        <div>
+                            <h4>Ranking</h4>
+                            <div *ngIf="Ranking.length">
+
+                                <div *ngFor="let rank of Ranking">
+                                    <div class="row" style="margin-top:20px;padding:2px;background: #3f51b5;color:white">
+                                        <div class="col-sm-12 text-center">
+                                            <span><b>{{rank.levelName}} - {{rank.eventName}}</b></span>
+                                        </div>
+                                    </div>
+
+
+                                    <div *ngIf="rank.users.length > 0">
+                                        <div *ngFor="let user of rank.users;let i = index" style="margin-top:20px;">
+                                            <div class="row" *ngIf="routineObj.SanctionRoutine">
+                                                <div class="col-sm-3">
+                                                    <span>{{user.rank}}</span>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <span>{{user.USAGID}}</span>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <span>{{user.athlete}}</span>
+                                                </div>
+
+                                                <div class="col-sm-3">
+                                                    <span>{{user.score}}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="row" *ngIf="!routineObj.SanctionRoutine">
+                                                <div class="col-sm-4">
+                                                    <span>{{user.rank}}</span>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <span>{{user.athlete}}</span>
+                                                </div>
+
+                                                <div class="col-sm-4">
+                                                    <span>{{user.score}}</span>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                            </div>
+                            <hr/>
+                        </div>
+
+
+                    </mat-card>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="levelranking" role="dialog" style="overflow-y: scroll !important;background: linear-gradient(90deg, rgba(46, 49, 146, 0.52), rgba(190, 30, 45, 0.6));">
+    <div class="modal-dialog " style="  max-width: 45% ;display:block;margin:0 auto;margin-top:20px !important">
+
+
+        <!-- Modal content-->
+        <div class="modal-content" style="overflow-y: scroll">
+
+            <div class="modal-body" style="padding:0px;overflow: scroll;position: relative; min-height:300px!important">
+                <button type="button" style="    background: #be1e2d;
+				float: right;
+				margin: 10px;
+				height: 21px;
+				width: 43px;
+				padding: 0;
+				font-size: 12px;
+				line-height: 10px;
+				 
+				color: white;" class="btn btn-default" data-dismiss="modal">
+				  Close
+				  
+				  </button>
+                <div class="col-md-12 word-wrap" style="margin-top:50px;">
+                    <mat-card>
+                        <div>
+                            <h4>Ranking</h4>
+                            <div *ngIf="EventMeetLevelRanking.length">
+                                <div class="row" style="margin-top:20px;padding:2px;background: #3f51b5;color:white">
+                                    <div class="col-sm-12 text-center">
+                                        <span><b>{{routineObj.EventMeetName}} - {{routineObj.level}}</b></span>
+                                    </div>
+                                </div>
+                                <div *ngFor="let user of EventMeetLevelRanking;let i = index">
+
+
+
+
+                                    <div class="row" style="margin-top:20px;" *ngIf="routineObj.SanctionRoutine">
+                                        <div class="col-sm-3">
+                                            <span>{{user.rank}}</span>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <span>{{user.USAGID}}</span>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <span>{{user.athlete}}</span>
+                                        </div>
+
+                                        <div class="col-sm-3">
+                                            <span>{{user.score}}</span>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="row" style="margin-top:20px;" *ngIf="!routineObj.SanctionRoutine">
+                                        <div class="col-sm-4">
+                                            <span>{{user.rank}}</span>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                            <span>{{user.athlete}}</span>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                            <span>{{user.score}}</span>
+                                        </div>
+
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <hr/>
+                        </div>
+
+
+                    </mat-card>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,42 @@
+<div class="d-flex flex-row-reverse">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb nb-breadcrumb">
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/dashboard']">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Data Export</li>
+      </ol>
+    </nav>
+    <h1 class="nb-heading-one mr-auto">Data Export</h1>
+  </div>
+<mat-card class="nb-dashboard-table">
+    <mat-table #table [dataSource]="dataSource">
+      <ng-container matColumnDef="SN">
+        <mat-header-cell class="symbol-no" *matHeaderCellDef> SN </mat-header-cell>
+        <mat-cell class="symbol-no" *matCellDef="let element let i=index">{{preIndex+(i+1)}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="Collections">
+        <mat-header-cell *matHeaderCellDef> Collections</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+      </ng-container>
+    
+      <ng-container matColumnDef="Actions">
+        <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+        <mat-cell class="nb-icon-cell" *matCellDef="let element let i=index">
+          <button mat-mini-fab class="material-icon-sm" color="primary" (click)="exportExcelCollection(element.name)" title="Export" > <i class="fa fa-download"></i></button>
+          <!-- <button mat-mini-fab class="material-icon-sm" color="primary" (click)="exportCollection(element)" title="View" href="javascript:void(0)">
+            <i class="fa fa-file-export"></i>
+          </button> -->
+          
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <!-- <div class="p-3 text-center" *ngIf="Collections.length==0">
+      No Records Found
+  </div>
+ 
+    <mat-paginator *ngIf="Collections.length>0" [length]="Collections.length" [pageSize]="perPage" [pageSizeOptions]="pageSizeOptions" (page)="pageChanged($event)">
+    </mat-paginator> -->
+  </mat-card>

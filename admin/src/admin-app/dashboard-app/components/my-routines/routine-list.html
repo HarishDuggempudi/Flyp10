@@ -1,0 +1,618 @@
+<div *ngIf="routineservice.progress>0 && routineservice.progress<100; else routineUploadPage">
+    <progress-bar [progress]="routineservice.progress" [color]="'#488aff'">
+    </progress-bar>
+</div>
+<ng-template #routineUploadPage>
+    <div class="routine-container">
+        <div class="row">
+            <div class="col-md-6">
+
+
+                <mat-card class="material-card-sm">
+                    <div>
+                        <label><b>Uploading For:</b></label>
+                        <div class="mb-3">
+                            <mat-radio-group [(ngModel)]="routineObj.uploadingType" (change)="uploadingforchange()">
+                                <mat-radio-button style="padding-left: 10px;" [checked]="routineObj.uploadingType == '1'" value="1">My Flyp10</mat-radio-button>
+                                <mat-radio-button [disabled]='!eventMeet.length' [checked]="routineObj.uploadingType == '2'" style="padding-left: 10px;" value="2">Event Meet</mat-radio-button>
+                            </mat-radio-group>
+                            <!-- <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.submissionfor"></control-messages>   -->
+                        </div>
+                    </div>
+                    <div [ngStyle]="{display:routineObj.uploadingType=='2'?'none':''}">
+                        <label><b>Select your routine type:</b></label>
+                        <div class="mb-3">
+                            <mat-radio-group [(ngModel)]="routineObj.routineType">
+                                <mat-radio-button style="padding-left: 10px;" [checked]='true' value="1">New routine</mat-radio-button>
+                                <mat-radio-button style="padding-left: 10px;" value="2">Judged routine</mat-radio-button>
+                            </mat-radio-group>
+                            <!-- <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.submissionfor"></control-messages>   -->
+                        </div>
+                    </div>
+                    <form role="form" [ngStyle]="{display:routineObj.routineType=='2' && routineObj.uploadingType=='1'?'':'none'}" novalidate [formGroup]="judgedroutineForm" #rf="ngForm" (ngSubmit)="OnjudgedsubmitRoutine()">
+
+                        <div class="mb-3">
+                            <mat-form-field class="material-input-full">
+                                <mat-select placeholder="Select your judged routine" name="sport" [(ngModel)]="judgedRoutineObj.RoutineID" [formControl]="judgedroutineForm.controls.RoutineID" (change)="setJudgedroutineTitle()">
+                                    <mat-option *ngFor="let routine of judgedRoutineList" [value]="routine._id">
+                                        {{ routine.title }}
+                                    </mat-option>
+                                </mat-select>
+
+                                <mat-error>
+                                    <control-messages [isSubmitted]="isSubmitted" [control]="judgedroutineForm.controls.RoutineID"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <label><b>Scoring Type:</b></label>
+                            <div class="mb-3">
+                                <mat-radio-group [(ngModel)]="judgedRoutineObj.scoretype" [formControl]="judgedroutineForm.controls.scoretype">
+                                    <mat-radio-button style="padding-left: 10px;" [disabled]='isRequiredJudgesNotes' value="1">Score Only</mat-radio-button>
+                                    <mat-radio-button style="padding-left: 10px;" value="2">Score with Judges Notes</mat-radio-button>
+                                    <mat-radio-button style="padding-left: 10px;" value="3">Skills</mat-radio-button>
+                                </mat-radio-group>
+                                <control-messages [isSubmitted]="isSubmitted" [control]="judgedroutineForm.controls.scoretype"></control-messages>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <mat-form-field class="material-input-full">
+                                <input matInput placeholder="Title" [(ngModel)]="judgedRoutineObj.title" [formControl]="judgedroutineForm.controls.title">
+                                <mat-error>
+                                    <control-messages [isSubmitted]="isSubmitted" [control]="judgedroutineForm.controls.title"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="mb-3">
+                            <mat-form-field class="material-input-full">
+                                <textarea matInput placeholder="Description" [(ngModel)]="judgedRoutineObj.description" [formControl]="judgedroutineForm.controls.description"></textarea>
+                                <mat-error>
+                                    <control-messages [isSubmitted]="isSubmitted" [control]="judgedroutineForm.controls.description"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="mb-3">
+                            <mat-checkbox formControlName="terms" [checked]="judgedroutineForm.terms" [(ngModel)]="judgedRoutineObj.terms">
+                                I agree to the <a href="#" data-toggle="modal" data-target="#myModal" style="text-decoration:underline;">terms and conditions</a>
+                            </mat-checkbox>
+                        </div>
+                        <button mat-raised-button class="upload-routine" color="primary" type="submit"><i class="fas fa-video"></i> Upload routine</button>
+                    </form>
+                    <form role="form" [ngStyle]="{display:routineObj.routineType=='1' && routineObj.uploadingType=='1'?'':'none'}" novalidate [formGroup]="routineForm" (ngSubmit)="OnsubmitRoutine()" #f="ngForm">
+                        <div>
+                            <label><b>Scoring Type:</b></label>
+                            <div class="mb-3">
+                                <mat-radio-group [(ngModel)]="routineObj.scoretype" [formControl]="routineForm.controls.scoretype">
+                                    <mat-radio-button style="padding-left: 10px;" [disabled]='isRequiredJudgesNotes' value="1">Score Only</mat-radio-button>
+                                    <mat-radio-button style="padding-left: 10px;" value="2">Score with Judges Notes</mat-radio-button>
+                                    <mat-radio-button style="padding-left: 10px;" value="3">Skills</mat-radio-button>
+                                </mat-radio-group>
+                                <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.submissionfor"></control-messages>
+                            </div>
+                        </div>
+                        <div class="hero is-fullheight">
+                            <div class="hero-body">
+                                <div class="container">
+                                    <div class="columns is-multiline">
+                                        <div class="column is-6 is-offset-3">
+                                            <div class="upload-box">
+                                                <div class="upload-box-header">
+                                                    <div class="control-circles">
+                                                        <span class="circle is-green"></span>
+                                                        <span class="circle is-yellow"></span>
+                                                        <span class="circle is-red"></span>
+                                                    </div>
+                                                    <div class="header-title">
+                                                        <!-- <h2>ngx-uploader</h2> -->
+                                                    </div>
+                                                    <div class="gh-icon">
+                                                        <a target="_blank" href="https://github.com/bleenco/ngx-uploader">
+                                                            <i class="ionicon ion-social-github"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="upload-box-content">
+                                                    <div class="drop-container" ngFileDrop [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
+                                                        <p style="margin-bottom: 0px">Drag files here or
+                                                            <label class="upload-button" style="text-decoration: underline;cursor: pointer;font-family: italic;font-style: italic;">Choose file
+                             <input type="file" [hidden]="true" [(ngModel)]="routineObj.htmlfile" [formControl]="routineForm.controls.htmlfile" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" (click)="files=[]" >
+                             <input type="hidden" name="fileHidden" formControlName="file"/>
+                           </label>
+                                                        </p>
+                                                        <span>{{draggedfilename}}</span>
+                                                    </div>
+
+                                                </div>
+                                                <div class="mb-3 validation-error">
+                                                    <span *ngIf="fileDurationError">Video file should not exceeds 20 seconds. Please upload a video file less than 20 seconds.</span>
+                                                    <span *ngIf="fileformaterror">File type not supported</span>
+                                                </div>
+                                                <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.file"></control-messages>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label><b>Routine submission for:</b></label>
+                            <div class="mb-3">
+                                <mat-radio-group [(ngModel)]="routineObj.submissionfor" [formControl]="routineForm.controls.submissionfor" (change)="SubmissionChange()">
+                                    <mat-radio-button style="padding-left: 10px;" [checked]='true' value="1">Own</mat-radio-button>
+                                    <mat-radio-button style="padding-left: 10px;" value="2">Teammate</mat-radio-button>
+                                </mat-radio-group>
+                                <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.submissionfor"></control-messages>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <mat-checkbox [checked]="showAll" (change)="toggleSports($event)" [(ngModel)]="showAll">
+                                Show All Sports
+                            </mat-checkbox>
+                        </div>
+                        <div class="mb-3" *ngIf="routineObj.submissionfor=='2'">
+                            <mat-form-field class="material-input-full">
+                                <mat-select placeholder="Select Teammate" [(ngModel)]="routineObj.teammate" [formControl]="routineForm.controls.teammate" name="level" (change)="onteammateChange()">
+                                    <mat-option *ngFor="let teammate of teammatelist" [value]="teammate.username">
+                                        {{ teammate.firstName}} {{teammate.lastName}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>
+                                    <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.level"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="mb-3">
+                            <mat-form-field class="material-input-full">
+                                <mat-select *ngIf="toggleSportlist" placeholder="Select Sport" name="sport" [(ngModel)]="routineObj.sport" [formControl]="routineForm.controls.sport" (change)="setTitle('s')">
+                                    <mat-option *ngFor="let sport1 of sportObj" [value]="sport1.sportName">
+                                        {{ sport1.sportName }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-select *ngIf="!toggleSportlist" placeholder="Select Sport" name="sport" [(ngModel)]="routineObj.sport" [formControl]="routineForm.controls.sport" (change)="setTitle('s')">
+                                    <mat-option *ngFor="let sport1 of ownsportObj|groupBy:'OrgSportName'" [value]="sport1.key">
+                                        {{ sport1.key}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>
+                                    <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.sport"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="mb-3">
+                            <mat-form-field class="material-input-full">
+                                <mat-select placeholder="Select Level" [(ngModel)]="routineObj.level" [formControl]="routineForm.controls.level" name="level" (change)="onLevelChange($event.value)">
+                                    <mat-option *ngFor="let sport2 of levelObj" [value]="sport2.level">
+                                        {{ sport2.level }}
+                                    </mat-option>
+                                </mat-select>
+                                <!-- <mat-select *ngIf="!toggleSportlist" placeholder="Select Level" name="level" [(ngModel)]="routineObj.level" [formControl]="routineForm.controls.level" >
+           <mat-option *ngFor="let sport1 of ownsportObj" [value]="sport1.level">
+             {{ sport1.level}}
+           </mat-option>
+       </mat-select> -->
+                                <mat-error>
+                                    <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.level"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="mb-3">
+                            <mat-form-field class="material-input-full">
+                                <mat-select placeholder="Select Event" [(ngModel)]="routineObj.event" [formControl]="routineForm.controls.event" name="event" (change)="setTitle('e')">
+                                    <mat-option *ngFor="let event of eventObj" [value]="event.event">
+                                        {{ event.event }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>
+                                    <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.event"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="mb-3">
+                            <mat-form-field class="material-input-full">
+                                <input matInput placeholder="Title" [(ngModel)]="routineObj.title" [formControl]="routineForm.controls.title">
+                                <mat-error>
+                                    <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.title"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="mb-3">
+                            <mat-form-field class="material-input-full">
+                                <textarea matInput placeholder="Description" [(ngModel)]="routineObj.description" [formControl]="routineForm.controls.description"></textarea>
+                                <mat-error>
+                                    <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.description"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- <div>
+         <label><b>Scoring Type:</b></label> 
+         <div class="mb-3">       
+             <mat-radio-group  [(ngModel)]="routineObj.scoretype" [formControl]="routineForm.controls.scoretype">
+               <mat-radio-button style="padding-left: 10px;" [disabled]='isRequiredJudgesNotes' value="1">Score Only</mat-radio-button>
+               <mat-radio-button style="padding-left: 10px;" value="2">Score with Judges Notes</mat-radio-button>
+             </mat-radio-group>    
+             <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.submissionfor"></control-messages>  
+         </div>
+     </div> -->
+                        <div class="mb-3">
+                            <mat-checkbox formControlName="terms" [checked]="routineObj.terms" [(ngModel)]="routineObj.terms">
+                                I agree to the <a href="#" data-toggle="modal" data-target="#myModal" style="text-decoration:underline;">terms and conditions</a>
+                            </mat-checkbox>
+                        </div>
+                        <button mat-raised-button class="upload-routine" color="primary" type="submit"><i class="fas fa-video"></i> Upload routine</button>
+                    </form>
+                    <form role="form" [ngStyle]="{display:routineObj.uploadingType=='1'?'none':''}" novalidate [formGroup]="routineForm" (ngSubmit)="OnsubmitRoutine()" #ef="ngForm">
+                        <!-- <div>
+          <label><b>Scoring Type:</b></label> 
+          <div class="mb-3">       
+              <mat-radio-group  [(ngModel)]="routineObj.scoretype" [formControl]="routineForm.controls.scoretype">
+                <mat-radio-button style="padding-left: 10px;" [disabled]='isRequiredJudgesNotes' value="1">Score Only</mat-radio-button>
+                <mat-radio-button style="padding-left: 10px;" value="2">Score with Judges Notes</mat-radio-button>
+                <mat-radio-button style="padding-left: 10px;" value="3">Skills</mat-radio-button>
+              </mat-radio-group>    
+              <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.submissionfor"></control-messages>  
+          </div> 
+      </div> -->
+                        <div class="hero is-fullheight">
+                            <div class="hero-body">
+                                <div class="container">
+                                    <div class="columns is-multiline">
+                                        <div class="column is-6 is-offset-3">
+                                            <div class="upload-box">
+                                                <div class="upload-box-header">
+                                                    <div class="control-circles">
+                                                        <span class="circle is-green"></span>
+                                                        <span class="circle is-yellow"></span>
+                                                        <span class="circle is-red"></span>
+                                                    </div>
+                                                    <div class="header-title">
+                                                        <!-- <h4>ngx-uploader</h4> -->
+
+                                                    </div>
+                                                    <div class="gh-icon">
+                                                        <a target="_blank" href="https://github.com/bleenco/ngx-uploader">
+                                                            <i class="ionicon ion-social-github"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="upload-box-content">
+                                                    <div class="drop-container" ngFileDrop [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
+                                                        <p style="margin-bottom: 0px">Drag files here or
+                                                            <label class="upload-button" style="text-decoration: underline;cursor: pointer;font-family: italic;font-style: italic;">Choose file
+                            <input type="file" [hidden]="true" [(ngModel)]="routineObj.htmlfile" [formControl]="routineForm.controls.htmlfile" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" (click)="files=[]" >
+                            <input type="hidden" name="fileHidden" formControlName="file"/>
+                          </label>
+                                                        </p>
+                                                        <span>{{draggedfilename}}</span>
+                                                    </div>
+
+                                                </div>
+                                                <div class="mb-3 validation-error">
+                                                    <span *ngIf="fileDurationError">Uploading video file is more than 20 seconds.Please upload the video file less than 20 seconds</span>
+                                                    <span *ngIf="fileformaterror">File type not supported</span>
+                                                </div>
+                                                <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.file"></control-messages>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label><b>Routine submission for:</b></label>
+                            <div class="mb-3">
+                                <mat-radio-group [(ngModel)]="routineObj.submissionfor" [formControl]="routineForm.controls.submissionfor" (change)="SubmissionChange()">
+                                    <mat-radio-button style="padding-left: 10px;" [checked]='true' value="1">Own</mat-radio-button>
+                                    <mat-radio-button style="padding-left: 10px;" value="2">Teammate</mat-radio-button>
+                                </mat-radio-group>
+                                <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.submissionfor"></control-messages>
+                            </div>
+                        </div>
+                        <!-- <div class="mb-3" style="display:none">
+        <mat-checkbox  [checked]="showAll" (change)="toggleSports($event)" [(ngModel)]="showAll">
+          Show All Sports
+        </mat-checkbox>
+       </div> -->
+                        <div class="mb-3">
+                            <mat-form-field class="material-input-full">
+                                <mat-select placeholder="Select Event Meet" [formControl]="routineForm.controls.eventMeet" name="event" (change)="onEventMeetNameChange($event)">
+                                    <mat-option *ngFor="let event of eventMeet" [value]="event">
+                                        {{ event.EventName }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>
+                                    <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.eventMeet"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="mb-3" *ngIf="routineObj.submissionfor=='2'">
+                            <mat-form-field class="material-input-full">
+                                <mat-select placeholder="Select Teammate" [(ngModel)]="routineObj.teammate" [formControl]="routineForm.controls.teammate" name="level" (change)="onteammateChange()">
+                                    <mat-option *ngFor="let teammate of teammatelist" [value]="teammate.username">
+                                        {{ teammate.firstName}} {{teammate.lastName}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>
+                                    <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.level"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="mb-3">
+                            <mat-form-field class="material-input-full">
+                                <input matInput placeholder="Event Meet Sport" [formControl]="routineForm.controls.sport">
+                                <mat-error>
+                                    <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.sport"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="mb-3">
+                            <mat-form-field class="material-input-full">
+                                <mat-select placeholder="Select Event Meet Level" [(ngModel)]='routineObj.level' [formControl]="routineForm.controls.level" name="level" (change)="onLevelChange($event.value)">
+                                    <mat-option *ngFor="let sport2 of eventMeetLevels" [value]="sport2.level">
+                                        {{ sport2.level }}
+                                    </mat-option>
+                                </mat-select>
+                                <!-- <mat-select *ngIf="!toggleSportlist" placeholder="Select Level" name="level" [(ngModel)]="routineObj.level" [formControl]="routineForm.controls.level" >
+          <mat-option *ngFor="let sport1 of ownsportObj" [value]="sport1.level">
+            {{ sport1.level}}
+          </mat-option>
+      </mat-select> -->
+                                <mat-error>
+                                    <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.level"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="mb-3">
+                            <mat-form-field class="material-input-full">
+                                <mat-select placeholder="Select Event" [(ngModel)]='routineObj.event' [formControl]="routineForm.controls.event" name="event" (change)="setTitle('e')">
+                                    <mat-option *ngFor="let event of eventMeetEvents" [value]="event.Event">
+                                        {{ event.Event }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>
+                                    <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.event"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="mb-3">
+                            <mat-form-field class="material-input-full">
+                                <input matInput placeholder="Title" [(ngModel)]="routineObj.title" [formControl]="routineForm.controls.title">
+                                <mat-error>
+                                    <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.title"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="mb-3">
+                            <mat-form-field class="material-input-full">
+                                <textarea matInput placeholder="Description" [(ngModel)]="routineObj.description" [formControl]="routineForm.controls.description"></textarea>
+                                <mat-error>
+                                    <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.description"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div *ngIf="!isSanctionEventMeet">
+                            <label><b>Scoring Type:</b></label>
+                            <div class="mb-3">
+                                <mat-radio-group [(ngModel)]="routineObj.scoretype" [formControl]="routineForm.controls.scoretype">
+                                    <mat-radio-button style="padding-left: 10px;" [disabled]='isRequiredJudgesNotes' value="1">Score Only</mat-radio-button>
+                                    <mat-radio-button style="padding-left: 10px;" value="2">Score with Judges Notes</mat-radio-button>
+                                </mat-radio-group>
+                                <control-messages [isSubmitted]="isSubmitted" [control]="routineForm.controls.submissionfor"></control-messages>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <mat-checkbox formControlName="terms" [checked]="routineObj.terms" [(ngModel)]="routineObj.terms">
+                                I agree to the <a href="#" data-toggle="modal" data-target="#myModal" style="text-decoration:underline;">terms and conditions</a>
+                            </mat-checkbox>
+                        </div>
+                        <button mat-raised-button class="upload-routine" color="primary" type="submit"><i class="fas fa-video"></i> Upload routine</button>
+                    </form>
+                </mat-card>
+
+            </div>
+            <div class="modal fade" id="myModal" role="dialog" style="overflow-y: hidden !important;">
+                <div class="modal-dialog" style="  max-width: 90%">
+                    <button type="button" style=" background: transparent;
+             float: right;margin-right: -45px;" class="btn btn-default" data-dismiss="modal">
+                 <a href="javascript:void(0)"><img style="    width: 36px;
+                     margin-right: -54px;
+                     position: absolute;
+                     right: 17px;
+                     top: -22px;
+                     z-index: 1;cursor: pointer;" src="assets/client/images/icons/close.png" alt="logo"> </a>
+                 
+                 </button>
+                    <!-- <button style="    width: 50px;
+                 height: 50px;
+                 background: red;
+                 border-radius: 50%;
+                 color: white;
+                 border: 5px solid;
+                 z-index: 999;
+                 position: absolute;
+                 right: 0px;
+                 top: -25px;
+                 cursor: pointer;
+                 opacity: unset;" type="button" class="close" data-dismiss="modal">&times;</button> -->
+                    <!-- Modal content-->
+                    <div class="modal-content" style="overflow-y: hidden">
+                        <!-- <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+               <h4 class="modal-title">Modal Header</h4>
+             </div> -->
+                        <div class="modal-body" style="padding:0px;overflow-y: scroll;position: relative; max-height:605px">
+
+                            <terms></terms>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <mat-card class="material-card-sm">
+                    <h4>Uploaded Routines</h4>
+                    <div class="card" *ngIf="routineList.length==0">
+                        <span class="no-data">No routine found</span>
+                    </div>
+                    <div class="ScrollContent">
+                        <div id="accordion" *ngFor="let routine of routineList|reverse;let i=index">
+
+                            <div class="card">
+
+                                <div class="card-header" data-toggle="collapse" [attr.href]="'#collapse0'+i" [ngStyle]="{'background-color':routine.routinestatus == '3' || routine.routinestatus == '4' ? '#dd6b55' : '#303090' }">
+                                    <a class="card-link">
+                                        <i class="fas fa-video"></i> {{routine.title}}
+                                        <i *ngIf="routine.routinestatus=='0'&& routine.technician_status == '0'" style="float:right" (click)="delete(routine._id,routine)" class="fa fa-trash pad-icon"></i>
+                                    </a>
+
+                                </div>
+                                <div [attr.id]="'collapse0'+i" class="collapse " [ngClass]="{'show':i==0}" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <div>
+                                            <div *ngIf="routine.isConverted=='1' || routine.isConverted=='3'" [ngStyle]="{'background-image':'url(https://flyp10.com/' + routine.thumbnailPath + ')'}" style="width:410px; height:176px;">
+
+                                                <div class="overlayscore">
+                                                    <p>Optimizing your new Flyp10 video, please wait.</p>
+                                                    <span (click)="refreshRoutine()" style="padding: 2px 13px;border: 1px solid;cursor: pointer;">Refresh&nbsp;&nbsp;<i class="fa fa-refresh"></i></span>
+                                                </div>
+                                            </div>
+                                            <video *ngIf="routine.isConverted && routine.isConverted!='1' && routine.isConverted!='3'" id="myVideo" width="410" height="176" controls controlsList="nodownload">
+                               <source [src]="'https://flyp10.com/'+routine.videofilename" type="video/mp4">
+                               
+                                 Your browser does not support HTML5 video.
+                             </video>
+                                        </div>
+                                        <div style="text-align:center;margin:15px;" *ngIf="routine.routinestatus=='1'">
+                                            <span style="font-size:20px;color:#303090;"><i class="fas fa-star" style="padding:5px;"></i>Score:</span>
+                                            <span style="font-size:20px;font-weight:bold;">{{routine.score}}</span>
+                                        </div>
+                                        <ul class="list-group">
+                                            <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
+                           Duration
+                           <span class="badge badge-primary badge-pill">{{formatduration(routine.duration)}}</span>
+                         </li> -->
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                Sport
+                                                <span class="badge badge-primary badge-pill">{{routine.sport}}</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                Level
+                                                <span class="badge badge-primary badge-pill">{{routine.level}}</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                Event
+                                                <span class="badge badge-primary badge-pill">{{routine.event}}</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                Status
+                                                <span class="badge badge-primary badge-pill" *ngIf="routine.routinestatus=='0'">In Queue</span>
+                                                <span class="badge badge-primary badge-pill" *ngIf="routine.routinestatus=='1'">Judged</span>
+                                                <span class="badge badge-primary badge-pill" *ngIf="routine.routinestatus=='2'">Waiting for score</span>
+                                                <span class="badge badge-primary badge-pill" *ngIf="routine.routinestatus=='3'">Poor Video Quality</span>
+                                                <span class="badge badge-danger badge-pill" *ngIf="routine.routinestatus=='4'">Inappropriate</span>
+                                                <span class="badge badge-primary badge-pill" *ngIf="routine.routinestatus=='5'">Evaluating</span>
+
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="routine.submissionfor=='1'">
+                                                Athlete Name
+                                                <span class="badge badge-primary badge-pill">{{routine.submittedBy}}</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="routine.submissionfor=='2' && routine.athlete">
+                                                Athlete Name
+                                                <span class="badge badge-primary badge-pill">{{routine.athlete}}</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                Submitted Date
+                                                <span class="badge badge-primary badge-pill">{{formatdate(routine.submittedOn)}}</span>
+                                            </li>
+                                            <!--  <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="routine.routinestatus!='0' && routine.routinestatus!='2'">
+                           Score:
+                           <span class="badge badge-primary badge-pill">{{routine.score}} Pts</span>
+                         </li> -->
+                                            <!-- <li class="list-group-item d-flex justify-content-between  align-items-center" *ngIf="routine.routinestatus=='1'">
+                           <span>Comment</span>
+                           <span class="badge badge-primary badge-pill">{{routine.comment}}</span>
+                         </li>  -->
+                                            <!-- <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="routine.routinestatus!='0'">
+                            Judged By:
+                           <span class="badge badge-primary badge-pill">{{routine.judgedBy}}</span>
+                         </li> -->
+                                            <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="routine.routinestatus!='0' && routine.routinestatus!='2'">
+                                                Judged On:
+                                                <span class="badge badge-primary badge-pill">{{formatdate(routine.judgedOn)}}</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="routine.routinestatus=='1' && (routine.scoretype=='2' || routine.scoretype=='3')">
+                                                Judge Notes
+                                                <span class="badge " style="color:blue;text-decoration: underline;cursor: pointer;" (click)="commentPage(routine._id)">View notes</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="routine.routinestatus=='1' && (routine.scoretype=='1')">
+                                                Over all comment
+                                                <span class="badge " style="color:blue;text-decoration: underline;cursor: pointer;" (click)="commentPage(routine._id)">View</span>
+                                            </li>
+                                        </ul>
+                                        <label *ngIf="routine.routinestatus=='1'" style=" color:#2f3191;   float: left;
+                     background: white;
+                     margin-left: 152px;
+                     margin-top: 2px;
+                     padding: 10px;"> 
+                         <i  class="fas fa-share-alt pad-icon" ></i><b>Share</b>
+                     </label>
+                                        <div>
+
+                                            <div *ngIf="routine.routinestatus=='1'" class="buttondivcontainer" style="padding:10px;border: 1px solid #2f3191;margin-top:20px">
+                                                <div style="margin: 3px 14px;width: 91%;">
+                                                    <div class="popover" *ngIf="toggleCustomshareButton && i==selectedsharebuttion">
+                                                        <ul>
+                                                            <li style="padding: 5px;border-bottom: 1px solid #c4bbe4;" (click)="shareRoutine(routine,1)">
+                                                                All teammates
+                                                            </li>
+                                                            <li style="padding: 5px;" (click)="clearPopover(routine)" data-toggle="modal" data-target="#myModal1">
+                                                                Only selected teammates
+                                                            </li>
+                                                        </ul>
+                                                        <div class="popover-arrow"></div>
+                                                    </div>
+                                                    <button mat-raised-button (click)="toggleScustomshare(i)" class="upload-routine" color="primary" type="button"><i class="fas fa-share-alt"></i>  Share with my teammates</button>
+                                                </div>
+
+                                                <share-buttons style="color:#2f3191!important" [include]="['facebook','twitter','google','linkedin','pinterest','reddit','tumblr','whatsapp','messenger','telegram','vk','stumble','xing','sms','email','copy','print']" [exclude]="['pinterest','reddit','tumblr','messenger','telegram','vk','stumble','xing','sms','copy','print']"
+                                                    [showText]="false" [showCount]="true" [size]="2" [url]="'https://flyp10.com/share/'+routine._id" [title]="'Flyp10'" [description]="'Another great performance, scored by Flyp10 '" [image]="'http://ia.media-imdb.com/images/rock.jpg'"
+                                                    [autoSetMeta]="false"></share-buttons>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+    <div id="myModal1" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Select teammates</h4>
+                </div>
+                <div class="modal-body" style="padding: 0px;">
+                    <p style="text-align: center;" *ngIf="secondaryTeammatelist.length<1">No teammates found.</p>
+                    <ul style="list-style: none;margin:0;padding: 0;">
+                        <li *ngFor="let teammate of secondaryTeammatelist" style="padding: 12px;border-bottom: 1px solid #c8c8d0;" (click)="teammate.isClicked=teammate.isClicked?false:true" [ngStyle]="{'color':teammate.isClicked?'green':'#333'}"><i *ngIf="teammate.isClicked" class="fa fa-check" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;{{ teammate.firstName}} {{teammate.lastName}}</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" mat-raised-button color="primary" data-dismiss="modal" (click)="shareselectedTeammates(secondaryTeammatelist)">Share Now</button>
+                    <button type="button" mat-raised-button color="warn" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,35 @@
+.webcats li:hover{
+    cursor: pointer;
+    color: #2e3192 ;
+}
+.webtags .tags>a:hover{
+    color: #fff !important;
+    cursor: pointer;
+    background: #be1e2d;
+    border: 1px solid #be1e2d;
+}
+.single_post .post, .single_post .text {
+    display: inline-block !important;
+}
+.whitebox .widget {
+    padding: 40px 30px;
+    padding-bottom: 10px;
+    background: #fff;
+    -webkit-box-shadow: 0 0px 5px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0px 5px 0px rgba(0, 0, 0, 0.1);
+}
+#ulsports li{
+    list-style: disc
+}
+.cimage{
+   margin-top: 20px;
+   margin-bottom: 20px;
+   text-align: center;
+}
+.innerul{
+    margin-top: 10px;
+    margin-left: 40px
+}
+.innerul li{
+    list-style: square;
+}

@@ -1,0 +1,6 @@
+Application has thrown an uncaught exception and is terminated:
+MongoError: not authorized on flyp10-dev to execute command { listIndexes: "MailService", cursor: {} }
+    at queryCallback (F:\Flyp10-app\cms\node_modules\mongodb-core\lib\cursor.js:223:25)
+    at F:\Flyp10-app\cms\node_modules\mongodb-core\lib\connection\pool.js:541:18
+    at _combinedTickCallback (internal/process/next_tick.js:73:7)
+    at process._tickDomainCallback (internal/process/next_tick.js:128:9)

@@ -1,0 +1,151 @@
+<div class="d-flex flex-row-reverse">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb nb-breadcrumb">
+            <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">User Details</li>
+        </ol>
+    </nav>
+    <!-- <h1 class="nb-heading-one mr-auto">User Details</h1> -->
+    </div>
+<div class="view-wrapper">
+    <div class="row">
+        <div class="col-lg-6">
+                <mat-card>    
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h1 class="nb-heading-one mr-auto">User Details</h1>                          
+                        </div>
+                        <div class="col-lg-6">                         
+                                <!-- <a  class="editlink" (click)="triggerEdit()"> <i class="far fa-edit"></i></a> -->
+                            </div>
+                    </div>     
+                    <div class="row">
+                            <div class="col-lg-4">
+                                    <div class="form-group row">
+                                        <img *ngIf="imageSrc" [src]="imageSrc" width="150" height="170"/>
+                                        <img *ngIf="!imageSrc" src="../../../../assets/admin/img/defaults/default_avatar.png" width="150" height="170"/>
+
+                                       
+                                    </div>
+                           </div>
+                    </div>                  
+                    <div class="col-lg-12">
+                        <div class="form-group row">
+                            <label class="col-sm-4 form-control-label">First Name</label>
+                            <label class="form-control-static">{{userData.firstName}}</label>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 form-control-label">Last Name</label>
+                            <label class="form-control-static">{{userData.lastName}}</label>
+                        </div>
+						 <div class="form-group row">
+                            <label class="col-sm-4 form-control-label">Username</label>
+                            <label class="form-control-static">{{userData.username}}</label>
+                        </div>
+                       <!--  <div class="form-group row">
+                            <label class="col-sm-4 form-control-label">Email</label>
+                            <label class="form-control-static">{{userData.email}}</label>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 form-control-label">Phone Number</label>
+                            <label class="form-control-static">{{userData.phoneNumber}}</label>
+                        </div> -->
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <button type="button" (click)="removeUser()"  mat-raised-button color="warn">Remove teammate</button>
+                </mat-card>
+        </div>
+        <div class="col-md-6">
+                <mat-card class="material-card-sm">
+                  <h4>Uploaded Routines</h4>
+                  <div class="card" *ngIf="routineList.length==0">
+                  <span class="no-data">No routine found</span>
+                  </div>
+                  <div id="accordion" *ngFor="let routine of routineList;let i=index,">
+                  
+                      <div class="card" *ngIf="routine.rountineInfo && isSharedWithYou(routine.sharedwith,loginuserinfo._id)">
+                          
+                        <div class="card-header" data-toggle="collapse" [attr.href]="'#collapse0'+i" [ngStyle]="{'background-color':routine.routinestatus == '3' || routine.routinestatus == '4' ? '#dd6b55' : '#303090' }">
+                          <a class="card-link">
+                              <i class="fas fa-video"></i> {{routine.rountineInfo.title}}
+                          </a>
+                        
+                        </div>
+                        <div [attr.id]="'collapse0'+i" class="collapse " [ngClass]="{'show':i==0}" data-parent="#accordion">
+                          <div class="card-body">
+                              <div>
+                                  <video controlsList="nodownload" id="myVideo" width="410" height="176" controls>
+                                      <source [src]="'https://flyp10.com/'+routine.rountineInfo.videofilename" type="video/mp4">
+                                     
+                                      Your browser does not support HTML5 video.
+                                    </video>
+                                </div> 
+							   <div  style="text-align:center;margin:15px;" *ngIf="routine.rountineInfo.routinestatus=='1'">
+						            <span style="font-size:20px;color:#303090;"><i class="fas fa-star" style="padding:5px;"></i>Score:</span>
+						             <span style="font-size:20px;font-weight:bold;">{{routine.rountineInfo.score}}</span>
+						        </div>
+                              <ul class="list-group">
+                               <!--  <li class="list-group-item d-flex justify-content-between align-items-center">
+                                  Duration
+                                  <span class="badge badge-primary badge-pill">{{formatduration(routine.duration)}}</span>
+                                </li> -->
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                  Sport
+                                  <span class="badge badge-primary badge-pill">{{routine.rountineInfo.sport}}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                  Level
+                                  <span class="badge badge-primary badge-pill">{{routine.rountineInfo.level}}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                  Event
+                                  <span class="badge badge-primary badge-pill">{{routine.rountineInfo.event}}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="routine.rountineInfo.routinestatus=='1' && (routine.rountineInfo.scoretype=='2' || routine.rountineInfo.scoretype=='3')">
+                                  Judge Notes
+                                  <span class="badge " style="color:blue;text-decoration: underline;cursor: pointer;" (click)="commentPage(routine.rountineInfo._id)">View notes</span>
+                                </li>         
+                                <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="routine.rountineInfo.routinestatus=='1' && (routine.rountineInfo.scoretype=='1')">
+                                 Over all comment
+                                 <span class="badge " style="color:blue;text-decoration: underline;cursor: pointer;" (click)="commentPage(routine.rountineInfo._id)">View</span>
+                               </li> 
+                               <!--  <li class="list-group-item d-flex justify-content-between align-items-center">
+                                  Status
+                                  <span class="badge badge-primary badge-pill" *ngIf="routine.routinestatus=='0'">In Queue</span>
+                                  <span class="badge badge-primary badge-pill" *ngIf="routine.routinestatus=='1'">Judged</span>
+                                  <span class="badge badge-primary badge-pill" *ngIf="routine.routinestatus=='3'">In Complete</span>
+                                  <span class="badge badge-danger badge-pill"  *ngIf="routine.routinestatus=='4'">In Appropriate</span>
+                                </li> -->
+                                <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
+                                  Athlete Name
+                                  <span class="badge badge-primary badge-pill">{{routine.submittedBy}}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                  Submitted Date
+                                  <span class="badge badge-primary badge-pill">{{formatdate(routine.submittedOn)}}</span>
+                                </li>     -->                  
+                                <!-- <li class="list-group-item d-flex justify-content-between align-items-center" >
+                                  Score:
+                                  <span class="badge badge-primary badge-pill">{{routine.score}} Pts</span>
+                                </li> -->
+								<!-- <li class="list-group-item d-flex justify-content-between align-items-center" *ngIf="routine.comment">
+                                  Comment:
+                                 <span class="badge badge-primary badge-pill">{{routine.comment}}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center" >
+                                   Judged By:
+                                  <span class="badge badge-primary badge-pill">{{routine.judgedBy}}</span>
+                                </li> -->
+                                
+                                    
+                            </ul>
+                        
+                           
+                          </div>
+                        </div>
+                      </div>         
+                    </div>
+                </mat-card>
+            </div>
+    </div></div>

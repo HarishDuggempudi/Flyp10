@@ -1,0 +1,121 @@
+<div class="d-flex flex-row-reverse">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb nb-breadcrumb">
+            <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">User Details</li>
+        </ol>
+    </nav>
+    <!-- <h1 class="nb-heading-one mr-auto">User Details</h1> -->
+    </div>
+<div class="view-wrapper">
+    <div class="row">
+        <div class="col-lg-6">
+                <mat-card>    
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h1 class="nb-heading-one mr-auto">User Details</h1>                          
+                        </div>
+                        <div class="col-lg-6">                         
+                                <a  class="editlink" (click)="triggerEdit()"> <i class="far fa-edit"></i></a>
+                            </div>
+                    </div>     
+                    <div class="row">
+                            <div class="col-lg-4">
+                                    <div class="form-group row">
+                                        <img [src]="imageSrc" width="150" height="170"/>
+                                    </div>
+                           </div>
+                    </div>                  
+                    <div class="col-lg-12">
+                        <div class="form-group row">
+                            <label class="col-sm-4 form-control-label">First Name</label>
+                            <label class="form-control-static">{{objUser.firstName}}</label>
+                        </div>
+                        <div class="form-group row" *ngIf="objUser.lastName">
+                            <label class="col-sm-4 form-control-label">Last Name</label>
+                            <label class="form-control-static">{{objUser.lastName}}</label>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 form-control-label">Email</label>
+                            <label class="form-control-static">{{objUser.email}}</label>
+                        </div>
+                        <div *ngIf="objUser.phoneNumber" class="form-group row">
+                            <label class="col-sm-4 form-control-label">Phone Number</label>
+                            <label class="form-control-static">{{objUser.phoneNumber}}</label>
+                        </div>
+                        <div *ngIf="!isaddUSAG" class="form-group row">
+                            <label class="col-sm-4 form-control-label">USAG MemberID</label>
+                            <label class="nb-label-md col-6">{{USAGMemberID}}<a (click)="editusag()" style="float:right"><i class="far fa-edit"></i></a></label>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 form-control-label">User Role</label>
+                            <label class="form-control-static" *ngIf="objUser.userRole==='1'">Admin User</label>
+                            <label class="form control-static" *ngIf="objUser.userRole==='2'">Judge</label>
+                            <label class="form-control-static" *ngIf="objUser.userRole==='3'">Competitor</label>
+							<label class="form-control-static" *ngIf="objUser.userRole==='4'">Recruiter</label>
+                        </div>
+                        <div class="form-group row" *ngIf="objUser.userRole==='4' && objUser.recruiterStatus">
+                            <label class="col-sm-4 form-control-label">Recruiter Status</label>
+                            <label class="form-control-static" *ngIf="objUser.recruiterStatus==='1'">Verified</label>
+                            <label class="form control-static" *ngIf="objUser.recruiterStatus==='0'">Un Verified</label>
+                            <label class="form-control-static" *ngIf="objUser.recruiterStatus==='2'">Rejected</label>
+							
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <button type="button" *ngIf="isaddUSAG" (click)="addUSAGMemberID()"   mat-raised-button color="primary">Add USAG MemberID</button>
+                    <button *ngIf="objUser.userRole=='2'" type="button" (click)="addNewSport()"   mat-raised-button color="primary">Add Sport</button>
+                    <button type="button" (click)="triggerDelete()"  mat-raised-button color="primary">Delete</button>
+                    <button type="button" (click)="triggerCancelView()"  mat-raised-button color="warn">Cancel</button>
+               						
+				</mat-card>
+        </div>
+
+		  <div class="col-lg-6" *ngIf="objUser.userRole!='4'">              
+                    <ul class="list-group">
+                        <li class="list-group-item"><span><strong>Sport Details</strong> </span></li>                   
+                            <div *ngFor="let sport of SportDetails| groupByarr:'sportid'">
+                             <div *ngIf="sport.key!=null" class="vl"></div>
+							
+                             <li class="list-group-item" ><strong>Sport: </strong>{{sport.value[0].sportinfo?sport.value[0].sportinfo.sportName:"unknown"}}</li>
+							 <div *ngFor="let sports of sport.value">
+								 <li class="list-group-item" style="text-align:initial">
+								 <span><strong>Level: </strong>{{sports.levelinfo.level}}
+								 <i *ngIf="sports.status=='1' && objUser.userRole=='2'" class="far fa-check-circle" style="color:green;padding-left:3px;"></i>
+								 <i *ngIf="sports.status=='0' && objUser.userRole=='2'" class="fas fa-hourglass-half" style="color:#34a6da;padding-left:3px;"></i>
+								 <i *ngIf="sports.status=='2' && objUser.userRole=='2'" class="fas fa-user-times" style="color:#b3154b;padding-left:3px;"></i>
+                                 <i *ngIf="sports.status=='3' && objUser.userRole=='2'"class="far fa-calendar-times" style="color:#d88812;padding-left:3px;"></i>
+                                  <span *ngIf="sports.uploadingfor == '1'&& objUser.userRole=='2'">- <b><i>Technician</i></b></span>
+                                 <span *ngIf="(sports.uploadingfor == '2' || sports.uploadingfor == '0' ||  sports.uploadingfor == '')&& objUser.userRole=='2'">- <b><i>Judge</i></b></span>
+                                 <span *ngIf="sports.uploadingfor == '3'&& objUser.userRole=='2'">- <b><i>Technician & Judge</i></b></span>
+								 </span>								  
+								  <button mat-mini-fab class="material-icon-sm" color="warn" (click)="delete(sports._id)">
+										<i class="fa fa-trash" style="padding-bottom: 5px;"></i>
+								 </button>
+								 <button *ngIf="objUser.userRole=='2'" mat-mini-fab class="material-icon-sm" color="primary" (click)="edit(sports._id)" style="margin-right:10px;">
+                                        <i class="far fa-edit" style="padding-bottom: 5px;"></i>
+                                      </button>
+								 <button *ngIf="objUser.userRole=='2'" style="margin-right:10px;" mat-mini-fab class="material-icon-sm btn-green" color="warn" (click)="view(sports._id)">
+										<i class="fa fa-eye" style="padding-bottom: 5px;"></i>
+								 </button>
+								 </li>
+								<!--  <li class="list-group-item" *ngIf="sports.originalfilename" >
+									<p class="zeromarbottom"><strong>Document</strong></p>
+									<a href="/api/user/judge/downloadfile/{{sports.docName}}" class="downloadlink" >{{sports.originalfilename}}</a>
+								</li> -->
+								 <!-- <li class="list-group-item">									
+								    <button mat-mini-fab class="material-icon-sm" color="warn" (click)="delete(sports._id)">
+										<i class="fa fa-trash"></i>
+									</button>
+								</li> -->
+                            </div>
+                        </div>
+                        <div *ngIf="SportDetails.length==0"  class="vl"></div>
+                        <li  *ngIf="SportDetails.length==0"  class="vl" class="list-group-item"><span><strong>No data to display</strong> </span></li>
+                        
+                         
+                    </ul>
+            
+            </div>
+    </div></div>

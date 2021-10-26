@@ -1,0 +1,81 @@
+<!-- Page Heading -->
+<div class="d-flex flex-row-reverse">
+  <!-- <nav aria-label="breadcrumb">
+    <ol class="breadcrumb nb-breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/dashboard']">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Sport Editor</li>
+    </ol>
+  </nav> -->
+  
+</div>
+<!-- /.row -->
+<form role="form" novalidate [formGroup]="sportForm" (ngSubmit)="saveSport()">
+<div class="row">
+    
+    <div class="col-md-6">
+        <h1 class="nb-heading-one mr-auto">Sport Editor</h1>
+        <mat-card class="material-card-sm">
+            
+                <mat-form-field class="material-input-full">
+                  <input matInput placeholder="Sport Name" value="" formControlName="sportName" >
+                </mat-form-field>
+
+                <!-- <tag-input [(ngModel)]="levelList" (onAdd)="onItemAdded($event)" theme='bootstrap-info' secondaryPlaceholder="Enter sport levels" placeholder="Use comma to separate" separatorKeys="," [editable]='true' formControlName="selectLevel"></tag-input> -->
+              
+                <div class="mb-3">
+                  <image-uploader [isSubmitted]="isSubmitted" [canvasSize]="canvasSize" (deleteImageEvent)="deleteImage($event)" [imageFormControl]="imageFormControl"
+                    [imageName]="fileName" [drawImagePath]="drawImagePath" allowDelete="true" (fileSelectedEvent)="changeFile($event)"></image-uploader>   
+                </div>
+        
+                <div class="mb-3">
+                  <mat-checkbox formControlName="addnotes" class="marginCheckbox">
+                                Add Notes Only
+                  </mat-checkbox>
+                  <mat-checkbox formControlName="active">
+                    Active
+                  </mat-checkbox>
+                </div>
+            
+        </mat-card>
+    </div>
+    <div class="col-md-6">
+      <h1 class="nb-heading-one mr-auto">Mapping Fields Configuration</h1>
+          <mat-card class="material-card-sm">
+              <div class="padCB">
+                  <mat-checkbox class="checkboxContainer" formControlName="eventMapping" (change)="toggleEventCheckbox($event)" color="primary">Add Event</mat-checkbox><br>
+              </div>
+      
+              <div class="padCB">
+                  <mat-checkbox class="checkboxContainer" formControlName="levelMapping" (change)="toggleLevelCheckbox($event)" color="primary">Add Level</mat-checkbox><br>
+              </div>
+      
+              <div class="padCB">
+                  <mat-checkbox class="checkboxContainer" formControlName="categoryMapping" (change)="toggleCategoryCheckbox($event)" color="primary">Add Category</mat-checkbox><br>
+              </div>
+      
+              <div class="padCB">
+                  <mat-checkbox class="checkboxContainer" formControlName="elementMapping" (change)="toggleElementCheckbox($event)" color="primary">Add Element</mat-checkbox><br>
+              </div>
+      
+              <div class="padCB">
+                  <mat-checkbox class="checkboxContainer" formControlName="elementGroupMapping" (change)="toggleElementGroupCheckbox($event)" color="primary">Add Element Group</mat-checkbox><br>
+              </div>
+      
+              <div class="padCB">
+                  <mat-checkbox class="checkboxContainer" formControlName="baseMapping" (change)="toggleBaseCheckbox($event)" color="primary">Add Base</mat-checkbox><br>
+              </div>
+              
+            </mat-card>   
+
+    </div>
+  
+</div>
+<div class="mb-3" style="margin-top: 15px !important;">
+    <button mat-raised-button color="primary" type="submit">Save</button>
+    <button mat-raised-button color="warn" type="button" (click)="triggerCancelForm()">Cancel</button>
+</div>
+</form>
+
+

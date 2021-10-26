@@ -1,0 +1,68 @@
+ <div class="d-flex flex-row-reverse">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb nb-breadcrumb">
+            <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Recruiter Details</li>
+        </ol>
+    </nav>
+    <!-- <h1 class="nb-heading-one mr-auto">User Details</h1> -->
+    </div>
+<div class="view-wrapper">
+    <div class="row">
+        <div class="col-lg-6">
+                <mat-card>    
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h1 class="nb-heading-one mr-auto">Recruiter Details</h1>                          
+                        </div>
+                        
+                    </div>     
+                    <div class="row">
+                            <div class="col-lg-4">
+                                    <div class="form-group row">
+                                        <img [src]="imageSrc" width="150" height="170"/>
+                                    </div>
+                           </div>
+                    </div>                  
+                    <div class="col-lg-12">
+                        <div class="form-group row">
+                            <label class="col-sm-4 form-control-label">First Name</label>
+                            <label class="form-control-static">{{objUser.firstName}}</label>
+                        </div>
+                        <div class="form-group row" *ngIf="objUser.lastName">
+                            <label class="col-sm-4 form-control-label">Last Name</label>
+                            <label class="form-control-static">{{objUser.lastName}}</label>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 form-control-label">Email</label>
+                            <label class="form-control-static">{{objUser.email}}</label>
+                        </div>
+                        <div *ngIf="objUser.phoneNumber" class="form-group row">
+                            <label class="col-sm-4 form-control-label">Phone Number</label>
+                            <label class="form-control-static">{{objUser.phoneNumber}}</label>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 form-control-label">User Role</label>
+                            <label class="form-control-static" *ngIf="objUser.userRole==='1'">Admin User</label>
+                            <label class="form control-static" *ngIf="objUser.userRole==='2'">Judge</label>
+                            <label class="form-control-static" *ngIf="objUser.userRole==='3'">Competitor</label>
+							<label class="form-control-static" *ngIf="objUser.userRole==='4'">Recruiter</label>
+                        </div>
+                        
+                       <div *ngIf="objUser.recruiterStatus" class="form-group row">
+                            <label class="col-sm-4 form-control-label">Status</label>
+                            <label class="form-control-static" *ngIf="objUser.recruiterStatus=='0'">Un Verified</label>
+							<label class="form-control-static" *ngIf="objUser.recruiterStatus=='1'">Verified</label>
+							<label class="form-control-static" *ngIf="objUser.recruiterStatus=='2'">Rejected</label>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>   
+                    <button type="button" (click)="VerifyRecruiter()"  *ngIf="objUser.recruiterStatus=='0'" mat-raised-button color="primary">Verify</button>
+                    <button type="button" (click)="RejectRecruiter()"  *ngIf="objUser.recruiterStatus=='0'" mat-raised-button color="primary">Reject</button>					
+                    <button type="button" (click)="triggerCancelView()"  mat-raised-button color="warn">Cancel</button>
+               						
+				</mat-card>
+        </div>
+
+		 
+    </div></div>

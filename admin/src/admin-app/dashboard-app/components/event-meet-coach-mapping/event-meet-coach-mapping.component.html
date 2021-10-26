@@ -1,0 +1,76 @@
+<div class="row">
+    <div class='col-lg-6'>
+        <div class="d-flex flex-row-reverse">
+            <h1 class="nb-heading-one mr-auto">Event Meet Mapping</h1>
+        </div>
+        <mat-card class="material-card-sm">
+            <form role="form" novalidate [formGroup]="AddEventMeetForm" #form="ngForm" (ngSubmit)="saveEventMeetCoachMap()">
+                <div class="mb-6">
+                    <mat-form-field class="material-input-full">
+                        <mat-select (change)="OnEventMeetChange()" [formControl]="AddEventMeetForm.controls.Events" placeholder="Events">
+
+                            <mat-option *ngFor="let ev of allEvents" [value]="ev._id">
+                                {{ev.EventName}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>
+                            <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.Events"></control-messages>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mb-6">
+                    <mat-form-field class="material-input-full">
+                        <mat-select (change)="onCompetitorsChange()" [formControl]="AddEventMeetForm.controls.Competitors" placeholder="Competitors" multiple>
+                            <span *ngIf="!isSanctionEventMeet">
+                            <mat-option >
+                                <ngx-mat-select-search [formControl]="AddEventMeetForm.controls.inputCompetitors" [placeholderLabel]="'Search Competitors'" [noEntriesFoundLabel]="'No matching competitors found'"><i ngxMatSelectSearchClear class="fa fa-times" aria-hidden="true"></i></ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option *ngFor="let ev of filteredCompetitors" [value]="ev._id">
+                              {{ev.username}}
+                            </mat-option>
+                          </span>
+                            <span *ngIf="isSanctionEventMeet">
+                            <mat-option >
+                              <ngx-mat-select-search [formControl]="AddEventMeetForm.controls.inputCompetitors" [placeholderLabel]="'Search Competitors By Name'" [noEntriesFoundLabel]="'No matching competitors found'"><i ngxMatSelectSearchClear class="fa fa-times" aria-hidden="true"></i></ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option *ngFor="let ev of filteredSanctionCompetitors" [value]="ev._id">
+                            {{ev.Name}} - ({{ev.username}})
+                          </mat-option>
+                        </span>
+                        </mat-select>
+                        <mat-error>
+                            <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.Competitors"></control-messages>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mb-6">
+                    <button mat-raised-button color="primary" type="submit">
+                  <i class="fas fa-map-signs"></i> Map</button>
+                    <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
+                </div>
+            </form>
+        </mat-card>
+    </div>
+    <div class="col-lg-6">
+        <ul class="list-group">
+            <li class="list-group-item"><span><strong>Mapped Competitors</strong> </span></li>
+            <div class="vl"></div>
+            <div *ngFor="let comp of MappedCompetitors;let j=index">
+                <li class="list-group-item" style="text-align:initial">
+                    <span><strong><span *ngIf="comp.Type">{{comp.Type}}-</span></strong>{{comp.username}}<span *ngIf="comp.MemberID">-{{comp.MemberID}}-{{comp.FirstName}}-{{comp.LastName}}</span>
+
+                    </span>
+                    <button mat-mini-fab class="material-icon-sm" color="warn" style="float: right;
+  bottom: 8px;" (click)="deleteCompetitors(comp)">
+    <i class="fa fa-trash" style="padding-bottom: 5px;"></i>
+ </button>
+                </li>
+
+            </div>
+            <div *ngIf="MappedCompetitors.length==0" class="vl"></div>
+            <li *ngIf="MappedCompetitors.length==0" class="list-group-item"><span><strong>No data to display</strong> </span></li>
+
+
+        </ul>
+    </div>
+</div>

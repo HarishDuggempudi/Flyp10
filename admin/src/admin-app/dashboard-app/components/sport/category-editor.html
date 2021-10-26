@@ -1,0 +1,33 @@
+<!-- Page Heading -->
+<div class="d-flex flex-row-reverse">
+        <h1 class="nb-heading-one mr-auto">Category Editor</h1>
+      </div>
+      <!-- /.row -->
+      
+      <div class="row">
+          <div class="col-md-8">
+              <mat-card class="material-card-sm">
+                  <form role="form" novalidate [formGroup]="categoryForm" (ngSubmit)="saveCategory()">
+                      <div class="mb-3">
+                        <mat-form-field class="material-input-full">
+                          <input matInput placeholder="Category Name" [(ngModel)]="categoryObj.categoryName" value="" formControlName="categoryName" >
+                        </mat-form-field>
+                      </div>
+              
+                      <div class="mb-3">
+                        <mat-checkbox formControlName="active" [checked]="categoryObj.active"  [(ngModel)]="categoryObj.active">
+                          Active
+                        </mat-checkbox>
+                      </div>
+
+                      <div class="mb-3">
+                          <button mat-raised-button color="primary" type="submit">Save</button>
+                          <button mat-raised-button color="warn" type="button" (click)="triggerCancelForm()">Cancel</button>
+                      </div>
+                  </form>
+              </mat-card>
+          </div>
+      </div>
+      
+      
+      

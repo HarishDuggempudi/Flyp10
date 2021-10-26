@@ -1,0 +1,72 @@
+.drop-container{
+    padding: 50px 0px;
+    text-align: center;
+    background: #2f309033;
+    border: 2px dashed #2f3090;
+    border-radius: 20px;
+    color: #2f3090;
+    font-size: 15px;
+    margin-bottom: 25px;
+}
+.upload-routine{
+    width: 100% !important;
+    background: -webkit-gradient(linear, left top, right top, from(#be1e2d), to(#2e3192));
+    background: linear-gradient(to right, #be1e2d 0%, #2e3192 100%);
+}
+
+a{
+    color: #303191 !important;
+}
+.badge-primary {
+    color: #fff;
+    background-color: #303191 !important;
+}
+
+.card-header {
+    padding: .75rem 1.25rem;
+    margin-bottom: 0;
+    color: #fff;
+    // background-color: rgb(48, 48, 144) !important;
+    border-bottom: 1px solid rgba(0,0,0,.125);
+    cursor: pointer;
+}
+
+.card-header > a {
+    color: #fff !important;
+}
+.no-data{
+     margin: 15px;
+     font-size: 15px;
+     color:#303090;
+     font-weight: bold;
+     text-align: center;
+}
+.midbutton{
+    width: 40px !important;
+    height: 40px !important;
+}
+.buttondivcontainer{
+    text-align: center;
+    margin-top: 10px;
+}
+.pad-icon{
+    padding-right: 10px;
+}
+.comment-container{
+    font-size: 16px;
+    padding: 13px;
+    border-bottom: 1px solid lightgray;
+}
+
+.comment-container > span {
+    word-wrap: break-word;
+}
+
+.comment-duration{
+    background: lightgray;
+    padding: 6px 4px;
+    border-radius: 5px;
+    margin-left: 4px;
+    margin-right: 2px;
+    line-height: 25.2px;
+}

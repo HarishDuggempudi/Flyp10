@@ -1,0 +1,82 @@
+<mat-card class="material-card-sm">
+        <div >
+          <mat-card-title>
+             <b>Add</b> Judge Sports
+            </mat-card-title>
+        <form role="form" novalidate [formGroup]="userForm" (ngSubmit)="saveUser()">
+
+          <div class="mb-3" > 
+            
+              <div formArrayName="sportdetail">   
+                 <div *ngFor="let sport of userForm.controls.sportdetail['controls']; let i=index" >  
+                           
+                  <div [formGroupName]="i">
+                   
+                     <mat-form-field style="width:100%">
+                    <mat-select placeholder="Select Sport" formControlName="sportName" (change)="OnSportChange($event.value)" >
+                   <mat-option *ngFor="let sport1 of sportObj" [value]="sport1.sportName">
+                     {{sport1.sportName}}
+                   </mat-option>
+                 </mat-select>
+               </mat-form-field>
+               <mat-form-field style="width:100%">
+                 <mat-select placeholder="Select Sport Level"  formControlName="level" (change)="OnLevelChange($event.value)">
+                   <mat-option *ngFor="let sport2 of levelObj" [value]="sport2.level">
+                     {{sport2.level}}
+                   </mat-option>
+                 </mat-select>      
+               </mat-form-field>
+               <div class="mb-3">
+                <mat-form-field class="material-input-full">
+                   <input matInput placeholder="Describe Document"  formControlName="docdescription">          
+                </mat-form-field>
+               </div>
+               <div *ngIf ="selectedsportid == MFigureSkating || selectedsportid == WFigureSkating">
+                <label><b>Uploading For:</b></label><br>
+                <mat-checkbox    [checked]='techniciancheck' value='technician' (click)="Onuploadingfor('technician')">
+                    Technician
+                </mat-checkbox>
+                <mat-checkbox   [checked]='judgecheck' value='judge' (click)="Onuploadingfor('judge')">
+                  Judge
+              </mat-checkbox>
+              <mat-error *ngIf="!uploadingFor" >
+                *Required
+              </mat-error>
+            </div> 
+                <div style="margin-bottom:5px;">Verification Document</div>
+                  <div  class="row" style="margin-top:10px;margin-left:2px;" *ngIf="Sportsdoc && docid">
+                    <div  class="mb-3">
+                      <a style="color: #007bff;text-decoration: underline;" >{{Sportsdoc}}</a>                  
+                      <a  style="color: #007bff;" (click)="editdoc()"><i class="far fa-edit"></i></a> 
+                    </div>                    
+                  </div>
+                   
+                     <div class="row" style="margin-left:2px;" *ngIf="togglechoose">
+                          <input name="file" type="file"  (change)="onFileChange($event,i)" style="margin-bottom: 5px">
+                          <span *ngIf="isinvalidfile" style="color: red">*file size should be less then 1MB</span>
+                          <input type="hidden" name="fileHidden" formControlName="sportdocname"/> <!-- Validation Field -->
+                          <input type="hidden" name="fileHidden" formControlName="file"/>
+                          <input type="hidden" name="fileHidden" formControlName="username"/>
+                          <button type="button" *ngIf="i!= 0" (click)="remove(i)" mat-raised-button color="warn" style="margin-left:10px;">
+                          Remove
+                        </button>   
+                     </div>
+                               
+                 </div>             
+              </div>
+                <!--  <button  type="button" mat-raised-button color="info" *ngIf="addmorebutton" style="color: #fff;background-color: #4a4949;margin-bottom: 15px;margin-top: 15px" (click)="addMoreSports()">Add More</button>  -->
+              </div>
+            </div>
+         
+              <div class="mb-3">
+                <button type="submit" mat-raised-button color="primary">
+                  Save</button>
+                <button type="button" (click)="triggerCancelForm()" mat-raised-button color="warn">
+                  Cancel
+                </button>
+          </div>
+        </form>
+      </div>
+          
+      </mat-card>
+      

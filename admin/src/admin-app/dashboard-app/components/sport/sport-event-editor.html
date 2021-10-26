@@ -1,0 +1,55 @@
+<div class="d-flex flex-row-reverse">
+  <h1 class="nb-heading-one mr-auto">Event Editor</h1>
+</div>
+<mat-card class="material-card-sm">
+    <form role="form" novalidate [formGroup]="AddEventForm" (ngSubmit)="saveSportsEvent()">
+      
+      <!-- <div class="mb-3">
+        <mat-form-field class="material-input-full">
+          <mat-select placeholder="Sport Name" [(ngModel)]="eventObj.sportsName" [formControl]="AddEventForm.controls['sportsName']">
+            <mat-option *ngFor="let obj of sports" [value]="obj.id">
+                {{obj.name}}
+            </mat-option>         
+          </mat-select>
+          <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="AddEventForm.controls.sportsName"></control-messages>
+          </mat-error>
+        </mat-form-field>
+      </div> -->
+       <div class="mb-3">
+        <mat-form-field class="material-input-full">
+          <input matInput placeholder="Event" [(ngModel)]="eventObj.Event" [formControl]="AddEventForm.controls.Event">
+          <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="AddEventForm.controls.Event"></control-messages>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="mb-3">
+        <mat-form-field class="material-input-full">
+          <textarea matInput placeholder="Event Full Name" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"
+            [(ngModel)]="eventObj.eventFullname" formControlName="eventFullname"></textarea>
+          <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="AddEventForm.controls.eventFullname"></control-messages>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="mb-3">
+        <mat-form-field class="material-input-full">
+          <input matInput placeholder="Difficulty Factor" [(ngModel)]="eventObj.difficultyFactor" [formControl]="AddEventForm.controls.difficultyFactor">
+          <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="AddEventForm.controls.difficultyFactor"></control-messages>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="mb-3">
+        <mat-checkbox [checked]="eventObj.active" formControlName="active" [(ngModel)]="eventObj.active">
+          Active
+        </mat-checkbox>
+      </div>
+      <div class="mb-3">
+        <button mat-raised-button color="primary" type="submit">
+          <i class="fas fa-save"></i> Save</button>
+        <button mat-raised-button color="warn" type="button" (click)="triggerCancelForm()">Cancel</button>
+      </div>
+    </form>
+  </mat-card>

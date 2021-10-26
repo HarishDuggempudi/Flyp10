@@ -1,0 +1,81 @@
+  <!-- Page Heading -->
+<div class="d-flex flex-row-reverse">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb nb-breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/dashboard']">Dashboard</a>
+      </li>
+	  <li class="breadcrumb-item">
+        <a [routerLink]="['/profile']">Profile</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Card Details</li>
+    </ol>
+  </nav>
+  <h1 class="nb-heading-one mr-auto">Card Details</h1>
+</div>
+<!-- /.row -->
+<div class="pb-4">
+  <button mat-raised-button color="primary" (click)="addCard()">
+    <i class="fa fa-plus-circle"></i> Add Credit Card </button>
+</div>
+
+<div class="flex-container" >
+    <mat-card *ngFor="let account of CardDetails" style="min-width: 330px !important;height: 145px;background-color: #f7f7fd !important;">
+      <div class="row" style="height: 10px;font-size: 15px;float: right;margin-top: -12px;">
+		<i class="fas fa-times" style="padding-right: 7px;color: #9b2346;cursor:pointer;" (click)="removeCard(account)"></i>
+	  </div>
+	  <div class="row">
+          <label class="nb-label-md col-6" style="font-weight: 300;">Card Number:</label>
+                  <label class="nb-label-md col-6" style="font-weight: 300;"><b>{{account.ssl_account_number}}</b></label>
+      </div>
+              <div class="row">
+          <label class="nb-label-md col-6" style="font-weight: 300;">Name:</label>
+                  <label class="nb-label-md col-6" style="font-weight: 300;"><b>{{account.ssl_first_name}} {{account.ssl_last_name}}</b></label>
+      </div>
+	   <div class="row">
+	   </div>
+        <div class="row">
+		
+          <label class="col-6"  style="font-weight: 700;background-repeat: no-repeat;height:30px;
+    color: #3f51b5">
+		    {{account.ssl_card_type}}
+		  </label>
+		  <div class="col-6" >
+           <mat-slide-toggle style="position: absolute;right: 20px;"
+                class="example-margin"
+                (change)="setDefault($event, account)" 
+                [color]="'#2e3192'"
+                [checked]="account.isdefault">
+                Is default
+           </mat-slide-toggle> 
+            </div>		   
+        </div>
+       
+    </mat-card>
+</div>
+ 
+        <!-- <div class="row">
+		   <div class="col-4 flex-container" >
+        <mat-card *ngFor="let account of accountDetails" style="background: linear-gradient(to right, #be1e2d 0%, #2e3192 100%);color:#fff;">
+            <div class="row">
+              <label class="nb-label-md col-6" style="font-weight: 300;">Account Number</label>
+                      <label class="nb-label-md col-6" style="font-weight: 300;">{{account.AccountNumber}}</label>
+          </div>
+                  <div class="row">
+              <label class="nb-label-md col-6" style="font-weight: 300;">ABA Number</label>
+                      <label class="nb-label-md col-6" style="font-weight: 300;">{{account.RoutingNumber}}</label>
+          </div>
+            <div class="row">
+              <label class="nb-label-md col-6" style="font-weight: 300;">Checking Account</label>
+                      <label class="nb-label-md col-6" style="font-weight: 300;">{{account.IsCheckingAccount}}</label>
+            </div>
+            <div class="row">
+              <label class="nb-label-md col-6" style="font-weight: 300;">Is Primary</label>
+                      <label class="nb-label-md col-6" style="font-weight: 300;">{{account.IsDefault}}</label>
+            </div>
+			  </mat-card>
+            </div>
+		    
+        </div> -->
+     
+        

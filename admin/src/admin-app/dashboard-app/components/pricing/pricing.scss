@@ -1,0 +1,49 @@
+@import url('https://use.fontawesome.com/releases/v5.0.9/css/all.css');
+
+  [data-tip] {
+	position:relative;
+
+}
+[data-tip]:before {
+	content:'';
+	/* hides the tooltip when not hovered */
+	display:none;
+	content:'';
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-bottom: 5px solid #3f51b5;	
+	position:absolute;
+	top:40px;
+	left:35px;
+	z-index:8;
+	font-size:0;
+	line-height:0;
+	width:0;
+    height:0;
+    white-space: pre-wrap;
+	word-wrap: break-word;
+}
+[data-tip]:after {
+	display:none;
+	content:attr(data-tip);
+	position: relative;;
+	left:0px;
+	padding:5px 8px;
+	background:#3f51b5;
+	color:#fff;
+	z-index:9;
+	font-size: 14px;
+	height:50px;
+	line-height:18px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+[data-tip]:hover:before,
+[data-tip]:hover:after {
+	display:block;
+}
+  
+  

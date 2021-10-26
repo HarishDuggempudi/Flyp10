@@ -1,0 +1,53 @@
+<div class="d-flex flex-row-reverse">
+    <h1 class="nb-heading-one mr-auto">Faq Editor</h1>
+  </div>
+<mat-card class="material-card-sm">
+    <form role="form" novalidate [formGroup]="AddFaqForm" (ngSubmit)="saveFaq()">
+       <div class="mb-6">
+        <mat-form-field class="material-input-full">
+          <input matInput placeholder="Question" [(ngModel)]="faqObj.question" [formControl]="AddFaqForm.controls.question">
+          <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="AddFaqForm.controls.question"></control-messages>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- <div class="mb-6">
+        <mat-form-field class="material-input-full">
+          <textarea matInput placeholder="Answer" [(ngModel)]="faqObj.answer" [formControl]="AddFaqForm.controls.answer"></textarea>
+          <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="AddFaqForm.controls.answer"></control-messages>
+          </mat-error>
+        </mat-form-field>
+      </div> -->
+      <div class="mb-6">
+        <label>Answer</label>
+        <tiny-editor module="faq" [isSubmitted]="isSubmitted" [value]="faqObj.answer" [editorFormControl]="editorFormControl"
+          (valueChange)="editorValueChange($event)"></tiny-editor>
+      </div>
+      <div class="mb-6">
+        <mat-form-field class="material-input-full">
+            <mat-select placeholder="Assigned To" [(ngModel)]="faqObj.assignedTo" [formControl]="AddFaqForm.controls.assignedTo" >
+                <mat-option  value="1">
+                   Website
+                </mat-option>   
+                <mat-option value="2">
+                    Judge
+                 </mat-option>     
+                 <mat-option  value="3">
+                    Athlete
+                 </mat-option>   
+            </mat-select>
+        </mat-form-field>
+    </div>
+  <div class="mb-6">
+        <mat-checkbox [checked]="faqObj.active" formControlName="active" [(ngModel)]="faqObj.active">
+          Active
+        </mat-checkbox>
+      </div>
+      <div class="mb-6">
+        <button mat-raised-button color="primary" type="submit">
+          <i class="fas fa-save"></i> Save</button>
+        <button mat-raised-button color="warn" type="button" (click)="triggerCancelForm()">Cancel</button>
+      </div>
+    </form>
+  </mat-card>

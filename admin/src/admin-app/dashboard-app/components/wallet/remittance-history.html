@@ -1,0 +1,43 @@
+<mat-card class="nb-dashboard-table">
+  <mat-table #table [dataSource]="dataSource">
+    <ng-container matColumnDef="SN">
+      <mat-header-cell class="symbol-no" *matHeaderCellDef> SN </mat-header-cell>
+      <mat-cell class="symbol-no" *matCellDef="let element let i=index">{{preIndex+(i+1)}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="Amount">
+      <mat-header-cell *matHeaderCellDef>Remittance Amount</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.Amount}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="Previous">
+      <mat-header-cell *matHeaderCellDef>Previous Balance</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.PreviousBalance}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="Closing">
+      <mat-header-cell *matHeaderCellDef>Closing Balance</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.ClosingBalance}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="Date">
+      <mat-header-cell *matHeaderCellDef>Transaction Date</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{formatDate(element.addedOn)}}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="Status">
+      <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+          <span *ngIf="element.Status == 'Settled'" style="color: #40a022;">{{element.Status}}</span>
+          <span *ngIf="element.Status == 'Pending'" style="color: #ff8300;">{{element.Status}}</span>
+          <span *ngIf="element.Status == 'Submitted'" style="color: orange;">{{element.Status}}</span>
+          <span *ngIf="element.Status == 'Voided'" style="color: orange;">{{element.Status}}</span>
+          <span *ngIf="element.Status == 'Returned'" style="color: #004cff;">{{element.Status}}</span>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <div class="p-3 text-center" *ngIf="objResponse?.length==0">
+          No Records Found
+     </div>
+    <!-- <mat-paginator *ngIf="objResponse?.length>0" [length]="totalItems" [pageSize]="perPage" [pageSizeOptions]="pageSizeOptions" (page)="pageChanged($event)">
+    </mat-paginator> -->
+</mat-card>

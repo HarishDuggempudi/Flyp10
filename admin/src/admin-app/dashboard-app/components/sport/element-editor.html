@@ -1,0 +1,59 @@
+<div class="d-flex flex-row-reverse">
+  <h1 class="nb-heading-one mr-auto">Element Editor</h1>
+</div>
+<mat-card class="material-card-sm">
+    <form role="form" novalidate [formGroup]="AddElementForm" (ngSubmit)="saveSportsEvent()">
+       <div class="mb-3">
+        <mat-form-field class="material-input-full">
+          <input matInput placeholder="Element Name" [(ngModel)]="elementObj.elementName" [formControl]="AddElementForm.controls.elementName">
+          <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="AddElementForm.controls.elementName"></control-messages>
+          </mat-error>
+        </mat-form-field>
+      </div>
+	    <div class="mb-3">
+		   <mat-form-field class="material-input-full">
+			  <mat-select  [formControl]="AddElementForm.controls.event" [(ngModel)]="elementObj.event" placeholder="Event" #singleSelect>
+				<mat-option>
+				  <ngx-mat-select-search [formControl]="AddElementForm.controls.inputText"
+				       [placeholderLabel]="'Search Event'" 
+                       [noEntriesFoundLabel]="'No matching event found'"
+				  ><i ngxMatSelectSearchClear class="fa fa-times" aria-hidden="true"></i></ngx-mat-select-search>
+				</mat-option>
+				<mat-option *ngFor="let ev of filteredEvents" [value]="ev._id">
+				  {{ev.Event}}
+				</mat-option>
+			  </mat-select>
+			   <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="AddElementForm.controls.event"></control-messages>
+          </mat-error>
+			</mat-form-field>
+		</div>
+	  <div class="mb-3">
+        <mat-form-field class="material-input-full">
+          <input matInput placeholder="Skill Value" [(ngModel)]="elementObj.skillValue" [formControl]="AddElementForm.controls.skillValue" type="number">
+          <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="AddElementForm.controls.skillValue"></control-messages>
+          </mat-error>
+        </mat-form-field>
+     </div>
+	 <div class="mb-3">
+        <mat-form-field class="material-input-full">
+          <input matInput placeholder="Factor" [(ngModel)]="elementObj.factor" [formControl]="AddElementForm.controls.factor" type="number">
+          <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="AddElementForm.controls.factor"></control-messages>
+          </mat-error>
+        </mat-form-field>
+     </div>
+  <div class="mb-3">
+        <mat-checkbox [checked]="elementObj.active" formControlName="active" [(ngModel)]="elementObj.active">
+          Active
+        </mat-checkbox>
+      </div>
+      <div class="mb-3">
+        <button mat-raised-button color="primary" type="submit">
+          <i class="fas fa-save"></i> Save</button>
+        <button mat-raised-button color="warn" type="button" (click)="triggerCancelForm()">Cancel</button>
+      </div>
+    </form>
+  </mat-card>

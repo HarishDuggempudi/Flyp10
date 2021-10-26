@@ -1,0 +1,494 @@
+<div class='row'>
+    <div class='col-lg-6'>
+        <div class="d-flex flex-row-reverse">
+            <h1 class="nb-heading-one mr-auto">Event Editor</h1>
+        </div>
+        <mat-card class="material-card-sm">
+            <form role="form" novalidate [formGroup]="AddEventMeetForm" (ngSubmit)="saveEventMeet()">
+                <div class="mb-6">
+                    <mat-form-field class="material-input-full">
+                        <input matInput placeholder="Event Name" [(ngModel)]="eventMeetObj.EventName" [formControl]="AddEventMeetForm.controls.EventName">
+                        <!-- <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onEventMeetChange($event.option.value)">
+              <mat-option *ngFor="let option of filteredOptions" [value]="option.USAGSanctioninfo._id" >
+              {{option.USAGSanctioninfo.Name}}
+              </mat-option>
+            </mat-autocomplete> -->
+                        <mat-error>
+                            <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.EventName"></control-messages>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mb-6">
+                    <mat-form-field class="material-input-full">
+                        <mat-label>Start Date</mat-label>
+                        <input [formControl]="AddEventMeetForm.controls.StartDate" matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker [startAt]="startDate" #picker></mat-datepicker>
+                        <mat-error>
+                            <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.StartDate"></control-messages>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mb-6">
+                    <mat-form-field class="material-input-full">
+                        <mat-label>End Date</mat-label>
+                        <input [min]="returnMinDate()" [formControl]="AddEventMeetForm.controls.EndDate" matInput [matDatepicker]="picker1">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker [startAt]="startDate" #picker1></mat-datepicker>
+                        <mat-error>
+                            <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.EndDate"></control-messages>
+                        </mat-error>
+                    </mat-form-field>
+
+                </div>
+                <div class="mb-6">
+                    <mat-form-field class="material-input-full">
+                        <mat-select (change)='OnSportChange()' [formControl]="AddEventMeetForm.controls.Sports" placeholder="Sport">
+                            <!-- <mat-option>
+                  <ngx-mat-select-search [formControl]="AddEventMeetForm.controls.inputSport"
+                       [placeholderLabel]="'Search Sport'" 
+                               [noEntriesFoundLabel]="'No matching event found'"
+                  ><i ngxMatSelectSearchClear class="fa fa-times" aria-hidden="true"></i></ngx-mat-select-search>
+                </mat-option> -->
+                            <mat-option *ngFor="let ev of filteredSports" [value]="ev._id">
+                                {{ev.sportName}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>
+                            <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.Sports"></control-messages>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mb-6">
+                    <mat-form-field class="material-input-full">
+                        <mat-select [formControl]="AddEventMeetForm.controls.Levels" placeholder="Level" multiple>
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="AddEventMeetForm.controls.inputLevel" [placeholderLabel]="'Search level'" [noEntriesFoundLabel]="'No matching level found'"><i ngxMatSelectSearchClear class="fa fa-times" aria-hidden="true"></i></ngx-mat-select-search>
+                            </mat-option>
+
+
+                            <mat-option *ngFor="let ev of filteredLevels" [value]="ev._id">
+                                {{ev.level}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>
+                            <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.Levels"></control-messages>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <p *ngIf="!eventid && notinsertSanctionlevels.length > 0" style="font-size: 15px; color: royalblue" class="col-md-6">{{notinsertSanctionlevels}} levels are not available in flyp10.please contact our admin</p>
+                    <!-- <mat-form-field class="material-input-full" *ngIf="filteredLevels.length == 0">
+      <mat-select     placeholder="Level">
+        <mat-option>
+          No mapped level found
+        </mat-option>
+        </mat-select>
+        <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.Levels"></control-messages>
+          </mat-error>
+    </mat-form-field> -->
+                </div>
+                <div class="mb-6">
+                    <mat-form-field class="material-input-full">
+                        <mat-select [formControl]="AddEventMeetForm.controls.Events" (change)="onEventChange()" placeholder="Event" multiple>
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="AddEventMeetForm.controls.inputEvent" [placeholderLabel]="'Search Event'" [noEntriesFoundLabel]="'No matching event found'"><i ngxMatSelectSearchClear class="fa fa-times" aria-hidden="true"></i></ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option *ngFor="let ev of filteredEvents" [value]="ev._id">
+                                {{ev.Event}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>
+                            <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.Events"></control-messages>
+                        </mat-error>
+                    </mat-form-field>
+                    <!-- <mat-form-field class="material-input-full" *ngIf="filteredEvents.length == 0">
+    <mat-select   placeholder="Event" >
+      
+      <mat-option >
+       No mapped event found
+      </mat-option>
+      </mat-select>
+      <mat-error>
+          <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.Events"></control-messages>
+        </mat-error>
+  </mat-form-field> -->
+                </div>
+
+                <div class="mb-6" *ngIf="addEventLevel">
+                    <mat-form-field class="material-input-full">
+                        <mat-select placeholder="Select Event Level" (change)='OnEventLevelChange()' [formControl]="AddEventMeetForm.controls.EventLevel">
+                            <mat-option value='0'>Lower</mat-option>
+                            <mat-option value='1'>Higher</mat-option>
+                        </mat-select>
+
+                        <mat-error>
+                            <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.EventLevel"></control-messages>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="mb-6" *ngIf="!isSanctionEventMeet">
+                    <mat-form-field class="material-input-full">
+                        <mat-select placeholder="Select Country" [formControl]="AddEventMeetForm.controls.Country">
+                            <mat-option [value]='state.Country' *ngFor="let state of statelist">{{state.Country}}</mat-option>
+                        </mat-select>
+
+                        <mat-error>
+                            <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.Country"></control-messages>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="mb-6" *ngIf="!isSanctionEventMeet">
+                    <mat-form-field class="material-input-full">
+                        <input matInput placeholder="State / Province" [formControl]="AddEventMeetForm.controls.State">
+                        <mat-error>
+                            <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.State"></control-messages>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div *ngIf="!isSanctionEventMeet">
+                    <label><b>Pricing for score only ($)</b></label>
+                    <div class="mb-6">
+                        <mat-form-field class="material-input-full">
+                            <input matInput placeholder="Competitor" type="number" [(ngModel)]="eventMeetObj.ScompetitorPrice" [formControl]="AddEventMeetForm.controls.ScompetitorPrice">
+                            <mat-error>
+                                <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.ScompetitorPrice"></control-messages>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-6">
+                        <mat-form-field class="material-input-full">
+                            <input matInput type="number" placeholder="Judge" [(ngModel)]="eventMeetObj.SjudgePrice" [formControl]="AddEventMeetForm.controls.SjudgePrice">
+                            <mat-error>
+                                <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.SjudgePrice"></control-messages>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-6">
+                        <mat-form-field class="material-input-full">
+                            <input matInput type="number" placeholder="Technician" [(ngModel)]="eventMeetObj.StechnicianPrice" [value]="AddEventMeetForm.controls.StechnicianPrice" [formControl]="AddEventMeetForm.controls.StechnicianPrice">
+                            <mat-error>
+                                <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.StechnicianPrice"></control-messages>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <label><b>Pricing for score with judge notes ($)</b></label>
+                    <div class="mb-6">
+                        <mat-form-field class="material-input-full">
+                            <input matInput placeholder="Competitor" type="number" [(ngModel)]="eventMeetObj.NcompetitorPrice" [formControl]="AddEventMeetForm.controls.NcompetitorPrice">
+                            <mat-error>
+                                <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.NcompetitorPrice"></control-messages>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-6">
+                        <mat-form-field class="material-input-full">
+                            <input matInput placeholder="Judge" type="number" [(ngModel)]="eventMeetObj.NjudgePrice" [formControl]="AddEventMeetForm.controls.NjudgePrice">
+                            <mat-error>
+                                <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.NjudgePrice"></control-messages>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-6">
+                        <mat-form-field class="material-input-full">
+                            <input matInput placeholder="Technician" type="number" [(ngModel)]="eventMeetObj.NtechnicianPrice" [value]="AddEventMeetForm.controls.NtechnicianPrice" [formControl]="AddEventMeetForm.controls.NtechnicianPrice">
+                            <mat-error>
+                                <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.NtechnicianPrice"></control-messages>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="mb-6" style="margin-top: 15px;
+  margin-bottom: 25px;" [ngStyle]="{'display':showJudges?'none':''}" *ngIf="!isSanctionEventMeet">
+                    <a class="addjudge" style="border: 2px solid #2e3192;
+    color: #2e3192;
+    padding: 8px;
+    font-weight: 600;cursor: pointer;" (click)="addjudges()"><i class="fas fa-plus"></i> Add Judges</a>
+
+                    <div *ngIf="sportDetails.length==0 && isSubmitted" style="color:brown ;margin-top: 15px;">Please add judges.</div>
+                </div>
+
+                <div [ngStyle]="{'display':!showJudges?'none':''}">
+                    <div class="d-flex ">
+                        <h1 class="nb-heading-one">Add Judges
+
+                        </h1>
+                        <button style="margin-left:10px" mat-mini-fab color="primary" type="button" (click)="saveEventSport()" title="Click here to add judges">
+          <i class="fas fa-plus"></i> </button>
+                        <button style="margin-left:10px" mat-mini-fab color="warn" type="button" (click)="resetSportForm()" title="Click here to reset"> <i class="fas fa-undo"></i></button>
+
+                    </div>
+
+                    <form novalidate [formGroup]="AddSportForm" #f="ngForm">
+
+                        <div class="mb-6">
+                            <mat-form-field class="material-input-full">
+                                <mat-select [disabled]='showLevelEvent' [formControl]="AddSportForm.controls.Events" (change)="onJudgeEventChange()" placeholder="Event">
+                                    <!-- <mat-option>
+            <ngx-mat-select-search [formControl]="AddEventMeetForm.controls.inputEvent"
+                 [placeholderLabel]="'Search Event'" 
+                         [noEntriesFoundLabel]="'No matching event found'"
+            ><i ngxMatSelectSearchClear class="fa fa-times" aria-hidden="true"></i></ngx-mat-select-search>
+          </mat-option> -->
+                                    <mat-option *ngFor="let ev of judgesEvent" [value]="ev._id">
+                                        {{ev.Event}}
+                                    </mat-option>
+                                </mat-select>
+                                <!-- <mat-select *ngIf="isSanctionEventMeet"  [formControl]="AddSportForm.controls.JudgePanel" (change)="onJudgePanelChange()" placeholder="Panel" >
+           
+            <mat-option *ngFor="let ev of sportjudgepanel" [value]="ev._id">
+              {{ev.judgePanel}}
+            </mat-option>
+            </mat-select> -->
+
+
+                                <mat-error *ngIf='isSubmittedSportForm'>
+                                    <control-messages [isSubmitted]="isSubmittedSportForm" [control]="AddSportForm.controls.Events"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+
+                        <div class="mb-6">
+                            <mat-form-field class="material-input-full">
+                                <mat-select placeholder="Select Judges" [formControl]="AddSportForm.controls.Judges" multiple>
+                                    <!-- <mat-option>
+          <ngx-mat-select-search [formControl]="AddEventMeetForm.controls.inputJudges"
+               [placeholderLabel]="'Search Judge'" 
+                       [noEntriesFoundLabel]="'No matching Judge found'"
+          ><i ngxMatSelectSearchClear class="fa fa-times" aria-hidden="true"></i></ngx-mat-select-search>
+        </mat-option> -->
+                                    <mat-option [value]='state._id' *ngFor="let state of JudgesToShow">{{state.username}}</mat-option>
+                                </mat-select>
+
+                                <mat-error *ngIf='isSubmittedSportForm'>
+                                    <control-messages [isSubmitted]="isSubmittedSportForm" [control]="AddSportForm.controls.Judges"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="mb-6" *ngIf="addTechnician">
+                            <mat-form-field class="material-input-full">
+                                <mat-select placeholder="Select Technician" [formControl]="AddSportForm.controls.Technician">
+                                    <!-- <mat-option>
+          <ngx-mat-select-search [formControl]="AddEventMeetForm.controls.inputJudges"
+               [placeholderLabel]="'Search Judge'" 
+                       [noEntriesFoundLabel]="'No matching Judge found'"
+          ><i ngxMatSelectSearchClear class="fa fa-times" aria-hidden="true"></i></ngx-mat-select-search>
+        </mat-option> -->
+                                    <mat-option [value]='state._id' *ngFor="let state of TechnicianToShow">{{state.username}}</mat-option>
+                                </mat-select>
+
+                                <mat-error *ngIf='isSubmittedSportForm'>
+                                    <control-messages [isSubmitted]="isSubmittedSportForm" [control]="AddSportForm.controls.Technician"></control-messages>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+
+                    </form>
+
+
+                </div>
+
+                <div *ngIf="isSanctionEventMeet">
+                    <label><b>Scoring Type:</b></label>
+                    <div class="mb-3">
+                        <mat-radio-group [formControl]="AddEventMeetForm.controls.scoretype">
+                            <mat-radio-button style="padding-left: 10px;" value="1">Score Only</mat-radio-button>
+                            <mat-radio-button style="padding-left: 10px;" value="2">Score with Judges Notes</mat-radio-button>
+                        </mat-radio-group>
+                        <control-messages [isSubmitted]="isSubmitted" [control]="AddEventMeetForm.controls.scoretype"></control-messages>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <mat-checkbox [formControl]="AddEventMeetForm.controls.active" [checked]="eventMeetObj.active">
+                        Active
+                    </mat-checkbox>&nbsp;&nbsp;
+                    <span *ngIf="userRole == '1' && isSanctionEventMeet">
+            <button mat-raised-button color="default">
+            USAG Sanction Event Meet</button>
+            </span>
+
+                </div>
+                <span *ngIf="userRole == '1' && isSanctionEventMeet"><br></span>
+                <div class="mb-6">
+                    <button mat-raised-button color="primary" type="submit">
+            <i class="fas fa-save"></i> Save</button>
+                    <button mat-raised-button color="warn" type="button" (click)="triggerCancelForm()">Cancel</button>
+                </div>
+            </form>
+        </mat-card>
+
+    </div>
+
+
+    <div class="col-lg-6">
+
+        <div *ngIf="sanctionid && isSanctionEventMeet && !isOpenSanction">
+            <button mat-raised-button color="primary" (click)="viewSanctionInfo()">
+        <i class="fa fa-eye"></i>View Sanction Details</button>
+        </div>
+        <div *ngIf="isOpenSanction">
+            <mat-card>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="nb-heading-one mr-auto">Sanction Details
+                            <a class="editlink" style="float: right;" (click)="isOpenSanction = false"> <i class="fa fa-times-circle"></i></a>
+                        </h1>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-12" *ngIf="SanctionInfo.Name">
+                    <div class="form-group row">
+
+                        <label class="col-sm-4 form-control-label">Sanction Name</label>
+                        <label class="form-control-static">{{SanctionInfo.Name}}</label>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 form-control-label">Sport Name</label>
+                        <label class="form-control-static">{{SanctionInfo.DisciplineType}}</label></div>
+
+
+
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 form-control-label">Start Date</label>
+                        <label class="form-control-static">{{formatDate(SanctionInfo.CompetitionStartDate)}}</label>
+                    </div>
+                    <div class="form-group row">
+
+
+                        <label class="col-sm-4 form-control-label">End Date</label>
+                        <label class="form-control-static">{{formatDate(SanctionInfo.CompetitionEndDate)}}</label>
+
+                    </div>
+                    <div class="form-group row">
+
+
+
+                        <label class="col-sm-4 form-control-label">State</label>
+                        <label class="form-control-static">{{SanctionInfo.SiteState}}</label>
+
+                    </div>
+                    <div class="form-group row">
+
+
+
+                        <label class="col-sm-4 form-control-label">City</label>
+                        <label class="form-control-static">{{SanctionInfo.SiteCity}}</label>
+
+                    </div>
+                    <div class="form-group row">
+
+                        <label class="col-sm-4 form-control-label">Level</label>
+                        <label class="form-control-static"><span *ngFor="let level of allsanctionlevel;let i = index">
+          {{level}},
+          <span *ngIf="(i+1)%4 == 0"><br></span>
+        </span></label>
+
+                    </div>
+
+
+
+                </div>
+
+
+            </mat-card>
+        </div>
+        <br>
+        <ul class="list-group" *ngIf="!isSanctionEventMeet">
+            <li class="list-group-item"><span><strong>Judges Details</strong> </span></li>
+            <div *ngFor="let sport of sportDetails;let i=index">
+                <div class="vl" style=" margin-left: 165px !important;"></div>
+                <li class="list-group-item"><span>
+              <strong>Event: </strong>{{sport.EventName}}
+            <button mat-mini-fab class="material-icon-sm" color="warn" (click)="delete(i)">
+              <i class="fa fa-trash" style="padding-bottom: 5px;"></i>
+           </button>
+           </span></li>
+                <div *ngFor="let sports of sport.JudgeName;let j=index">
+                    <li class="list-group-item" style="text-align:initial">
+                        <span><strong>Judge: </strong>{{sports}}
+<button *ngIf="sport.JudgeName.length>1" mat-mini-fab class="material-icon-sm" color="warn" (click)="deletejudge(i,j)">
+    <i class="fa fa-trash" style="padding-bottom: 5px;"></i>
+ </button>
+</span>
+
+                    </li>
+                </div>
+                <div *ngIf="sport.TechnicianName">
+                    <li class="list-group-item" style="text-align:initial">
+                        <span><strong>Technician: </strong>{{sport.TechnicianName}}
+ <button mat-mini-fab class="material-icon-sm" color="warn" (click)="deletetechnician(i)">
+     <i class="fa fa-trash" style="padding-bottom: 5px;"></i>
+  </button>
+</span>
+
+                    </li>
+                </div>
+            </div>
+            <div *ngIf="sportDetails.length==0" class="vl" style=" margin-left: 165px !important;"></div>
+            <li *ngIf="sportDetails.length==0" class="list-group-item"><span><strong>No data to display</strong> </span></li>
+
+
+        </ul>
+        <ul class="list-group" *ngIf="isSanctionEventMeet">
+            <li class="list-group-item"><span><strong>Judges Details</strong> </span></li>
+            <div *ngFor="let  jp of EventMeetJudgespanelBylevelevent;let i=index">
+                <div class="vl" style=" margin-left: 165px !important;"></div>
+                <li class="list-group-item"><span>
+                <strong>Level: </strong>{{jp.levelName}}  <strong>Event: </strong>{{jp.eventName}}
+           
+             </span></li>
+                <div *ngFor="let judgespanel of jp.JudgesbyPanel;let j=index">
+                    <div *ngFor="let judge of judgespanel.JudgeName;let k=index">
+                        <li class="list-group-item" style="text-align:initial">
+
+                            <span><strong>{{judgespanel.PanelName}}: </strong>{{judge.name}} -{{judge.USAGID}}
+    
+    </span>
+
+
+                        </li>
+                    </div>
+                </div>
+
+            </div>
+            <div *ngIf="EventMeetJudgespanelBylevelevent.length==0" class="vl" style=" margin-left: 165px !important;"></div>
+            <li *ngIf="EventMeetJudgespanelBylevelevent.length==0" class="list-group-item"><span><strong>No data to display</strong> </span></li>
+
+
+        </ul>
+        <br>
+        <ul class="list-group" *ngIf="!isSanctionEventMeet">
+            <li class="list-group-item"><span><strong>Mapped Competitors</strong> </span></li>
+
+            <div class="vl" style=" margin-left: 165px !important;"></div>
+            <!-- <li class="list-group-item" ><span>
+              <strong>Competitors</strong>
+            <button mat-mini-fab class="material-icon-sm" color="warn" (click)="delete(i)">
+              <i class="fa fa-trash" style="padding-bottom: 5px;"></i>
+           </button>
+           </span></li> -->
+            <div *ngFor="let comp of Competitors;let j=index">
+                <li class="list-group-item" style="text-align:initial">
+                    <span>{{comp.competitors.username}}
+
+</span>
+
+                </li>
+
+            </div>
+            <div *ngIf="Competitors.length==0" class="vl" style=" margin-left: 165px !important;"></div>
+            <li *ngIf="Competitors.length==0" class="list-group-item"><span><strong>No data to display</strong> </span></li>
+
+
+        </ul>
+
+
+    </div>
+</div>

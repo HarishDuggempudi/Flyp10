@@ -1,0 +1,143 @@
+       
+<!-- Facebook Pixel Code -->
+
+<script>
+
+    !function(f,b,e,v,n,t,s)
+    
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    
+    s.parentNode.insertBefore(t,s)}(window,document,'script',
+    
+    'https://connect.facebook.net/en_US/fbevents.js');
+    
+    fbq('init', '256352801666442'); 
+    
+    fbq('track', 'PageView');
+    
+    </script>
+    
+    <noscript>
+
+        <img height="1" width="1" src="https://www.facebook.com/tr?id=256352801666442&ev=PageView&noscript=1" />
+
+    </noscript>
+    
+    <!-- End Facebook Pixel Code -->
+       
+       <div class="card"  style="width:500px;display:block;margin: 0 auto;">
+	        <div class="container" *ngIf="!userObj.userConfirmed">
+			    <p style="text-align: center;
+                margin-top: 27px;
+                font-size: 20px;
+                color: #34389c
+                ;text-align: center">Loading...</p>
+			</div>  
+            <div class="container" *ngIf="userObj.userConfirmed && !alreadyActivated">
+
+           
+        
+            
+      <!-- Modal content-->
+       
+       
+            <img style="width: 283px;
+            display: block;
+            margin: auto;
+            margin-top: 40px;" src="../../../assets/client/images/flyp10.png">
+			
+            <p style="text-align: center;
+                margin-top: 27px;
+                font-size: 20px;
+                color: #34389c">
+				<img style="width:35px;" src="../../../assets/client/images/checked.png">
+					Your account is activated</p>
+
+               
+                    <div class="row" style="display: table;margin: 0 auto;margin-bottom:50px!important">
+                        <div  style="    display: inline;
+                        margin: auto;" >
+                           
+                           <a href='https://flyp10.com/admin/login'> <button style="margin-top: 17px;background: #2e3192;
+                            border-color: transparent;" class="btn btn-primary">Click here to login</button></a> 
+                        </div>
+                    
+                    
+                        <!-- <div style="    display: inline;
+                        margin: auto;
+                        ">
+                           
+                           <a [href]="'https://flyp10.com/pricing/'+userId"> <button style="margin-top: 17px;background: #2e3192;
+                            border-color: transparent;" class="btn btn-primary">Upgrade Subscription</button></a> 
+                        
+                    
+                </div> -->
+              </div>
+                       
+           
+            
+
+           
+          
+
+     
+        </div>
+
+        <div class="container" *ngIf="alreadyActivated">
+
+           
+        
+            
+            <!-- Modal content-->
+             
+             
+                  <img style="width: 283px;
+                  display: block;
+                  margin: auto;
+                  margin-top: 40px;" src="../../../assets/client/images/flyp10.png">
+                  
+                  <p style="text-align: center;
+                      margin-top: 27px;
+                      font-size: 20px;
+                      color: #34389c">
+                      <img style="width:35px;" src="../../../assets/client/images/checked.png">
+                          Your account is activated</p>
+      
+                     
+                          <div class="row" style="display: table;margin: 0 auto;margin-bottom:50px!important">
+                              <div  style="    display: inline;
+                              margin: auto;" >
+                                 
+                                 <a href='https://flyp10.com/admin/login'> <button style="margin-top: 17px;background: #2e3192;
+                                  border-color: transparent;" class="btn btn-primary">Click here to login</button></a> 
+                              </div>
+                          
+<!--                           
+                              <div style="    display: inline;
+                              margin: auto;
+                              ">
+                                 
+                                 <a [href]="'https://flyp10.com/pricing/'+userId"> <button style="margin-top: 17px;background: #2e3192;
+                                  border-color: transparent;" class="btn btn-primary">Upgrade Subscription</button></a> 
+                              
+                          
+                      </div> -->
+                    </div>
+                             
+                 
+                  
+      
+                 
+                
+      
+           
+              </div>
+        </div>

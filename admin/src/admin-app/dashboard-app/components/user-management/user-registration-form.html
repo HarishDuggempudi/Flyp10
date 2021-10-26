@@ -1,0 +1,254 @@
+<mat-card class="material-card-sm">
+    <div>
+        <mat-card-title *ngIf="!userId">
+            <b>Add</b> user
+        </mat-card-title>
+        <mat-card-title *ngIf="userId">
+            <b>Update</b> user details
+        </mat-card-title>
+        <form role="form" novalidate [formGroup]="userForm" (ngSubmit)="saveUser()">
+            <div *ngIf="logineduserObj.userRole=='1'">
+                <label><b>User Role:</b></label>
+                <div class="mb-3">
+                    <mat-radio-group formControlName="userRole" [(ngModel)]="userObj.userRole" (change)="onuserRoleChange()">
+                        <mat-radio-button style="padding-left: 10px;" value="1">Admin User</mat-radio-button>
+                        <mat-radio-button style="padding-left: 10px;" value="2">Judge</mat-radio-button>
+                        <mat-radio-button style="padding-left: 10px;" value="3">Competitor</mat-radio-button>
+                        <mat-radio-button style="padding-left: 10px;" value="4">Recruiter</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </div>
+            <div class="mb-3">
+                <mat-form-field class="material-input-full">
+                    <input matInput placeholder="First Name" [(ngModel)]="userObj.firstName" formControlName="firstName">
+                    <mat-error>
+                        <control-messages [isSubmitted]="isSubmitted" [control]="userForm.controls['firstName']"></control-messages>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="mb-3">
+                <mat-form-field class="material-input-full">
+                    <input matInput required placeholder="Last Name" [(ngModel)]="userObj.lastName" formControlName="lastName">
+                    <mat-error>
+                        <control-messages [isSubmitted]="isSubmitted" [control]="userForm.controls['lastName']"></control-messages>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="mb-3">
+                <mat-form-field class="material-input-full">
+                    <input matInput required placeholder="Username" (input)="checkUsername($event.target.value)" #username [(ngModel)]="userObj.username" formControlName="username">
+                    <mat-error>
+                        <control-messages [isSubmitted]="isSubmitted" [control]="userForm.controls['username']"></control-messages>
+                    </mat-error>
+                </mat-form-field>
+                <span style="color: red" *ngIf="userAvailability===0 && username.value.length<3 && isSubmitted">Username must be atleast 4 characters long</span>
+                <span style="color: red" *ngIf="userAvailability===1">Username not available <i class="fas fa-times"></i></span>
+                <span style="color: green" *ngIf="userAvailability===2">Username available <i class="fas fa-check"></i></span>
+            </div>
+            <div *ngIf="!userId" class="mb-3">
+                <mat-form-field class="material-input-full">
+                    <input matInput type="password" id="inputPassword" [(ngModel)]="userObj.password" name="password" placeholder="Password" formControlName="password">
+                    <mat-error>
+                        <control-messages [isSubmitted]="isSubmitted" [control]="userForm.controls['password']"></control-messages>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div *ngIf="!userId" class="mb-3">
+                <mat-form-field class="material-input-full">
+                    <input matInput type="password" placeholder="Re-enter Password" formControlName="confirmPassword">
+                    <mat-error>
+                        <control-messages [control]="userForm.controls['confirmPassword']"></control-messages>
+                    </mat-error>
+                    <div class="error-msg" *ngIf="userForm.hasError('mismatchedPasswords')&& userForm.controls['confirmPassword'].dirty" style="color:red">
+                        Passwords do not match.
+                    </div>
+                </mat-form-field>
+
+
+            </div>
+            <div class="mb-3" *ngIf="userId && logineduserObj.userRole=='3' ">
+                <mat-form-field class="material-input-full">
+                    <input matInput required placeholder="Flyp-phrase" [(ngModel)]="userObj.passphrase" formControlName="passphrase">
+                    <mat-error>
+                        <control-messages [isSubmitted]="isSubmitted" [control]="userForm.controls['passphrase']"></control-messages>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="mb-3" *ngIf="userForm.value.userRole=='3'">
+                <mat-form-field class="material-input-full">
+                    <input matInput [matDatepicker]="picker" [(ngModel)]="userObj.dob" required formControlName="dob" placeholder="Date Of Birth">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker [startAt]="userObj.dob"></mat-datepicker>
+                    <mat-error>
+                        <control-messages [isSubmitted]="isSubmitted" [control]="userForm.controls['dob']"></control-messages>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="mb-3">
+                <mat-form-field class="material-input-full">
+                    <input matInput type="text" [(ngModel)]="userObj.email" required placeholder="Email" formControlName="email">
+                    <mat-error>
+                        <control-messages [isSubmitted]="isSubmitted" [control]="userForm.controls['email']"></control-messages>
+                    </mat-error>
+                    <mat-error *ngIf="isSubmitted && !userForm.get('email').hasError('required') && userForm.get('email').hasError('pattern')">
+                        Invalid email address
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="mb-3">
+                <mat-form-field class="material-input-full">
+                    <input matInput placeholder="Phone Number (optional)" [(ngModel)]="userObj.phoneNumber" formControlName="phoneNumber" [class.error]="userForm.controls['phoneNumber'].touched && userForm.controls['phoneNumber'].invalid || isSubmitted && userForm.controls['phoneNumber'].invalid">
+                    <mat-error>
+                        <control-messages [isSubmitted]="isSubmitted" [control]="userForm.controls['phoneNumber']"></control-messages>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <!--    <div class="mb-3">
+      <mat-form-field class="material-input-full">
+        <input matInput placeholder="Address" [(ngModel)]="userObj.address" formControlName="address"
+        [class.error]="userForm.controls['address'].touched && userForm.controls['address'].invalid || isSubmitted && userForm.controls['address'].invalid">
+        <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="userForm.controls['address']"></control-messages>
+        </mat-error>
+      </mat-form-field>
+    </div> -->
+            <div class="mb-3">
+                <mat-form-field class="material-input-full">
+
+                    <mat-select placeholder="Country" [(ngModel)]="userObj.country" formControlName="country" name="country" (change)="OnCountryChange(userObj.country,1)">
+                        <mat-option>
+                            <ngx-mat-select-search [formControl]="userForm.controls.inputCountry" [placeholderLabel]="'Search Country'" [noEntriesFoundLabel]="'No matching country found'"><i ngxMatSelectSearchClear class="fa fa-times" aria-hidden="true"></i></ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let country of filteredCountry" [value]="country.Name">
+                            {{country.Name}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error>
+                        <control-messages [isSubmitted]="isSubmitted" [control]="userForm.controls['country']"></control-messages>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="mb-3">
+                <mat-form-field class="material-input-full">
+                    <mat-select placeholder="State" *ngIf="isSelectState" [(ngModel)]="userObj.address" formControlName="address" name="address">
+                        <mat-option *ngFor="let state of statelist" [value]="state.name">
+                            {{state.name}}
+                        </mat-option>
+                    </mat-select>
+                    <input matInput *ngIf="!isSelectState" placeholder="State" [(ngModel)]="userObj.address" formControlName="address">
+                    <mat-error>
+                        <control-messages [isSubmitted]="isSubmitted" [control]="userForm.controls['address']"></control-messages>
+                    </mat-error>
+                </mat-form-field>
+
+
+            </div>
+            <div class='mb-3' *ngIf="logineduserObj.userRole=='1'">
+                <div *ngIf="userForm.value.userRole=='2'">
+                    <mat-slide-toggle formControlName='EligibleJudgeForMyFlyp10Routine'>Eligible For Flyp10 Routine</mat-slide-toggle>
+                </div>
+
+            </div>
+            <div class="mb-3" *ngIf="userForm.value.userRole=='2' && !userId">
+                <label><b>Add Sport Details</b></label>
+                <div formArrayName="sportdetail">
+                    <div *ngFor="let sport of userForm.controls.sportdetail.controls; let i=index">
+
+                        <div [formGroupName]="i">
+
+                            <mat-form-field style="width:100%">
+                                <mat-select placeholder="Select Sport" formControlName="sportName" (change)="OnSportChange($event.value)">
+                                    <mat-option *ngFor="let sport1 of sportObj" [value]="sport1.sportName">
+                                        {{sport1.sportName}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field style="width:100%">
+                                <mat-select placeholder="Select Sport Level" formControlName="level" (change)="OnlevelChange($event.value)">
+                                    <mat-option *ngFor="let sport2 of levelObj" [value]="sport2.level">
+                                        {{sport2.level}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <div style="margin-bottom:5px;"><b>Verification Document</b>(required)</div>
+
+                            <input name="file" type="file" (change)="onFileChange($event,i)" style="margin-bottom: 5px">
+                            <p>*file size should be less then 1MB</p>
+                            <input type="hidden" name="fileHidden" formControlName="sportdocname" />
+                            <!-- Validation Field -->
+                            <input type="hidden" name="fileHidden" formControlName="file" />
+                            <input type="hidden" name="fileHidden" formControlName="username" />
+                            <button type="button" *ngIf="i!= 0" (click)="remove(i)" mat-raised-button color="warn" style="margin-left:10px;">
+                         Remove
+                       </button>
+                        </div>
+                    </div>
+                    <!-- <button  type="button" mat-raised-button color="info" style="color: #fff;background-color: #4a4949;margin-bottom: 15px;margin-top: 15px" (click)="addMoreSports()">Add More</button>  -->
+                </div>
+            </div>
+            <div style="margin-top:5px" *ngIf="logineduserObj.userRole=='1'">
+                <label><b>Status:</b></label>
+                <div class="mb-3">
+                    <mat-checkbox [checked]="userObj.active" formControlName="active" [(ngModel)]="userObj.active">
+                        Active
+                    </mat-checkbox>
+
+                </div>
+            </div>
+            <div style="margin-top:5px" *ngIf="logineduserObj.userRole=='3'">
+                <label><b>Always shared routine with teammates</b></label>
+                <div class="mb-3">
+                    <mat-radio-group formControlName="alwaysSharedRoutine" [(ngModel)]="userObj.alwaysSharedRoutine" (change)="onsharedRoutine()">
+                        <mat-radio-button style="padding-left: 10px;" value="Y">Yes</mat-radio-button>
+                        <mat-radio-button style="padding-left: 10px;" value="N">No</mat-radio-button>
+
+                    </mat-radio-group>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="form-group" style="display:table;" *ngIf="!cropped && !this.userId">
+                    <img style="width: 150px;height: 150px;" src="../../../assets/admin/img/defaults/default_avatar.png">
+                    <p *ngIf="!cropped">*You can change this later.</p>
+                </div>
+                <div class="form-group" style="display:table;" *ngIf="!cropped && this.userId">
+                    <img style="width: 150px;height: 150px;" [src]="editimagesrc">
+                </div>
+                <div style="margin-bottom:10px;" *ngIf="!cropped && this.userId && this.fileName">
+                    <button type="button" (click)="deleteImage()" mat-raised-button color="warn" style="margin-top:10px;">
+                         Remove Avatar
+          </button>
+                </div>
+                <image-cropper style="margin-bottom:10px" *ngIf="cropped" [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="4 / 4" [resizeToWidth]="128" format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+                    (loadImageFailed)="loadImageFailed()"></image-cropper>
+                <input style="margin-bottom:10px;" type="file" (change)="fileChangeEvent($event)" />
+                <!-- <image-uploader [canvasSize]="canvasSize" [imageFormControl]="imageFormControl" (deleteImageEvent)="deleteImage()" [imageName]="fileName"
+        [drawImagePath]="drawImagePath" [isSubmitted]="isSubmitted" (fileSelectedEvent1)="changeFile($event,'img')" allowDelete="true"></image-uploader> -->
+            </div>
+            <!-- <div *ngIf="userForm.value.userRole=='2'|| userForm.value.userRole=='3'" class="mb-6" style="margin-top: 15px;
+    margin-bottom: 25px;" [ngStyle]="{'display':isaddUSAGID?'none':''}">
+      <a class="addjudge" style="border: 2px solid #2e3192;
+      color: #2e3192;
+      padding: 8px;
+      font-weight: 600;cursor: pointer;" (click)="addUSAGM()"><i class="fas fa-plus"></i> Add USA Gymnastics MemberID</a>
+  
+    
+    </div>
+    <div class="mb-3" [formGroup]="MemberForm" *ngIf="isaddUSAGID"> 
+      <label><b>Add USA Gymnastics MemberID</b>	&nbsp;&nbsp;<i class="fas fa-times" style="padding-right: 7px;color: #2e3192;cursor:pointer;" (click)="addUSAGM()"></i></label>    
+      <mat-form-field class="material-input-full">
+        <input matInput placeholder="Enter the memberID"  formControlName="MemberID">          
+     </mat-form-field>  
+    </div> -->
+
+            <div class="mb-3">
+                <button type="submit" mat-raised-button color="primary">
+            Save</button>
+                <button type="button" (click)="triggerCancelForm()" mat-raised-button color="warn">
+            Cancel
+          </button>
+            </div>
+        </form>
+    </div>
+
+</mat-card>

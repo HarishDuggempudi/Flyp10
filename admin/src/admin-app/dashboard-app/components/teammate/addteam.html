@@ -1,0 +1,100 @@
+<div class="flexsearch">
+		<div class="flexsearch--wrapper">
+			<div class="flexsearch--form" action="#" method="post">
+				<div class="flexsearch--input-wrapper">
+					<input class="flexsearch--input" (input)="onSearchChange($event.target.value)" type="search" [(ngModel)]="searchInput" placeholder="Enter username">
+				</div>
+				<input class="flexsearch--submit" (click)="searchUsername()" value="&#10140;"/>
+			</div>
+		</div>
+</div>
+ 
+<div class="row">
+    <div class="col-md-6">
+        <mat-card class="material-card" style="padding: 0;" *ngIf="showUser">
+            <div class="list-group list-group-flush">
+              <a (click)="openDetails(user)" *ngFor="let user of usersList" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="row">
+                    <div class="col-md-2">
+                            <img *ngIf="imageSrc" style="    width: 64px;
+                            border-radius: 35px;" [src]="imageSrc" alt="{{userName}}">
+                             
+                             <div  *ngIf="!imageSrc" class="display-img">
+                                    <i class="fas fa-user"></i><br>
+                                </div>  
+                    </div>
+                    <div class="col-md-10">
+                        <div class="d-flex w-100 justify-content-between">
+                          <h5 class="mb-1" style="margin-top: 17px;">{{user.firstName}} {{user.lastName}}</h5>
+                        </div>
+                    </div>
+                </div>                
+              </a>			  
+            </div>
+        </mat-card> 
+    </div>
+    <div class="col-md-6">
+        <mat-card *ngIf="(selectedUser | json) != '{}' && showDetails && searchInput && showUser" class="material-card" style="margin-left: -25px;width: 100%;">
+            <div class="row">
+                <div class="col-md-2">
+                        <img *ngIf="imageSrc" style="    width: 64px;
+                        border-radius: 35px;" [src]="imageSrc" alt="{{userName}}">
+                         
+                         <div  *ngIf="!imageSrc" class="display-img">
+                                <i class="fas fa-user"></i><br>
+                            </div>  
+                </div>
+                <div class="col-md-10" style="padding-left: 30px;">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h5 class="mb-1" style="padding-bottom: 10px;">{{selectedUser.firstName}} {{selectedUser.lastName}}</h5>
+                    </div>
+                    <div>
+                        <button mat-raised-button color="primary" *ngIf="requestSent=='1' || requestSent == '' || requestSent == '3'" (click)="addTeammate(selectedUser)">
+                            <i class="fas fa-user-plus"></i> Add as teammate</button>
+                        <button mat-raised-button style="background: #dc3545; color: #fff" *ngIf="requestSent=='0'" (click)="cancelRequest(selectedUser)">
+                            <i class="fas fa-user-times"></i> Cancel request</button>
+                        <div class="alert alert-success alert-dismissible" *ngIf="requestSent == '2'" role="alert">
+                          You're already connected!
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="alert alert-success alert-dismissible" *ngIf="requestSent=='0'" role="alert">
+                Your request to add <strong>{{selectedUser.firstName}} {{selectedUser.lastName}}</strong> as teammate has been sent successfully!
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+        </mat-card>
+    </div>
+</div>
+<div class="row" style="margin-top:10%">
+    <div class="col-md-6">
+        <mat-card class="material-card" style="padding: 0;">
+            <div class="list-group list-group-flush">			  
+			  <a *ngFor="let user of requestedData" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="row">
+                    <div class="col-md-2">
+                            <img *ngIf="user.imageName!='' && user.imageName!=null" style="width: 64px;
+                            border-radius: 35px;" [src]="'https://flyp10.com/public/uploads/images/users/'+user.imageName" alt="{{userName}}">
+                             
+                             <div  *ngIf="user.imageName=='' && !user.imageNam"  class="display-img">
+                                    <i class="fas fa-user"></i><br>
+                                </div>  
+                    </div>
+                    <div class="col-md-10">
+                        <div class="d-flex w-100 justify-content-between">
+                          <h5 class="mb-1" style="margin-top: 17px;">{{user.firstName}} {{user.lastName}}</h5>
+                          <span style="margin-top: 21px;font-size: 12px;color: #a5a2a2;">Requested {{timeAgo(user.reqOn)}}</span>
+                        </div>
+                    </div>
+                </div>                
+              </a>
+            </div>
+        </mat-card> 
+    </div>
+	</div>

@@ -1,0 +1,241 @@
+<!-- Page Heading -->
+<div class="d-flex flex-row-reverse">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb nb-breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/dashboard']">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Wallet Editor</li>
+    </ol>
+  </nav>
+  <h1 class="nb-heading-one mr-auto" *ngIf="type=='1'">Add Credit</h1>
+  <h1 class="nb-heading-one mr-auto"*ngIf="type=='2'">Upgrade Subscription</h1>
+</div>
+<!-- /.row -->
+
+  <div class="row">
+      <div class="col-md-6">
+	  
+          <mat-card class="material-card-sm" *ngIf="toggleTokenCard || toggleNewCard">
+          <form *ngIf="toggleTokenCard" role="form" novalidate [formGroup]="tokenForm" (ngSubmit)="onsubmitTokenPayment()">
+			  <div class="mb-3">
+			    <label><b>Card Details</b></label> 
+			  </div>
+			<div class="mb-3"> 
+					<img src="assets/admin/img/dc.png"  *ngIf="defaultCard.cardType=='DC'"/>
+					<img src="assets/admin/img/visa.png"  *ngIf="defaultCard.cardType=='VISA'"/>
+					<img src="assets/admin/img/discover.png" *ngIf="defaultCard.cardType=='DISC'"/>
+					<img src="assets/admin/img/jcb.png"  *ngIf="defaultCard.cardType=='JCB'"/>
+					<img src="assets/admin/img/amex.png"  *ngIf="defaultCard.cardType=='AMEX'"/>
+					<img src="assets/admin/img/master.png"  *ngIf="defaultCard.cardType=='MC'"/><span style="font-size:15px;">{{defaultCard.cardNumber}} </span>
+			  </div>			  
+			  <div *ngIf="type=='2'">
+				<div><label><b>Select Package</b></label> <a style="float:right;" href="https://flyp10.com/#our-pricings" target="_blank">View package details here</a></div>
+				<div class="mb-3" style="margin-top:10px;">     	
+					<mat-radio-group formControlName="selectedpackage"   (change)="onPackageChange($event)">
+					  <mat-radio-button  value="{{subscription[0]}}" [checked]="true" >Premium ${{subscription[0]}} / year</mat-radio-button>
+					  <mat-radio-button style="padding-left: 10px;" value="{{subscription[1]}}">Premium-Plus ${{subscription[1]}} / year</mat-radio-button>
+					</mat-radio-group>
+				</div>
+			</div>
+			 <!-- <div class="mb-3" *ngIf="type!='1'">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Amount" type="number"  formControlName="amount" >
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="tokenForm.controls['amount']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div> -->
+		    <div class="mb-3" *ngIf="type!='1'">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Promocode" type="text"  formControlName="promocode">
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['promocode']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+         </div>
+		 <div class="mb-3"  *ngIf="type=='1'">
+          <mat-form-field class="material-input-full">
+            <mat-select placeholder="Amount"  (change)='onAmountChange($event)' formControlName="amount" name="amount">
+              <mat-option  *ngFor='let a of credit' [value]="a">{{formatDollar(a)}}</mat-option>
+			  
+            </mat-select>
+           <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="tokenForm.controls['amount']"></control-messages>
+          </mat-error>
+          </mat-form-field>
+           </div>   
+          <div class="mb-3">
+			  <button type="submit" mat-raised-button color="primary">
+				Pay now</button>
+			  <button type="button" (click)="triggerCancelForm()" mat-raised-button color="warn">
+				Cancel
+			  </button>
+          </div>		   
+		 </form>
+      <form *ngIf="toggleNewCard" role="form" novalidate [formGroup]="cardForm" (ngSubmit)="makePayment()">
+            <div *ngIf="type=='2'">
+				<div><label><b>Select Package</b></label> <a style="float:right;" href="https://flyp10.com/#our-pricings" target="_blank">View package details here</a></div>
+				<div class="mb-3">     	
+					<mat-radio-group formControlName="selectedpackage"  (change)="onPackageChange($event)">
+					  <mat-radio-button  value="2">Premium ${{subscription[0]}} / year</mat-radio-button>
+					  <mat-radio-button style="padding-left: 10px;" value="3">Premium-Plus ${{subscription[1]}} / year</mat-radio-button>
+					</mat-radio-group>
+				</div>
+			</div>
+		  <!-- <div class="mb-3" *ngIf="type!='1'">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Amount" type="number"  formControlName="amount">
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['amount']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div> -->
+		 <div class="mb-3" *ngIf="type!='1'">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Promocode" type="text"  formControlName="promocode">
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['promocode']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+         </div>  
+		<div class="mb-3"  *ngIf="type=='1'">
+          <mat-form-field class="material-input-full">
+            <mat-select (change)='onAmountChange($event)' placeholder="Amount"  formControlName="amount" [(ngModel)]='amount'  name="amount">
+              <mat-option *ngFor='let a of credit' [value]="a">{{formatDollar(a)}}</mat-option>
+			 
+            </mat-select>
+           <mat-error>
+            <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['amount']"></control-messages>
+          </mat-error>
+          </mat-form-field>
+        </div>
+           <div class="mb-3">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Cardholder’s Name"   formControlName="name">
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['name']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div>
+         
+		   <div class="mb-3">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Card number" class="cc-number" [ngClass]="cardType" (keyup)="returnCardType($event)"  type="text" [mask]="cardNumMask"   formControlName="cardnumber">
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['cardnumber']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+			<span *ngIf="cardType=='unknown' && isChecked" style="color:red;font-style: italic">Invalid card number</span>
+           </div>
+		   
+		   <div class="mb-3">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Expire date (MM/YY)"  type="text" mask="00/00"  formControlName="expdate">
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted"  [control]="cardForm.controls['expdate']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div>
+		    <div class="row">
+			 <div class="col-md-10" style="padding-right:0px;">
+              <mat-form-field class="material-input-full">
+                <input matInput placeholder="Security code" type="text" style="text-security:disc;-webkit-text-security:disc;" [mask]="cvvMask" formControlName="cvv">
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['cvv']"></control-messages>
+              </mat-error>
+             </mat-form-field>
+            </div>
+			<div class="col-md-2" style="padding-left:0px;">
+			  <button mat-mini-fab class="material-icon-sm" color="primary"  title="View" href="javascript:void(0)" style="margin-left:10px;background-color:#2f3191;" type="button" (click)="whatisCVV()">
+                          <i class="fa fa-question" ></i>
+                </button>
+			</div>
+		  </div>
+		
+		   <div class="mb-3">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Address"   formControlName="address">
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['address']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div>
+		    <div class="mb-3">
+            <mat-form-field class="material-input-full">
+               <mat-select placeholder="State" (change)="OnstateChange()"  formControlName="state" name="state">
+              <mat-option *ngFor="let state of statelist" [value]="state.abbreviation">
+                {{state.name}}
+              </mat-option>
+            </mat-select>
+              <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['state']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div>
+		  <div class="mb-3">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="City"   formControlName="city" [matAutocomplete]="auto" (ngModelChange)="docityFilter($event)">
+			    <mat-autocomplete #auto="matAutocomplete"  (optionSelected)="onCityChange()">
+							  <mat-option *ngFor="let option of filteredCityOptions" [value]="option.city" >
+								{{option.city}}
+							  </mat-option>
+				 </mat-autocomplete>
+                <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['city']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div>
+		    <div class="mb-3">
+            <mat-form-field class="material-input-full">
+                <input matInput placeholder="Zip code"   formControlName="zip" [matAutocomplete]="Zipauto"  (ngModelChange)="dozipFilter($event)">
+                  <mat-autocomplete #Zipauto="matAutocomplete">
+							  <mat-option *ngFor="let option of filteredZipOptions" [value]="option.Zip" >
+								{{option.Zip}}
+							  </mat-option>
+				 </mat-autocomplete>
+			  <mat-error>
+                <control-messages [isSubmitted]="isSubmitted" [control]="cardForm.controls['zip']"></control-messages>
+              </mat-error>
+            </mat-form-field>
+           </div>
+		     <div class="mb-3">
+          <button type="submit" mat-raised-button color="primary">
+            Pay now</button>
+          <button type="button" (click)="triggerCancelForm()" mat-raised-button color="warn">
+            Cancel
+          </button>
+    </div>
+		  </form>
+          </mat-card>
+      </div>
+	
+  </div>
+  <h1 class="nb-heading-one mr-auto"*ngIf="togglechooseCard" style="margin-bottom:20px">Select Card</h1>
+  
+   <div class="row" *ngIf="CardDetails.length>0 && togglechooseCard" style='margin-bottom:20px'>
+   <div class="col-md-6">
+            <mat-checkbox [checked]="usmdefault"  [(ngModel)]="usmdefault" (change)="usemyclicked()">
+              Use my default card
+            </mat-checkbox>
+   </div>
+   <div class="col-md-6">
+           <mat-checkbox [checked]="addnew"  [(ngModel)]="addnew" (change)="addnewclicked()">
+            Add New Card
+           </mat-checkbox>
+   </div>
+   <div class="col-md-12" style="margin-top:20px;">
+     <h1 class="nb-heading-one mr-auto"*ngIf="togglechooseCard">Saved Cards</h1>
+   </div>
+	  <div class="row">
+	   <div class="col-md-3" *ngFor="let card of CardDetails" style="margin:10px;cursor:pointer;" (click)="chosseCard(card)"> 
+	    <img src="assets/admin/img/dc.png"  *ngIf="card.ssl_card_type=='DC'"/>
+		<img src="assets/admin/img/visa.png"  *ngIf="card.ssl_card_type=='VISA'"/>
+		<img src="assets/admin/img/discover.png" *ngIf="card.ssl_card_type=='DISC'"/>
+		<img src="assets/admin/img/jcb.png"   *ngIf="card.ssl_card_type=='JCB'"/>
+		<img src="assets/admin/img/amex.png"  *ngIf="card.ssl_card_type=='AMEX'"/>
+	    <img src="assets/admin/img/master.png" *ngIf="card.ssl_card_type=='MC'"/><span style="font-size:15px;">{{card.ssl_account_number}} </span>
+	   </div>
+	  </div>
+      
+   </div>

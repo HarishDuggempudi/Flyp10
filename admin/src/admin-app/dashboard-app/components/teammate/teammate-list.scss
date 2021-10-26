@@ -1,0 +1,96 @@
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .flex-container mat-card {
+    margin: 10px;
+    width: 150px;
+    padding: 10px !important;
+  }
+
+  .flex-container > div{
+    border-bottom: 1px dashed #dadada;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  .flex-container > div:last-child{
+    border-bottom: none !important;
+  }
+
+  .addCard{
+      text-align: center;
+      padding-top: 15px;
+  }
+
+  .addCard > span {
+    color: darkgray;
+    font-weight: bold;
+  }
+
+  .addCard > .add-user > i {
+    padding: 17px;
+    font-size: 25px;
+    border: 2px dashed darkgray;
+    border-radius: 50%;
+    color: darkgray;
+    margin-bottom: 10px;
+  }
+
+  .flex-container[_ngcontent-c4] mat-card[_ngcontent-c4] {
+    margin: 10px;
+    width: 150px;
+    padding: 40px 15px !important;
+    cursor: pointer;
+  }
+
+  .userCard{
+    text-align: center;
+  }
+
+  .userCard > .user-name {
+    color: #3c3c3c;
+    font-weight: bold;
+    margin-bottom: 0px !important;
+  }
+
+  .userCard > .user-sport {
+    /* padding-top: 15px; */
+    padding: 6px;
+    background: #2f3090;
+    color: #fff;
+    border-radius: 15px;
+    /* line-height: 27px; */
+  }
+
+  .userCard > .display-img > i {
+    padding: 17px;
+    font-size: 25px;
+    background: darkgray;
+    border-radius: 50%;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+
+  .display-img > i {
+    padding: 15px;
+    margin-top: 3px;
+    font-size: 25px;
+    background: darkgray;
+    border-radius: 50%;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+
+  .mat-fab.mat-primary, .mat-mini-fab.mat-primary, .mat-raised-button.mat-primary {
+    background-color: #303190;
+}
+
+.requestItem{
+  border-bottom: 1px solid lightgray;
+}
+
+.requestItem:last-child{
+  border-bottom: none !important;
+}

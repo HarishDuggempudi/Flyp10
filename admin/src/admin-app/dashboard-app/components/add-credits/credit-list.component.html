@@ -1,0 +1,47 @@
+<div class="d-flex flex-row-reverse">
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb nb-breadcrumb">
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/dashboard']">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Add Credit</li>
+      </ol>
+    </nav>
+    <h1 class="nb-heading-one mr-auto">Add Credit</h1>
+  
+  </div>
+  <div class="pb-4">
+    <button mat-raised-button color="primary" (click)="addcredits()">
+      <i class="fa fa-plus-circle"></i> Add Credits</button>
+      
+      <mat-form-field style='margin-right:20px' class="example-full-width" class="float-right">
+        <input matInput placeholder="Search"(keyup)="applyFilter($event.target.value)">
+      </mat-form-field>
+   
+  </div>
+<mat-card class="nb-dashboard-table">
+    <mat-table #table [dataSource]="dataSource">
+      <ng-container matColumnDef="SN">
+        <mat-header-cell class="symbol-no" *matHeaderCellDef> SN </mat-header-cell>
+        <mat-cell class="symbol-no" *matCellDef="let element let i=index">{{preIndex+(i+1)}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="Competitors">
+        <mat-header-cell *matHeaderCellDef>Competitors</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.username}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="Available Balance">
+        <mat-header-cell *matHeaderCellDef>Available Balance</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{formatDollar(element.walletinfo.balance)}} </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <div class="p-3 text-center" *ngIf="objResponse?.dataList?.length==0">
+      No Records Found
+  </div>
+ 
+    <mat-paginator *ngIf="objResponse?.dataList?.length>0" [length]="totalItems" [pageSize]="perPage" [pageSizeOptions]="pageSizeOptions" (page)="pageChanged($event)">
+    </mat-paginator>
+      
+  </mat-card>

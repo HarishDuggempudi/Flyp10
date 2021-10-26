@@ -1,0 +1,105 @@
+.testimonial-wrapp .testimonial-photo, .testimonial-wrapp .testimonial-photo > img {
+    border-radius: 50%;
+    min-height: 100px !important;
+}
+.owl-carousel .owl-item{
+    width: 350px !important;
+    margin-right: 30px !important;
+}
+
+.item{
+    width: 350px !important;
+    margin-right: 30px !important;
+}
+
+.owl-carousel .owl-item .testimonial-wrapp .quoted {
+    background: #2e3192;
+    color: #fff;
+    font-size: 20px;
+    line-height: 50px;
+    height: 50px;
+    width: 50px;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    -webkit-transform: translateY(50%);
+    -ms-transform: translateY(50%);
+    -o-transform: translateY(50%);
+    transform: translateY(50%);
+    z-index: 1;
+}
+
+.owl-carousel .owl-item:nth-child(2n) .testimonial-wrapp .quoted {
+    background: #be1e2d;
+    color: #fff;
+    font-size: 20px;
+    line-height: 50px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    -webkit-transform: translateY(50%);
+    transform: translateY(50%);
+    z-index: 1;
+}
+.sportsRow{
+   padding-left: 25px;
+   padding-right: 25px;
+//    margin-left: 25%
+}
+.sportsdiv{
+    padding-left: 25px;
+    padding-right: 25px;
+    // margin-top: 3rem;
+    
+}
+.sportcontact{
+    // float: right;
+    line-height: 1.5;
+    padding-bottom: 10px!important;
+    padding-top: 10px!important;
+    padding-left: 25px!important;
+    padding-right: 25px!important;
+}
+.sportsdiv {
+    line-height: 1.8;
+    width: 120pt;
+    margin-left:15px;
+    margin-right:15px;
+}
+.sporttitle{
+    line-height: 120%;
+    text-transform: uppercase;
+    letter-spacing: .16em;
+    color: #c40d2e;
+    margin-top: 0;
+    margin-bottom: .7em;
+}
+
+@media screen and (min-width: 768px) {
+    .modal-dialog {
+      width: 700px; /* New width for default modal */
+    }
+    .modal-sm {
+      width: 350px; /* New width for small modal */
+    }
+   
+}
+@media screen and (max-width: 500px) {
+    .customFont{
+        font-size:20px !important;
+        word-break:break-word;
+        
+    
+    }
+    .modal-body{
+        overflow: scroll !important;
+    }
+    
+   
+}
+
+@media screen and (min-width: 992px) {
+    .modal-lg {
+      width: 950px; /* New width for large modal */
+    }
+}
+

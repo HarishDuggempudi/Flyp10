@@ -1,0 +1,32 @@
+@import '../fontawesome/scss/fontawesome';
+@import '../fontawesome/scss/fa-regular';
+@import '../fontawesome/scss/fa-brands';
+@import '../fontawesome/scss/fa-solid';
+@import '~@ngx-share/button/styles/share-buttons';
+@import '~@ngx-share/button/styles/themes/default/default-theme';
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+.custom-css aw-wizard-navigation-bar.horizontal ul.steps-indicator li.current div a {
+  color: violet!important;
+}
+.scroll--simple::-webkit-scrollbar-thumb:active {
+  background: rgba(0, 0, 0, 0.9);
+}
+:host::ng-deep aw-wizard-navigation-bar.horizontal.large-filled-symbols ul.steps-indicator li.done:after {
+  color:white !important;
+}

@@ -1,0 +1,102 @@
+<div class="view-wrapper">
+    <h4 class="page-header">User Sport Detail</h4>
+    <mat-card class="col-md-8 mt-3">
+        <div class="row">
+            <label class="nb-label-md col-6">Username</label>
+            <label class="nb-label-md col-6">{{docInfo.username}}</label>
+        </div>
+        <div class="row" >
+            <label class="nb-label-md col-6">Sport</label>
+            <label class="nb-label-md col-6">{{docInfo.sportName}}</label>
+        </div>
+        <div class="row">
+            <label class="nb-label-md col-6">Level</label>
+            <label class="nb-label-md col-6">{{docInfo.level}}</label>
+		</div>
+		<div class="row" *ngIf ="docInfo.sportid == MFigureSkating || docInfo.sportid == WFigureSkating">
+            <label class="nb-label-md col-6">Uploading For</label>
+            <label class="nb-label-md col-6">{{uploadingFor}}</label>
+        </div>
+        <div class="row"> 
+            <label class="nb-label-md col-6">Verification Document</label>
+            <label class="nb-label-md col-6"><a href="/api/user/judge/downloadfile/{{docInfo.docName}}" class="downloadlink" >{{docInfo.originalfilename}}</a>
+			 <span style="float: right;color: #3f51b5;cursor: pointer;" (click)="download(docInfo.docName)"><i class="fa fa-download" aria-hidden="true"></i></span>
+			</label>
+        </div>
+		<div class="row" *ngIf="docInfo.docdescription"> 
+            <label class="nb-label-md col-6">Document Description</label>
+            <label class="nb-label-md col-6">
+			  {{docInfo.docdescription}}
+			</label>
+        </div>
+		 <div class="row">
+            <label class="nb-label-md col-6">Expire Date</label>
+			 <label class="nb-label-md col-6"  *ngIf="docInfo.status!='0'">{{docInfo.expdate}}</label>
+            <mat-form-field class="material-input-full col-6" *ngIf="docInfo.status=='0'">
+			<input matInput [matDatepicker]="picker" [(ngModel)]="expiredate" required  placeholder="Expire Date" >
+			<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+			<mat-datepicker #picker  ></mat-datepicker>			
+		  </mat-form-field>
+        </div>
+		 <div class="row" *ngIf="docInfo.status=='3'">
+            <label class="nb-label-md col-6">Update Expire Date</label>
+            <mat-form-field class="material-input-full col-6">
+			<input matInput [matDatepicker]="picker" [(ngModel)]="expiredate" required  placeholder="Expire Date" >
+			<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+			<mat-datepicker #picker  ></mat-datepicker>			
+		  </mat-form-field>
+        </div>
+		<div class="row" *ngIf="docInfo.status=='0'">
+		 <label class="nb-label-md col-6">Judge Name</label>
+		   <label class="nb-label-md col-3">{{judgeDetails.firstName}}</label>
+		   <label class="nb-label-md col-3">{{judgeDetails.lastName}}</label>
+		 <!--  <mat-form-field class="material-input-full col-3">
+			<input matInput placeholder="Firstname" [(ngModel)]="userObj.firstname" required >     			
+		  </mat-form-field> -->		  
+		  <!-- <mat-form-field class="material-input-full col-3">
+			<input matInput placeholder="Lastname" [(ngModel)]="userObj.lastname" required >     
+		  </mat-form-field> -->
+		</div>
+		<div class="row" *ngIf="docInfo.status=='0'">
+		 <label class="nb-label-md col-6">Email</label>
+		 <label class="nb-label-md col-6">{{judgeDetails.email}}</label>
+		 <!--  <mat-form-field class="material-input-full col-6">
+			<input matInput placeholder="Email" [(ngModel)]="userObj.email" required >     
+		  </mat-form-field>		 -->  
+		</div>
+		<div class="row" *ngIf="docInfo.status=='0'">
+		  <label class="nb-label-md col-6">State</label>
+		  <label class="nb-label-md col-6">{{judgeDetails.address}}</label>
+          <!-- <mat-form-field class="material-input-full col-6">
+            <mat-select placeholder="State" [(ngModel)]="userObj.state"  name="address" required>
+              <mat-option *ngFor="let state of statelist" [value]="state.name">
+                {{state.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field> -->
+        </div>
+		  <div class="row"> 
+            <label class="nb-label-md col-6">Status</label>
+            <label class="nb-label-md col-6" *ngIf="docInfo.status=='1'">
+			  Active
+			</label>
+			<label class="nb-label-md col-6" *ngIf="docInfo.status=='0'">
+			  Verification Pending
+			</label>
+			<label class="nb-label-md col-6" *ngIf="docInfo.status=='2'">
+			  In Active
+			</label>
+			<label class="nb-label-md col-6" *ngIf="docInfo.status=='3'">
+			  Expired
+			</label>
+        </div>
+		<div class="row">
+		      <button *ngIf="docInfo.status=='0'" mat-raised-button style="margin-right:10px;" color="primary" (click)="verify()" >Verify</button>
+			  <!-- <button *ngIf="docInfo.status=='0'" mat-raised-button style="margin-right:10px;" color="primary" (click)="unverify()" >Reject</button> -->
+			  <button *ngIf="docInfo.status=='1'" mat-raised-button style="margin-right:10px;" color="primary" (click)="unverify()" >Deactivate</button>
+			  <button *ngIf="docInfo.status=='2'" mat-raised-button style="margin-right:10px;" color="primary" (click)="activate()" >Activate</button>
+			  <button *ngIf="docInfo.status=='3'" mat-raised-button style="margin-right:10px;" color="primary" (click)="reNew()" >Renew</button>
+			 <button mat-raised-button color="warn" (click)="triggerCancelForm()" >Cancel</button>
+		</div>
+    </mat-card> 
+</div>

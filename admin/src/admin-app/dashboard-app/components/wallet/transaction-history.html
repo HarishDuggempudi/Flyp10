@@ -1,0 +1,36 @@
+  <mat-card class="nb-dashboard-table">
+    <mat-table #table [dataSource]="dataSource">
+      <ng-container matColumnDef="SN">
+        <mat-header-cell class="symbol-no" *matHeaderCellDef> SN </mat-header-cell>
+        <mat-cell class="symbol-no" *matCellDef="let element let i=index">{{preIndex+(i+1)}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="Amount">
+        <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <span *ngIf="element.txn_amount.indexOf('.') !== -1">$&nbsp;{{element.txn_amount}}</span>
+          <span *ngIf="element.txn_amount.indexOf('.') == -1">$&nbsp;{{element.txn_amount}}.00</span>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="Type">
+        <mat-header-cell *matHeaderCellDef>Transaction Type</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <h5 *ngIf="element.txn_type=='c'">Credited</h5>	
+          <h5 *ngIf="element.txn_type=='d'">Debited</h5>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="Date">
+        <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{element.txn_date}}
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <div class="p-3 text-center" *ngIf="objResponse?.length==0">
+            No Records Found
+       </div>
+    <!--   <mat-paginator *ngIf="objResponse?.length>0" [length]="totalItems" [pageSize]="perPage" [pageSizeOptions]="pageSizeOptions" (page)="pageChanged($event)">
+      </mat-paginator> -->
+  </mat-card>
+  

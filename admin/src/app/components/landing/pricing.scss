@@ -1,0 +1,44 @@
+@import url('https://use.fontawesome.com/releases/v5.0.9/css/all.css');
+.bg-img{
+    background-image: url("../../../assets/client/images/login.jpg");
+    min-height: 730px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position:relative;
+    overflow-y: hidden!important;
+    padding-bottom:40px !important;
+}
+.btnprimary{
+   background-color:#2e3192;
+}
+.formBtn{
+    background: #3f51b5;
+    padding: 12px;
+    border-radius: 4px;
+    color: #fff;
+}.floatRight{
+    margin-left: auto;
+}.floatLeft{
+    margin-right: auto;
+}
+.form-group label, .checkbox label{
+  padding-left:0px !important;
+}.modal-content{
+    p{
+        font-size:14px !important;
+        color:black;
+        font-weight: 600;
+        margin: 0 !important;
+        max-width: 100%;
+        min-width: 100%;
+    }
+   
+    
+}
+.col-sm-4 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 33.333333%;
+    flex: 0 0 33.333333%;
+    max-width: 43.333333%;
+}

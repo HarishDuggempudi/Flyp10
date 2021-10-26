@@ -1,0 +1,6 @@
+// overwrite the checkbox background
+::ng-deep .mat-checkbox-checked .mat-checkbox-background, .mat-checkbox-indeterminate .mat-checkbox-background {
+    background-color: #3f51b5 !important;
+  }
+  
+ 

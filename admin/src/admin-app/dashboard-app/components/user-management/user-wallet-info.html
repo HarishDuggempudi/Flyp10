@@ -1,0 +1,144 @@
+
+<div class="view-wrapper">
+    <div class="row">
+	   <div class="col-lg-12">
+                            <h1 class="nb-heading-one mr-auto">Subscription Details</h1>                          
+        </div>
+	 </div>	
+<div *ngIf="objUser.userRole=='3'">
+<div class="row">
+  <div class="col-md-4">
+     <mat-card>
+	       <div>
+		     <h5>Active Balance</h5>
+		     <h6 style="color:#3f51b5">$ <span style="font-size:40px">{{formatDollar(walletObj.balance)}}</span></h6>           
+		   </div>
+		<!--    <div>
+		     <span style="float:right;color:#2f3191;cursor:pointer;" (click)="addCredits('1')"><i class="fa fa-plus-circle"></i>&nbsp;Add Credit</span>
+		   </div> -->
+     </mat-card>
+  </div>
+   <div class="col-md-4">
+     <mat-card>
+	       <div>
+		     <h5>Subscription Type</h5>
+		     <h6 style="color:#3f51b5" *ngIf="objUser.subtype=='0'">Standard</h6>
+             <h6 style="color:#3f51b5" *ngIf="objUser.subtype=='2'">Premium</h6>
+             <h6 style="color:#3f51b5" *ngIf="objUser.subtype=='3'">Premium plus</h6>  			 
+		   </div>
+		  <!--  <div *ngIf="objUser.subtype=='0'">
+		       <span style="font-size:11px;" >Subscribe to unlock features and enter our Flyp10 world meets</span>
+		   </div> -->
+		   <div *ngIf="objUser.subtype!='0'" style="margin-bottom:12px;">
+		      <span style="font-size:11px;">Expires On:{{formatdate(objUser.subEnd)}}</span>
+			  <br>
+		   </div>
+		   <div>
+		     <span style="float:right;color:#2f3191;cursor:pointer;" (click)="upgrade()"><i class="fas fa-level-up-alt"></i>&nbsp;Upgrade</span>
+		   </div>
+     </mat-card>
+  </div>
+</div>
+<div class="row" style="margin-top:20px;">
+  <div class="col-md-8">
+     <mat-card style="max-height: 400px;overflow-y: scroll;">
+	      <h5>Transaction history</h5>
+	       <mat-list *ngFor="let txn of transaction">
+			 <mat-list-item style="padding-top:0px;">			
+			   <div class="col-md-2" style=" background-color:#2f3191;color: #fff;padding: 18px;text-align:center;">
+			     <span *ngIf="txn.txn_amount.indexOf('.') !== -1">$&nbsp;{{txn.txn_amount}}</span>
+			     <span *ngIf="txn.txn_amount.indexOf('.') == -1">$&nbsp;{{txn.txn_amount}}.00</span>
+			   </div>
+			   <div style="margin-left:10px;">
+			      <!-- <h5 *ngIf="txn.txn_type=='c'">Credited</h5>	
+					<h5 *ngIf="txn.txn_type=='d'">Debited</h5> -->
+					<h6 style="color: #2f3191 !important;">{{txn.txn_desc}} {{txn.promocode && txn.promocode!='0'?'  -Promo Code: '+txn.promocode:''}}</h6>
+				  <p style="font-size:14px;color: #8a8787;">{{txn.txn_date}}</p>
+				</div>  
+				<i *ngIf="txn.txn_type=='c'" style="position: absolute; right: 0; color: green" class="fa fa-arrow-up"></i>
+				<i *ngIf="txn.txn_type=='d'" style="position: absolute; right: 0; color: red" class="fa fa-arrow-down"></i>
+			 </mat-list-item>		  
+			 <mat-divider></mat-divider>
+			</mat-list>
+			<span *ngIf="transaction.length == 0">No data to display</span>
+     </mat-card>
+  </div>
+</div>
+</div>
+<div *ngIf="objUser.userRole=='2'">
+  <div class="row">
+    <div class="col-md-4">
+     <mat-card>
+	       <div>
+		     <h5>Active Balance</h5>
+		     <h6 style="color:#3f51b5" >$ <span style="font-size:40px">{{formatDollar(walletObj.balance)}}</span></h6>           
+		   </div> 
+     </mat-card>
+  </div>
+  </div>
+  <div class="row" style="margin-top:20px;">
+  <div class="col-md-8">
+     <mat-card>
+	      <h5>Transaction history</h5>
+	       <mat-list *ngFor="let txn of transaction">
+			 <mat-list-item style="padding-top:0px;">			
+			   <div class="col-md-2" style=" background-color:#2f3191;color: #fff;padding: 18px;text-align:center;">
+			     <span *ngIf="txn.txn_amount.indexOf('.') !== -1">$&nbsp;{{txn.txn_amount}}</span>
+			     <span *ngIf="txn.txn_amount.indexOf('.') == -1">$&nbsp;{{txn.txn_amount}}.00</span>
+			   </div>
+			   <div style="margin-left:10px;">
+			      <!-- <h5 *ngIf="txn.txn_type=='c'">Credited</h5>	
+					<h5 *ngIf="txn.txn_type=='d'">Debited</h5> -->
+					<h6 style="color: #2f3191 !important;">{{txn.txn_desc}}</h6>
+				  <p style="font-size:14px;color: #8a8787;">{{txn.txn_date}}</p>
+				</div>  
+				<i *ngIf="txn.txn_type=='c'" style="position: absolute; right: 0; color: green" class="fa fa-arrow-up"></i>
+				<i *ngIf="txn.txn_type=='d'" style="position: absolute; right: 0; color: red" class="fa fa-arrow-down"></i>
+			 </mat-list-item>		  
+			 <mat-divider style="margin-top:10px;"></mat-divider>
+			</mat-list>
+			<span *ngIf="transaction.length == 0">No data to display</span>
+     </mat-card>
+  </div>
+</div>
+</div>
+
+
+<div *ngIf="objUser.userRole=='4'">
+  <div class="row">
+    <div class="col-md-4">
+     <mat-card>
+	       <div>
+		     <h5>Active Balance</h5>
+		     <h6 style="color:#3f51b5" >$ <span style="font-size:40px">{{formatDollar(walletObj.balance)}}</span></h6>           
+		   </div> 
+     </mat-card>
+  </div>
+  </div>
+  <div class="row" style="margin-top:20px;">
+  <div class="col-md-8">
+     <mat-card>
+	      <h5>Transaction history</h5>
+	       <mat-list *ngFor="let txn of transaction">
+			 <mat-list-item style="padding-top:0px;">			
+			   <div class="col-md-2" style=" background-color:#2f3191;color: #fff;padding: 18px;text-align:center;">
+			     <span *ngIf="txn.txn_amount.indexOf('.') !== -1">$&nbsp;{{txn.txn_amount}}</span>
+			     <span *ngIf="txn.txn_amount.indexOf('.') == -1">$&nbsp;{{txn.txn_amount}}.00</span>
+			   </div>
+			   <div style="margin-left:10px;">
+			      <!-- <h5 *ngIf="txn.txn_type=='c'">Credited</h5>	
+					<h5 *ngIf="txn.txn_type=='d'">Debited</h5> -->
+					<h6 style="color: #2f3191 !important;">{{txn.txn_desc}}</h6>
+				  <p style="font-size:14px;color: #8a8787;">{{txn.txn_date}}</p>
+				</div>  
+				<i *ngIf="txn.txn_type=='c'" style="position: absolute; right: 0; color: green" class="fa fa-arrow-up"></i>
+				<i *ngIf="txn.txn_type=='d'" style="position: absolute; right: 0; color: red" class="fa fa-arrow-down"></i>
+			 </mat-list-item>		  
+			 <mat-divider style="margin-top:10px;"></mat-divider>
+			</mat-list>
+			<span *ngIf="transaction.length == 0">No data to display</span>
+     </mat-card>
+  </div>
+</div>
+</div>
+	</div>
